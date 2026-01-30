@@ -3,282 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Evolution Ultimate - Intelligence Hub</title>
+    <title>Creative Executive Hub - Strategist Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap');
         
         :root {
+            --accent: #ec4899;
             --primary: #6366f1;
-            --secondary: #a855f7;
-            --bg-dark: #0f172a;
+            --bg: #0b0f1a;
         }
 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: #f8fafc; }
-        .glass-dark { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
-        .accent-gradient { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); }
-        
-        .loader-ring { width: 48px; height: 48px; border: 5px solid #1e293b; border-bottom-color: var(--primary); border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .tab-active { border-bottom: 2px solid var(--primary); color: var(--primary); }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: #ffffff; overflow-x: hidden; }
+        h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
 
-        .device-frame { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); border: 8px solid #334155; position: relative; }
-        .mobile-mode { width: 320px !important; height: 580px !important; border-radius: 40px; }
+        .glass { background: rgba(23, 32, 53, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .gradient-text { background: linear-gradient(to right, #818cf8, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* Simulazione Heatmap */
-        .heatmap-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 30% 20%, rgba(255,0,0,0.4) 0%, transparent 20%),
-                        radial-gradient(circle at 70% 50%, rgba(255,255,0,0.3) 0%, transparent 25%),
-                        radial-gradient(circle at 40% 80%, rgba(0,255,0,0.2) 0%, transparent 30%);
-            pointer-events: none; mix-blend-mode: overlay; opacity: 0; transition: opacity 0.3s;
-        }
-        .heatmap-visible .heatmap-overlay { opacity: 1; }
+        .loader { width: 40px; height: 40px; border: 3px solid rgba(99, 102, 241, 0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; color: black; }
-            .glass-dark { border: 1px solid #ddd; background: white; backdrop-filter: none; }
-            .dashboard-grid { display: block !important; }
-        }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); transition: all 0.3s ease; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -10px var(--primary); }
+
+        .tab-active { color: #ffffff !important; border-bottom: 4px solid var(--accent); opacity: 1 !important; transform: translateY(-2px); }
+
+        .mockup-container { width: 320px; height: 580px; background: #000; border-radius: 35px; overflow: hidden; border: 8px solid #1f2937; position: relative; }
+        
+        #heatmapOverlay { pointer-events: none; mix-blend-mode: overlay; opacity: 0.6; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        .solution-card { transition: all 0.3s ease; }
+        .solution-card:hover { border-color: rgba(99, 102, 241, 0.4); background: rgba(99, 102, 241, 0.05); }
+
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body class="antialiased min-h-screen">
+<body class="p-0 m-0">
 
-    <!-- Header -->
-    <header class="sticky top-0 z-50 glass-dark border-b border-slate-800 px-6 py-4 no-print">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="accent-gradient p-2 rounded-xl text-white shadow-lg shadow-indigo-500/20">
-                    <i class="fas fa-chart-network"></i>
+    <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 no-print">
+        <div class="max-w-[1600px] mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center shadow-lg">
+                    <i class="fas fa-rocket text-white"></i>
                 </div>
                 <div>
-                    <h1 class="font-black text-xl tracking-tighter uppercase italic leading-none">Creative<span class="text-indigo-400">Hub</span></h1>
-                    <span class="text-[8px] uppercase tracking-[0.2em] text-slate-500">Professional Strategic Suite</span>
+                    <h1 class="text-xl font-black tracking-tight leading-none text-white">STRATEGIST<span class="text-pink-500 italic">HUB</span></h1>
+                    <p class="text-[9px] uppercase tracking-[0.3em] text-white/60 font-bold">SEO & PNL Conversion Engine</p>
                 </div>
             </div>
-            <div id="topActions" class="hidden flex items-center gap-4">
-                <button onclick="location.reload()" class="text-[10px] font-black uppercase text-slate-400 hover:text-white transition">Reset</button>
-                <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition shadow-lg shadow-indigo-500/30 flex items-center gap-2">
-                    <i class="fas fa-file-pdf"></i> Esporta Report
+            <div id="navActions" class="hidden flex items-center gap-6">
+                <button onclick="window.print()" class="text-xs font-bold uppercase tracking-widest hover:text-pink-500 transition text-white">
+                    <i class="fas fa-file-pdf mr-2"></i> Report Strategico
+                </button>
+                <button onclick="location.reload()" class="btn-primary px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-white shadow-xl">
+                    Nuovo Audit
                 </button>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="max-w-7xl mx-auto p-6">
+    <main class="max-w-[1600px] mx-auto p-8">
         
-        <!-- Area Upload -->
-        <div id="uploadArea" class="py-24 text-center max-w-3xl mx-auto">
-            <h2 class="text-7xl font-extrabold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-slate-600">
-                Data-Driven <br>Creativity.
+        <section id="welcome" class="py-20 text-center">
+            <h2 class="text-6xl md:text-8xl font-black tracking-tighter mb-6 font-outfit text-white">
+                Analisi.<br><span class="gradient-text">Soluzione. Vendita.</span>
             </h2>
-            <p class="text-slate-400 text-lg mb-12 font-medium">L'intelligenza artificiale al servizio del tuo funnel di vendita e posizionamento.</p>
+            <p class="text-white max-w-2xl mx-auto text-lg mb-12 opacity-90">
+                Hub integrato per SEO specialist e content creator. Trasforma asset visivi in macchine da conversione.
+            </p>
             
-            <div id="dropZone" class="glass-dark border-2 border-dashed border-slate-700 rounded-[3.5rem] p-20 cursor-pointer hover:border-indigo-500 hover:bg-slate-800/40 transition-all group relative overflow-hidden">
+            <div id="dropZone" class="max-w-xl mx-auto glass rounded-[2.5rem] p-12 border-2 border-dashed border-white/10 hover:border-indigo-500/50 transition-all cursor-pointer group">
                 <input type="file" id="fileInput" class="hidden" accept="image/*">
-                <div class="flex flex-col items-center relative z-10">
-                    <div class="w-24 h-24 rounded-3xl bg-slate-800 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-2xl">
+                <div class="flex flex-col items-center">
+                    <div class="w-20 h-20 rounded-full bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition duration-500">
                         <i class="fas fa-cloud-upload-alt text-3xl text-indigo-400"></i>
                     </div>
-                    <p class="text-2xl font-bold tracking-tight">Trascina l'asset creativo</p>
-                    <p class="text-slate-500 mt-2 font-medium">Analizzeremo SEO, PNL, Heatmap e Sentiment</p>
+                    <span class="text-xl font-bold mb-2 text-white">Carica l'asset da ottimizzare</span>
+                    <span class="text-white/60 text-sm italic">Analisi PNL, SEO & UX Matrice Soluzioni</span>
                 </div>
             </div>
+        </section>
+
+        <div id="loader" class="hidden py-32 flex flex-col items-center">
+            <div class="loader mb-6"></div>
+            <p class="text-indigo-400 font-black uppercase tracking-widest text-[10px] animate-pulse">Generazione Matrice Soluzioni Strategiche...</p>
         </div>
 
-        <!-- Stato Caricamento -->
-        <div id="loadingState" class="hidden py-40 text-center">
-            <span class="loader-ring mb-8"></span>
-            <h3 class="text-indigo-400 font-black tracking-[0.4em] uppercase text-sm animate-pulse">Computing Intelligence</h3>
-            <p class="text-slate-500 text-xs mt-4">Interrogazione Gemini 2.5 Flash & Analisi Predittiva...</p>
-        </div>
-
-        <!-- Dashboard Principale -->
-        <div id="dashboard" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <!-- Sidebar: Asset Preview & Score -->
-            <div class="lg:col-span-4 space-y-8">
-                <div class="glass-dark rounded-[2.5rem] p-6 border border-slate-800 shadow-2xl sticky top-28">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Asset Control</span>
-                        <div class="flex gap-2">
-                            <button onclick="toggleHeatmap()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 flex items-center justify-center transition" title="Predizione Heatmap">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button id="toggleMobile" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-indigo-400 flex items-center justify-center transition" title="Mobile View">
-                                <i class="fas fa-mobile-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div id="imgFrame" class="device-frame bg-slate-900 rounded-3xl overflow-hidden aspect-video relative flex items-center justify-center mx-auto shadow-inner">
-                        <img id="mainImage" class="w-full h-full object-contain">
-                        <div class="heatmap-overlay"></div>
-                    </div>
-
-                    <div class="mt-8 grid grid-cols-2 gap-4">
-                        <div class="bg-indigo-500/10 p-5 rounded-3xl border border-indigo-500/20 text-center">
-                            <span class="block text-[9px] font-black text-indigo-400 uppercase tracking-tighter mb-1">Impact Score</span>
-                            <span id="scoreText" class="text-4xl font-black text-white">--</span>
-                        </div>
-                        <div class="bg-purple-500/10 p-5 rounded-3xl border border-purple-500/20 text-center">
-                            <span class="block text-[9px] font-black text-purple-400 uppercase tracking-tighter mb-1">SEO Readiness</span>
-                            <span id="seoRank" class="text-4xl font-black text-white">--</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 p-5 glass-dark rounded-3xl">
-                        <h4 class="text-[9px] font-black uppercase text-slate-500 mb-3">Color Psychology</h4>
-                        <div id="colorContainer" class="flex gap-2 mb-4"></div>
-                        <p id="psychologyNote" class="text-[11px] leading-relaxed text-slate-400 italic"></p>
-                    </div>
+        <div id="dashboard" class="hidden space-y-8 animate-fade-in">
+            <!-- Top Stats - Nuovi parametri -->
+            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div class="glass p-6 rounded-3xl border-l-4 border-indigo-500">
+                    <span class="text-[9px] font-black uppercase text-indigo-400">Engagement Potential</span>
+                    <div id="impactScore" class="text-3xl font-black text-white">--</div>
+                </div>
+                <div class="glass p-6 rounded-3xl border-l-4 border-pink-500">
+                    <span class="text-[9px] font-black uppercase text-pink-400">Attention Grip</span>
+                    <div id="attentionScore" class="text-3xl font-black text-white">--</div>
+                </div>
+                <div class="glass p-6 rounded-3xl border-l-4 border-emerald-500">
+                    <span class="text-[9px] font-black uppercase text-emerald-400">Readability Score</span>
+                    <div id="readabilityScore" class="text-3xl font-black text-white">--</div>
+                </div>
+                <div class="glass p-6 rounded-3xl border-l-4 border-amber-500">
+                    <span class="text-[9px] font-black uppercase text-amber-500">Contrast Ratio (UX)</span>
+                    <div id="contrastScore" class="text-3xl font-black text-white">--</div>
+                </div>
+                <div class="glass p-6 rounded-3xl border-l-4 border-purple-500">
+                    <span class="text-[9px] font-black uppercase text-purple-400">Trust Factor</span>
+                    <div id="trustScore" class="text-3xl font-black text-white">--</div>
                 </div>
             </div>
 
-            <!-- Area Contenuti -->
-            <div class="lg:col-span-8 space-y-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                <!-- Radar & Executive Summary -->
-                <div class="glass-dark rounded-[3rem] p-10 border border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div class="h-64 flex items-center justify-center relative">
-                        <canvas id="radarChart"></canvas>
-                    </div>
-                    <div class="flex flex-col justify-center">
-                        <h3 class="text-3xl font-black tracking-tight mb-4">Strategia AI</h3>
-                        <p id="strategicSummary" class="text-slate-400 text-sm leading-relaxed mb-6"></p>
-                        <div id="badgeList" class="flex flex-wrap gap-2"></div>
+                <!-- Colonna Sinistra -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="glass rounded-[2rem] p-6 sticky top-28">
+                        <h3 class="text-xs font-black uppercase text-white/50 tracking-widest mb-4">Focus & Heatmap</h3>
+                        
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-black mb-4">
+                            <img id="previewImg" class="w-full">
+                            <canvas id="heatmapOverlay" class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700"></canvas>
+                        </div>
+                        
+                        <button onclick="toggleHeatmap()" class="w-full text-[10px] font-black uppercase tracking-widest py-3 rounded-xl border border-white/10 hover:bg-white/5 transition text-white">
+                            <i class="fas fa-expand-arrows-alt mr-2"></i> Mostra Punti Focali
+                        </button>
+
+                        <!-- Color Psychology Card - FIXED TEXT CASE -->
+                        <div class="mt-8 p-8 rounded-[2rem] border-2 border-amber-500/20 bg-slate-900/50">
+                            <h4 class="text-[10px] font-black uppercase text-amber-500 mb-6 tracking-[0.2em]">Color Psychology</h4>
+                            <div id="colorFeeling" class="text-2xl font-bold text-white leading-snug">
+                                <!-- Testo caricato dinamicamente -->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Tabs Nav -->
-                <div class="glass-dark rounded-[3rem] p-10 border border-slate-800">
-                    <div class="flex gap-10 border-b border-slate-800 mb-8 overflow-x-auto no-scrollbar">
-                        <button onclick="showTab('seo')" id="tab-seo" class="tab-active pb-4 text-[10px] font-black uppercase tracking-[0.2em] transition">SEO & Web</button>
-                        <button onclick="showTab('pnl')" id="tab-pnl" class="pb-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 transition">Copy & Social</button>
-                        <button onclick="showTab('ai')" id="tab-ai" class="pb-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 transition">AI Creative Lab</button>
-                    </div>
-
-                    <!-- SEO Tab -->
-                    <div id="content-seo" class="space-y-8">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="md:col-span-2 bg-slate-800/40 p-8 rounded-[2rem] border border-slate-700/50">
-                                <label class="text-[9px] font-black uppercase text-indigo-400 block mb-3">Ottimizzazione Alt Text (WordPress)</label>
-                                <p id="seoAlt" class="text-lg text-white font-semibold leading-snug"></p>
-                            </div>
-                            <div class="bg-purple-900/20 p-8 rounded-[2rem] border border-purple-500/20">
-                                <label class="text-[9px] font-black uppercase text-purple-400 block mb-3">Search Intent</label>
-                                <div id="seoIntent" class="text-sm font-black text-white px-4 py-2 bg-purple-500/20 rounded-xl inline-block">--</div>
-                            </div>
-                        </div>
-                        <div>
-                            <h5 class="text-[10px] font-black uppercase text-slate-500 mb-4">Keyword Semantiche Suggerite</h5>
-                            <div id="keywordCloud" class="flex flex-wrap gap-3"></div>
-                        </div>
-                    </div>
-
-                    <!-- Copy & Social Tab -->
-                    <div id="content-pnl" class="hidden space-y-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div class="space-y-4">
-                                <h5 class="text-[10px] font-black uppercase text-indigo-400">Social Caption (IG/FB)</h5>
-                                <div id="socialCaption" class="bg-slate-800/50 p-6 rounded-3xl border border-slate-700 text-sm text-slate-300 leading-relaxed italic whitespace-pre-wrap"></div>
-                            </div>
-                            <div class="space-y-4">
-                                <h5 class="text-[10px] font-black uppercase text-purple-400">PNL & Ganci Mentali</h5>
-                                <div id="copySuggestions" class="space-y-4"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="p-8 bg-indigo-600/10 rounded-[2.5rem] border border-indigo-500/20 flex flex-col md:flex-row items-center gap-8">
-                            <div class="flex-1">
-                                <h5 class="text-[10px] font-black uppercase text-indigo-400 mb-2">Voice Strategy Preview</h5>
-                                <p id="ttsScript" class="text-sm text-slate-400">Ascolta il tono di voce suggerito per video/reel.</p>
-                            </div>
-                            <button onclick="playPreview()" class="h-16 w-16 rounded-full accent-gradient flex items-center justify-center text-white shadow-xl hover:scale-110 transition duration-300">
-                                <i class="fas fa-play text-xl ml-1"></i>
+                <!-- Colonna Destra -->
+                <div class="lg:col-span-8 space-y-8">
+                    <div class="glass rounded-[3rem] p-8">
+                        <!-- TAB NAVIGATION -->
+                        <div class="flex flex-col md:flex-row gap-8 border-b border-white/5 mb-10 no-scrollbar overflow-x-auto">
+                            <button onclick="switchTab('seo')" id="btn-seo" class="pb-6 text-2xl font-black uppercase tracking-tighter transition-all opacity-40 hover:opacity-100 tab-active">
+                                Audit SEO & UX
+                            </button>
+                            <button onclick="switchTab('pnl')" id="btn-pnl" class="pb-6 text-2xl font-black uppercase tracking-tighter transition-all opacity-40 hover:opacity-100">
+                                Persuasione PNL
+                            </button>
+                            <button onclick="switchTab('social')" id="btn-social" class="pb-6 text-2xl font-black uppercase tracking-tighter transition-all opacity-40 hover:opacity-100">
+                                Social Simulator
                             </button>
                         </div>
-                    </div>
 
-                    <!-- AI Lab Tab -->
-                    <div id="content-ai" class="hidden text-center py-10">
-                        <div class="max-w-xl mx-auto">
-                            <h4 class="text-2xl font-black mb-4">Generatore di Varianti</h4>
-                            <p class="text-slate-400 text-sm mb-10">Hai bisogno di un test A/B? Chiedi a Imagen 4.0 di generare una versione ottimizzata basata sui punti deboli dell'asset attuale.</p>
-                            <button id="generateBtn" class="accent-gradient px-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.3em] shadow-2xl hover:translate-y-[-4px] transition-all">
-                                <i class="fas fa-magic mr-3"></i> Genera Nuova Creative
-                            </button>
-                        </div>
-                        
-                        <div id="generatedImageArea" class="hidden mt-12 flex flex-col items-center">
-                            <div class="w-full max-w-md aspect-square rounded-[3rem] bg-slate-800 overflow-hidden shadow-2xl relative" id="genLoading">
-                                <div class="absolute inset-0 flex items-center justify-center animate-pulse">
-                                    <i class="fas fa-wand-magic-sparkles text-5xl text-indigo-500"></i>
+                        <!-- SEO Tab -->
+                        <div id="tab-seo" class="space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="p-8 bg-slate-800/40 rounded-3xl border border-white/5">
+                                    <h5 class="flex items-center text-xs font-black uppercase text-indigo-400 mb-4">
+                                        <i class="fas fa-flag-it mr-2"></i> Strategia SEO Italia
+                                    </h5>
+                                    <p id="seoIt" class="text-sm text-white leading-relaxed opacity-90"></p>
+                                </div>
+                                <div class="p-8 bg-slate-800/40 rounded-3xl border border-white/5">
+                                    <h5 class="flex items-center text-xs font-black uppercase text-pink-400 mb-4">
+                                        <i class="fas fa-flag-gb mr-2"></i> International SEO UK
+                                    </h5>
+                                    <p id="seoUk" class="text-sm text-white leading-relaxed opacity-90"></p>
                                 </div>
                             </div>
-                            <img id="genResult" class="hidden w-full max-w-md aspect-square rounded-[3rem] object-cover shadow-2xl border-4 border-slate-800">
-                        </div>
-                    </div>
 
+                            <!-- NUOVA SEZIONE MATRICE SOLUZIONI -->
+                            <div class="mt-8">
+                                <h5 class="text-xs font-black uppercase text-emerald-400 mb-6 flex items-center">
+                                    <i class="fas fa-tools mr-2"></i> Matrice Problema-Soluzione (CRO & UX)
+                                </h5>
+                                <div id="solutionMatrix" class="grid grid-cols-1 gap-4">
+                                    <!-- Caricato via JS -->
+                                </div>
+                            </div>
+                            
+                            <div class="p-8 bg-white/5 rounded-3xl border border-white/10 mt-8">
+                                <h5 class="text-[10px] font-black uppercase text-white/40 mb-4 tracking-[0.2em]">Semantic & LSI Keywords</h5>
+                                <div id="kwList" class="flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+
+                        <!-- PNL Tab -->
+                        <div id="tab-pnl" class="hidden space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="p-6 rounded-2xl border border-white/5 bg-slate-800/40 border-t-4 border-t-indigo-500">
+                                    <span class="text-[9px] font-black text-indigo-400 uppercase">Visivo (V)</span>
+                                    <p class="text-xs text-white mt-2 leading-relaxed" id="visivoDesc"></p>
+                                </div>
+                                <div class="p-6 rounded-2xl border border-white/5 bg-slate-800/40 border-t-4 border-t-pink-500">
+                                    <span class="text-[9px] font-black text-pink-400 uppercase">Auditivo (A)</span>
+                                    <p class="text-xs text-white mt-2 leading-relaxed" id="auditivoDesc"></p>
+                                </div>
+                                <div class="p-6 rounded-2xl border border-white/5 bg-slate-800/40 border-t-4 border-t-emerald-500">
+                                    <span class="text-[9px] font-black text-emerald-400 uppercase">Cinestesico (K)</span>
+                                    <p class="text-xs text-white mt-2 leading-relaxed" id="cinestesicoDesc"></p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="pnlTriggers"></div>
+                        </div>
+
+                        <!-- Social Simulator -->
+                        <div id="tab-social" class="hidden space-y-8 text-white">
+                            <div class="flex justify-center gap-3 no-scrollbar overflow-x-auto pb-6">
+                                <button onclick="setPlatform('instagram')" class="platform-btn px-8 py-3 rounded-xl glass text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition" data-target="instagram">Instagram</button>
+                                <button onclick="setPlatform('facebook')" class="platform-btn px-8 py-3 rounded-xl glass text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition" data-target="facebook">Facebook</button>
+                                <button onclick="setPlatform('linkedin')" class="platform-btn px-8 py-3 rounded-xl glass text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition" data-target="linkedin">LinkedIn</button>
+                            </div>
+
+                            <div class="flex flex-col xl:flex-row gap-12 items-start justify-center">
+                                <div id="socialMockup" class="mockup-container shadow-2xl flex-shrink-0">
+                                    <div id="mockupContent" class="h-full flex flex-col"></div>
+                                </div>
+                                <div class="flex-grow space-y-6 max-w-xl">
+                                    <div class="p-8 glass rounded-[2.5rem] border border-white/10">
+                                        <h4 id="platformTitle" class="text-2xl font-black mb-3 uppercase tracking-tighter"></h4>
+                                        <div id="platformStrategy" class="text-xs text-indigo-400 font-black mb-6 uppercase tracking-widest"></div>
+                                        <div class="p-6 bg-black/40 rounded-2xl text-sm italic leading-relaxed border border-white/5" id="fullCaptionText"></div>
+                                    </div>
+                                    <div id="socialHashtags" class="flex flex-wrap gap-2 text-[10px] font-mono text-pink-400 font-bold bg-pink-500/5 p-4 rounded-xl"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        const apiKey = ""; // Gestito dall'ambiente
-        let radarChart = null;
-        let currentAnalysis = null;
+        const apiKey = ""; 
+        let currentData = null;
+        let heatmapActive = false;
 
-        // Gestione UI
-        const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
+        document.getElementById('dropZone').onclick = () => fileInput.click();
         
-        dropZone.onclick = () => fileInput.click();
         fileInput.onchange = (e) => {
-            if (e.target.files[0]) handleUpload(e.target.files[0]);
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const b64 = ev.target.result;
+                    document.getElementById('previewImg').src = b64;
+                    analyzeAsset(b64);
+                };
+                reader.readAsDataURL(file);
+            }
         };
 
-        function handleUpload(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById('mainImage').src = e.target.result;
-                startAnalysis(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
+        async function analyzeAsset(base64) {
+            document.getElementById('welcome').classList.add('hidden');
+            document.getElementById('loader').classList.remove('hidden');
 
-        async function startAnalysis(base64) {
-            document.getElementById('uploadArea').classList.add('hidden');
-            document.getElementById('loadingState').classList.remove('hidden');
-
-            const prompt = `Analizza questo asset come esperto Senior di Marketing, SEO e Social Media. Restituisci JSON: 
+            const prompt = `Analisi per Web Designer & SEO Specialist (Elementor Expert). Fornisci un JSON:
             {
-                "score": 0-100, "seo_rank": 0-100, 
-                "radar": {"SEO":0,"Persuasione":0,"UX":0,"Design":0,"Conversione":0},
-                "summary": "Riassunto strategico di max 200 battute", "badges": ["Badge Strategico"],
-                "colors": [{"hex": "#...", "p": "30%"}], "psychology": "Spiegazione psicologica colori",
-                "seo": {"alt": "Alt text ottimizzato SEO", "intent": "INFO/TRANS/NAV", "keywords": ["kw1", "kw2"]},
-                "pnl": [{"type": "Trigger", "text": "...", "impact": "High"}],
-                "social": "Caption completa per Instagram/Facebook con hashtag",
-                "tts": "Script per un video promozionale di 15 secondi",
-                "gen_prompt": "Prompt artistico dettagliato per Imagen 4.0 per creare una versione migliore"
+                "scores": {"impact": 85, "attention": 70, "readability": 90, "contrast": 65, "trust": 80},
+                "color_psychology": "Energia, stabilità e benessere. Il giallo (stimolazione) contrasta con il grigio (professionalità)...",
+                "seo": {"it": "Strategia...", "uk": "Strategy...", "keywords": ["..."]},
+                "solutions": [
+                    {"problem": "Titolo poco leggibile su sfondo giallo", "solution": "Aggiungi un text-shadow o un box scuro semitrasparente in Elementor", "priority": "High"},
+                    {"problem": "Assenza di CTA chiara", "solution": "Inserire bottone con contrasto elevato (colore opposto sulla ruota)", "priority": "Urgent"}
+                ],
+                "pnl": {
+                    "sensorial": {"visivo": "...", "auditivo": "...", "cinestesico": "..."},
+                    "triggers": [{"name": "...", "desc": "..."}]
+                },
+                "platforms": {
+                    "instagram": {"caption": "...", "strategy": "...", "tags": "..."},
+                    "facebook": {"caption": "...", "strategy": "...", "tags": "..."},
+                    "linkedin": {"caption": "...", "strategy": "...", "tags": "..."}
+                },
+                "heatmap": [{"x": 0.5, "y": 0.4, "strength": 0.8}]
             }`;
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         contents: [{
                             parts: [
-                                {text: "Esegui un'analisi completa per un web designer SEO-focused."},
+                                {text: "Analizza l'immagine caricata fornendo soluzioni tecniche WordPress/Elementor per i problemi UX/SEO rilevati. Mantieni il testo della psicologia dei colori in formato normale (Maiuscolo/Minuscolo)."},
                                 {inlineData: {mimeType: "image/png", data: base64.split(',')[1]}}
                             ]
                         }],
@@ -287,165 +301,122 @@
                     })
                 });
 
-                const resData = await response.json();
-                currentAnalysis = JSON.parse(resData.candidates[0].content.parts[0].text);
-                renderDashboard(currentAnalysis);
+                const json = await resp.json();
+                currentData = JSON.parse(json.candidates[0].content.parts[0].text);
+                renderDashboard();
+                drawHeatmap();
             } catch (err) {
                 console.error(err);
-                alert("Si è verificato un errore nell'analisi AI.");
+                alert("Errore nell'analisi. Ricarica e riprova.");
             }
         }
 
-        function renderDashboard(data) {
-            document.getElementById('loadingState').classList.add('hidden');
+        function renderDashboard() {
+            document.getElementById('loader').classList.add('hidden');
             document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('topActions').classList.remove('hidden');
+            document.getElementById('navActions').classList.remove('hidden');
 
-            document.getElementById('scoreText').innerText = data.score;
-            document.getElementById('seoRank').innerText = data.seo_rank;
-            document.getElementById('strategicSummary').innerText = data.summary;
-            document.getElementById('seoAlt').innerText = data.seo.alt;
-            document.getElementById('seoIntent').innerText = data.seo.intent;
-            document.getElementById('psychologyNote').innerText = data.psychology;
-            document.getElementById('socialCaption').innerText = data.social;
+            document.getElementById('impactScore').innerText = currentData.scores.impact + '%';
+            document.getElementById('attentionScore').innerText = currentData.scores.attention + '%';
+            document.getElementById('readabilityScore').innerText = currentData.scores.readability + '%';
+            document.getElementById('contrastScore').innerText = currentData.scores.contrast + '%';
+            document.getElementById('trustScore').innerText = currentData.scores.trust + '%';
 
-            // Render Badges
-            document.getElementById('badgeList').innerHTML = data.badges.map(b => 
-                `<span class="bg-indigo-600/20 text-indigo-400 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tight border border-indigo-500/20">${b}</span>`
-            ).join('');
-
-            // Keywords
-            document.getElementById('keywordCloud').innerHTML = data.seo.keywords.map(k => 
-                `<span class="bg-slate-800 text-slate-300 px-4 py-2 rounded-2xl text-xs font-semibold border border-slate-700">#${k}</span>`
-            ).join('');
-
-            // Colors
-            document.getElementById('colorContainer').innerHTML = data.colors.map(c => 
-                `<div class="h-12 w-12 rounded-2xl shadow-xl ring-2 ring-white/5" style="background:${c.hex}" title="${c.hex} - ${c.p}"></div>`
-            ).join('');
-
-            // Copy/PNL
-            document.getElementById('copySuggestions').innerHTML = data.pnl.map(p => `
-                <div class="p-6 bg-slate-800/40 border border-slate-700 rounded-3xl group hover:border-indigo-500/50 transition">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-[9px] font-black uppercase text-indigo-400">${p.type}</span>
-                        <div class="flex gap-1">
-                            <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
-                            <div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>
-                        </div>
+            // FIXED: Maiuscolo/Minuscolo
+            document.getElementById('colorFeeling').innerText = currentData.color_psychology;
+            
+            document.getElementById('seoIt').innerText = currentData.seo.it;
+            document.getElementById('seoUk').innerText = currentData.seo.uk;
+            
+            // Render Solution Matrix
+            document.getElementById('solutionMatrix').innerHTML = currentData.solutions.map(s => `
+                <div class="solution-card p-6 glass rounded-2xl border-l-4 ${s.priority === 'Urgent' ? 'border-red-500' : 'border-indigo-500'} flex flex-col md:flex-row gap-6 items-start">
+                    <div class="flex-shrink-0 bg-white/5 p-3 rounded-lg text-xs font-black uppercase text-white/50">${s.priority}</div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase text-pink-500 mb-1">Criticità Rilevata</p>
+                        <p class="text-sm font-bold text-white mb-3">${s.problem}</p>
+                        <p class="text-[10px] font-black uppercase text-emerald-500 mb-1">Soluzione Tecnica</p>
+                        <p class="text-xs text-white opacity-80 leading-relaxed">${s.solution}</p>
                     </div>
-                    <p class="text-sm font-medium text-slate-200">"${p.text}"</p>
                 </div>
             `).join('');
 
-            initRadar(data.radar);
+            document.getElementById('kwList').innerHTML = currentData.seo.keywords.map(k => 
+                `<span class="bg-indigo-500/10 border border-indigo-500/20 px-4 py-1.5 rounded-full text-[10px] font-bold text-white uppercase">#${k}</span>`
+            ).join('');
+
+            document.getElementById('visivoDesc').innerText = currentData.pnl.sensorial.visivo;
+            document.getElementById('auditivoDesc').innerText = currentData.pnl.sensorial.auditivo;
+            document.getElementById('cinestesicoDesc').innerText = currentData.pnl.sensorial.cinestesico;
+            
+            document.getElementById('pnlTriggers').innerHTML = currentData.pnl.triggers.map(t => `
+                <div class="p-6 glass rounded-2xl border-l-4 border-pink-500">
+                    <h6 class="text-xs font-black uppercase text-pink-500 mb-2 tracking-widest">${t.name}</h6>
+                    <p class="text-xs text-white leading-relaxed opacity-90">${t.desc}</p>
+                </div>
+            `).join('');
+
+            setPlatform('instagram');
         }
 
-        function initRadar(scores) {
-            if (radarChart) radarChart.destroy();
-            const ctx = document.getElementById('radarChart').getContext('2d');
-            radarChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: Object.keys(scores),
-                    datasets: [{
-                        data: Object.values(scores),
-                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
-                        borderColor: '#6366f1',
-                        borderWidth: 4,
-                        pointBackgroundColor: '#fff',
-                        pointRadius: 4
-                    }]
-                },
-                options: {
-                    scales: { 
-                        r: { 
-                            grid: { color: 'rgba(255,255,255,0.05)' }, 
-                            angleLines: { color: 'rgba(255,255,255,0.05)' }, 
-                            ticks: { display: false }, 
-                            pointLabels: { color: '#64748b', font: { size: 10, weight: 'bold' } } 
-                        } 
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
+        function drawHeatmap() {
+            const canvas = document.getElementById('heatmapOverlay');
+            const ctx = canvas.getContext('2d');
+            const img = document.getElementById('previewImg');
+            canvas.width = img.clientWidth;
+            canvas.height = img.clientHeight;
 
-        function showTab(id) {
-            ['seo', 'pnl', 'ai'].forEach(t => {
-                document.getElementById(`content-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.replace('tab-active', 'text-slate-500');
+            currentData.heatmap.forEach(point => {
+                const x = point.x * canvas.width;
+                const y = point.y * canvas.height;
+                const rad = 80 * point.strength;
+                const grad = ctx.createRadialGradient(x, y, 0, x, y, rad);
+                grad.addColorStop(0, 'rgba(255, 0, 0, 1)');
+                grad.addColorStop(1, 'rgba(255, 255, 0, 0)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(x - rad, y - rad, rad * 2, rad * 2);
             });
-            document.getElementById(`content-${id}`).classList.remove('hidden');
-            document.getElementById(`tab-${id}`).classList.add('tab-active');
-            document.getElementById(`tab-${id}`).classList.remove('text-slate-500');
         }
 
         function toggleHeatmap() {
-            document.getElementById('imgFrame').classList.toggle('heatmap-visible');
+            heatmapActive = !heatmapActive;
+            document.getElementById('heatmapOverlay').style.opacity = heatmapActive ? '0.7' : '0';
         }
 
-        document.getElementById('toggleMobile').onclick = () => {
-            document.getElementById('imgFrame').classList.toggle('mobile-mode');
-        };
+        function setPlatform(platform) {
+            const pData = currentData.platforms[platform];
+            const content = document.getElementById('mockupContent');
+            const img = document.getElementById('previewImg').src;
 
-        // TTS
-        async function playPreview() {
-            if (!currentAnalysis) return;
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `In modo estremamente persuasivo, dì: ${currentAnalysis.tts}` }] }],
-                        generationConfig: { 
-                            responseModalities: ["AUDIO"],
-                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } }
-                        }
-                    })
-                });
-                const result = await response.json();
-                const pcmData = result.candidates[0].content.parts[0].inlineData.data;
-                const audioBlob = pcmToWav(pcmData, 24000);
-                new Audio(URL.createObjectURL(audioBlob)).play();
-            } catch (err) { alert("TTS temporaneamente non disponibile."); }
+            document.querySelectorAll('.platform-btn').forEach(b => {
+                b.classList.toggle('tab-active', b.dataset.target === platform);
+            });
+
+            document.getElementById('platformTitle').innerText = platform;
+            document.getElementById('platformStrategy').innerText = pData.strategy;
+            document.getElementById('fullCaptionText').innerText = pData.caption;
+            document.getElementById('socialHashtags').innerText = pData.tags;
+
+            let html = '';
+            if (platform === 'instagram') {
+                html = `<div class="p-4 flex items-center gap-3 bg-black"><div class="w-8 h-8 rounded-full bg-slate-800"></div><span class="text-[10px] font-bold text-white">tuo_brand</span></div><img src="${img}" class="w-full aspect-square object-cover"><div class="p-4 space-y-3"><div class="flex gap-4 text-xl text-white"><i class="far fa-heart"></i><i class="far fa-comment"></i></div><p class="text-[11px] text-white leading-relaxed line-clamp-2">${pData.caption}</p></div>`;
+            } else if (platform === 'facebook') {
+                html = `<div class="p-3 bg-[#242526] flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-slate-700"></div><div><p class="text-[11px] font-bold text-white">Tuo Brand</p><p class="text-[9px] text-white/50">Sponsored</p></div></div><div class="p-4 text-[12px] text-white leading-relaxed bg-[#1c1e21] flex-grow overflow-y-auto">${pData.caption}</div><img src="${img}" class="w-full object-cover">`;
+            } else if (platform === 'linkedin') {
+                html = `<div class="bg-white h-full"><div class="p-4 flex items-center gap-3 border-b"><div class="w-10 h-10 bg-indigo-900 text-white flex items-center justify-center font-bold">B</div><div><p class="text-[11px] font-bold text-black">Brand Hub</p><p class="text-[9px] text-slate-500 italic">2.340 follower</p></div></div><div class="p-4 text-[12px] text-slate-800 leading-relaxed">${pData.caption}</div><img src="${img}" class="w-full object-cover"></div>`;
+            }
+            content.innerHTML = html;
         }
 
-        // Imagen 4.0
-        document.getElementById('generateBtn').onclick = async () => {
-            const area = document.getElementById('generatedImageArea');
-            area.classList.remove('hidden');
-            document.getElementById('genLoading').classList.remove('hidden');
-            document.getElementById('genResult').classList.add('hidden');
-
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        instances: { prompt: currentAnalysis.gen_prompt },
-                        parameters: { sampleCount: 1 }
-                    })
-                });
-                const result = await response.json();
-                const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-                document.getElementById('genLoading').classList.add('hidden');
-                const img = document.getElementById('genResult');
-                img.src = imageUrl;
-                img.classList.remove('hidden');
-            } catch (err) { alert("Errore generazione immagine."); }
-        };
-
-        function pcmToWav(base64, sampleRate) {
-            const buffer = Uint8Array.from(atob(base64), c => c.charCodeAt(0)).buffer;
-            const view = new DataView(new ArrayBuffer(44 + buffer.byteLength));
-            const writeString = (o, s) => { for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i)); };
-            writeString(0, 'RIFF'); view.setUint32(4, 32 + buffer.byteLength, true); writeString(8, 'WAVE');
-            writeString(12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
-            view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 2, true); view.setUint16(32, 2, true);
-            view.setUint16(34, 16, true); writeString(36, 'data'); view.setUint32(40, buffer.byteLength, true);
-            new Uint8Array(view.buffer, 44).set(new Uint8Array(buffer));
-            return new Blob([view.buffer], { type: 'audio/wav' });
+        function switchTab(id) {
+            ['seo', 'pnl', 'social'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`btn-${t}`).classList.remove('tab-active');
+                document.getElementById(`btn-${t}`).style.opacity = '0.4';
+            });
+            document.getElementById(`tab-${id}`).classList.remove('hidden');
+            document.getElementById(`btn-${id}`).classList.add('tab-active');
+            document.getElementById(`btn-${id}`).style.opacity = '1';
         }
     </script>
 </body>
