@@ -3,43 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Evolution Ultimate - SEO & Imagen AI</title>
+    <title>Creative Evolution Ultimate - Intelligence Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0f172a; color: #f8fafc; }
-        .glass-dark { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.05); }
-        .accent-gradient { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --bg-dark: #0f172a;
+        }
+
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: #f8fafc; }
+        .glass-dark { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+        .accent-gradient { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); }
         
-        .loader-ring { width: 48px; height: 48px; border: 5px solid #1e293b; border-bottom-color: #6366f1; border-radius: 50%; display: inline-block; box-sizing: border-box; animation: rotation 1s linear infinite; }
+        .loader-ring { width: 48px; height: 48px; border: 5px solid #1e293b; border-bottom-color: var(--primary); border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
         @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .tab-active { border-bottom: 2px solid #6366f1; color: #6366f1; }
+        .tab-active { border-bottom: 2px solid var(--primary); color: var(--primary); }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 
-        .device-frame { transition: all 0.4s ease; border: 8px solid #334155; }
+        .device-frame { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); border: 8px solid #334155; position: relative; }
         .mobile-mode { width: 320px !important; height: 580px !important; border-radius: 40px; }
+        
+        /* Simulazione Heatmap */
+        .heatmap-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(255,0,0,0.4) 0%, transparent 20%),
+                        radial-gradient(circle at 70% 50%, rgba(255,255,0,0.3) 0%, transparent 25%),
+                        radial-gradient(circle at 40% 80%, rgba(0,255,0,0.2) 0%, transparent 30%);
+            pointer-events: none; mix-blend-mode: overlay; opacity: 0; transition: opacity 0.3s;
+        }
+        .heatmap-visible .heatmap-overlay { opacity: 1; }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; color: black; }
+            .glass-dark { border: 1px solid #ddd; background: white; backdrop-filter: none; }
+            .dashboard-grid { display: block !important; }
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen">
 
     <!-- Header -->
-    <header class="sticky top-0 z-50 glass-dark border-b border-slate-800 px-6 py-4">
+    <header class="sticky top-0 z-50 glass-dark border-b border-slate-800 px-6 py-4 no-print">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="accent-gradient p-2 rounded-xl text-white shadow-lg shadow-indigo-500/20">
-                    <i class="fas fa-bolt"></i>
+                    <i class="fas fa-chart-network"></i>
                 </div>
-                <h1 class="font-black text-xl tracking-tighter uppercase italic">Creative<span class="text-indigo-400">Hub</span></h1>
+                <div>
+                    <h1 class="font-black text-xl tracking-tighter uppercase italic leading-none">Creative<span class="text-indigo-400">Hub</span></h1>
+                    <span class="text-[8px] uppercase tracking-[0.2em] text-slate-500">Professional Strategic Suite</span>
+                </div>
             </div>
             <div id="topActions" class="hidden flex items-center gap-4">
-                <button onclick="location.reload()" class="text-xs font-bold uppercase text-slate-400 hover:text-white transition">Nuovo Test</button>
-                <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition shadow-lg shadow-indigo-500/20">
-                    Esporta PDF
+                <button onclick="location.reload()" class="text-[10px] font-black uppercase text-slate-400 hover:text-white transition">Reset</button>
+                <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition shadow-lg shadow-indigo-500/30 flex items-center gap-2">
+                    <i class="fas fa-file-pdf"></i> Esporta Report
                 </button>
             </div>
         </div>
@@ -47,139 +73,156 @@
 
     <main class="max-w-7xl mx-auto p-6">
         
-        <!-- Welcome/Upload Section -->
-        <div id="uploadArea" class="py-20 text-center max-w-3xl mx-auto animate-in fade-in duration-700">
-            <h2 class="text-6xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-500">
-                Ottimizza il tuo <br>Digital Asset.
+        <!-- Area Upload -->
+        <div id="uploadArea" class="py-24 text-center max-w-3xl mx-auto">
+            <h2 class="text-7xl font-extrabold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-slate-600">
+                Data-Driven <br>Creativity.
             </h2>
-            <p class="text-slate-400 text-lg mb-12">Analisi AI integrata: SEO, PNL e Design Strategy per esperti WordPress ed Elementor.</p>
+            <p class="text-slate-400 text-lg mb-12 font-medium">L'intelligenza artificiale al servizio del tuo funnel di vendita e posizionamento.</p>
             
-            <div id="dropZone" class="glass-dark border-2 border-dashed border-slate-700 rounded-[3rem] p-16 cursor-pointer hover:border-indigo-500 hover:bg-slate-800/50 transition-all group">
+            <div id="dropZone" class="glass-dark border-2 border-dashed border-slate-700 rounded-[3.5rem] p-20 cursor-pointer hover:border-indigo-500 hover:bg-slate-800/40 transition-all group relative overflow-hidden">
                 <input type="file" id="fileInput" class="hidden" accept="image/*">
-                <div class="flex flex-col items-center">
-                    <div class="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                        <i class="fas fa-upload text-2xl text-indigo-400"></i>
+                <div class="flex flex-col items-center relative z-10">
+                    <div class="w-24 h-24 rounded-3xl bg-slate-800 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-2xl">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-indigo-400"></i>
                     </div>
-                    <p class="text-xl font-bold">Trascina qui la tua grafica</p>
-                    <p class="text-sm text-slate-500 mt-2">Analizzeremo colori, copy e potenziale SEO</p>
+                    <p class="text-2xl font-bold tracking-tight">Trascina l'asset creativo</p>
+                    <p class="text-slate-500 mt-2 font-medium">Analizzeremo SEO, PNL, Heatmap e Sentiment</p>
                 </div>
             </div>
         </div>
 
-        <!-- Loading State -->
+        <!-- Stato Caricamento -->
         <div id="loadingState" class="hidden py-40 text-center">
             <span class="loader-ring mb-8"></span>
-            <h3 class="text-indigo-400 font-black tracking-[0.3em] uppercase animate-pulse">Deep Analysis In Progress</h3>
-            <p class="text-slate-500 text-sm mt-4">Stiamo interrogando il modello Gemini 2.5 Flash...</p>
+            <h3 class="text-indigo-400 font-black tracking-[0.4em] uppercase text-sm animate-pulse">Computing Intelligence</h3>
+            <p class="text-slate-500 text-xs mt-4">Interrogazione Gemini 2.5 Flash & Analisi Predittiva...</p>
         </div>
 
-        <!-- Dashboard -->
-        <div id="dashboard" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <!-- Dashboard Principale -->
+        <div id="dashboard" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <!-- Sidebar: Asset & Score -->
+            <!-- Sidebar: Asset Preview & Score -->
             <div class="lg:col-span-4 space-y-8">
-                <div class="glass-dark rounded-[2.5rem] p-6 border border-slate-800 shadow-2xl">
+                <div class="glass-dark rounded-[2.5rem] p-6 border border-slate-800 shadow-2xl sticky top-28">
                     <div class="flex justify-between items-center mb-6">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Asset Preview</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Asset Control</span>
                         <div class="flex gap-2">
-                            <button id="toggleMobile" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                            <button onclick="toggleHeatmap()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-red-400 flex items-center justify-center transition" title="Predizione Heatmap">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button id="toggleMobile" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-400 hover:text-indigo-400 flex items-center justify-center transition" title="Mobile View">
                                 <i class="fas fa-mobile-alt"></i>
                             </button>
                         </div>
                     </div>
                     
-                    <div id="imgFrame" class="device-frame bg-slate-900 rounded-2xl overflow-hidden aspect-video relative flex items-center justify-center mx-auto">
+                    <div id="imgFrame" class="device-frame bg-slate-900 rounded-3xl overflow-hidden aspect-video relative flex items-center justify-center mx-auto shadow-inner">
                         <img id="mainImage" class="w-full h-full object-contain">
+                        <div class="heatmap-overlay"></div>
                     </div>
 
                     <div class="mt-8 grid grid-cols-2 gap-4">
-                        <div class="bg-slate-800/50 p-4 rounded-2xl text-center">
-                            <span class="block text-[10px] font-black text-slate-500 uppercase">Impact Score</span>
-                            <span id="scoreText" class="text-3xl font-black text-indigo-400">--</span>
+                        <div class="bg-indigo-500/10 p-5 rounded-3xl border border-indigo-500/20 text-center">
+                            <span class="block text-[9px] font-black text-indigo-400 uppercase tracking-tighter mb-1">Impact Score</span>
+                            <span id="scoreText" class="text-4xl font-black text-white">--</span>
                         </div>
-                        <div class="bg-slate-800/50 p-4 rounded-2xl text-center">
-                            <span class="block text-[10px] font-black text-slate-500 uppercase">SEO Rank</span>
-                            <span id="seoRank" class="text-3xl font-black text-purple-400">--</span>
+                        <div class="bg-purple-500/10 p-5 rounded-3xl border border-purple-500/20 text-center">
+                            <span class="block text-[9px] font-black text-purple-400 uppercase tracking-tighter mb-1">SEO Readiness</span>
+                            <span id="seoRank" class="text-4xl font-black text-white">--</span>
                         </div>
                     </div>
-                </div>
 
-                <!-- Color & Psychology -->
-                <div class="glass-dark rounded-[2.5rem] p-8 border border-slate-800">
-                    <h4 class="text-xs font-black uppercase tracking-widest text-indigo-400 mb-6">Analisi Cromatica</h4>
-                    <div id="colorContainer" class="flex gap-3 mb-6"></div>
-                    <p id="psychologyNote" class="text-xs leading-relaxed text-slate-400 italic"></p>
+                    <div class="mt-6 p-5 glass-dark rounded-3xl">
+                        <h4 class="text-[9px] font-black uppercase text-slate-500 mb-3">Color Psychology</h4>
+                        <div id="colorContainer" class="flex gap-2 mb-4"></div>
+                        <p id="psychologyNote" class="text-[11px] leading-relaxed text-slate-400 italic"></p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Content Area -->
+            <!-- Area Contenuti -->
             <div class="lg:col-span-8 space-y-8">
                 
-                <!-- Performance Radar & Insights -->
-                <div class="glass-dark rounded-[3rem] p-10 border border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div class="h-64 flex items-center justify-center">
+                <!-- Radar & Executive Summary -->
+                <div class="glass-dark rounded-[3rem] p-10 border border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="h-64 flex items-center justify-center relative">
                         <canvas id="radarChart"></canvas>
                     </div>
-                    <div class="space-y-4">
-                        <h3 class="text-2xl font-black">Strategic Insight</h3>
-                        <p id="strategicSummary" class="text-slate-400 text-sm leading-relaxed"></p>
-                        <div id="badgeList" class="flex flex-wrap gap-2 pt-4"></div>
+                    <div class="flex flex-col justify-center">
+                        <h3 class="text-3xl font-black tracking-tight mb-4">Strategia AI</h3>
+                        <p id="strategicSummary" class="text-slate-400 text-sm leading-relaxed mb-6"></p>
+                        <div id="badgeList" class="flex flex-wrap gap-2"></div>
                     </div>
                 </div>
 
-                <!-- Tabs Section -->
+                <!-- Tabs Nav -->
                 <div class="glass-dark rounded-[3rem] p-10 border border-slate-800">
-                    <div class="flex gap-8 border-b border-slate-800 mb-8 overflow-x-auto no-scrollbar">
-                        <button onclick="showTab('seo')" id="tab-seo" class="tab-active pb-4 text-[10px] font-black uppercase tracking-widest transition">SEO & Content</button>
-                        <button onclick="showTab('pnl')" id="tab-pnl" class="pb-4 text-[10px] font-black uppercase tracking-widest text-slate-500 transition">PNL & Copy</button>
-                        <button onclick="showTab('ai')" id="tab-ai" class="pb-4 text-[10px] font-black uppercase tracking-widest text-slate-500 transition">AI Creative Labs</button>
+                    <div class="flex gap-10 border-b border-slate-800 mb-8 overflow-x-auto no-scrollbar">
+                        <button onclick="showTab('seo')" id="tab-seo" class="tab-active pb-4 text-[10px] font-black uppercase tracking-[0.2em] transition">SEO & Web</button>
+                        <button onclick="showTab('pnl')" id="tab-pnl" class="pb-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 transition">Copy & Social</button>
+                        <button onclick="showTab('ai')" id="tab-ai" class="pb-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 transition">AI Creative Lab</button>
                     </div>
 
                     <!-- SEO Tab -->
-                    <div id="content-seo" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="bg-slate-800/30 p-6 rounded-3xl border border-slate-700">
-                                <label class="text-[9px] font-black uppercase text-indigo-400">SEO Alt Text (WP)</label>
-                                <p id="seoAlt" class="mt-2 text-sm text-slate-300 font-medium"></p>
+                    <div id="content-seo" class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="md:col-span-2 bg-slate-800/40 p-8 rounded-[2rem] border border-slate-700/50">
+                                <label class="text-[9px] font-black uppercase text-indigo-400 block mb-3">Ottimizzazione Alt Text (WordPress)</label>
+                                <p id="seoAlt" class="text-lg text-white font-semibold leading-snug"></p>
                             </div>
-                            <div class="bg-slate-800/30 p-6 rounded-3xl border border-slate-700">
-                                <label class="text-[9px] font-black uppercase text-purple-400">Search Intent</label>
-                                <p id="seoIntent" class="mt-2 text-sm text-slate-300 font-bold uppercase tracking-wide"></p>
+                            <div class="bg-purple-900/20 p-8 rounded-[2rem] border border-purple-500/20">
+                                <label class="text-[9px] font-black uppercase text-purple-400 block mb-3">Search Intent</label>
+                                <div id="seoIntent" class="text-sm font-black text-white px-4 py-2 bg-purple-500/20 rounded-xl inline-block">--</div>
                             </div>
                         </div>
-                        <div id="keywordCloud" class="flex flex-wrap gap-2"></div>
-                    </div>
-
-                    <!-- PNL Tab -->
-                    <div id="content-pnl" class="hidden space-y-6">
-                        <div id="copySuggestions" class="space-y-4"></div>
-                        <div class="mt-8 p-6 bg-indigo-900/20 rounded-3xl border border-indigo-500/20">
-                            <div class="flex justify-between items-center mb-4">
-                                <h5 class="text-xs font-black uppercase text-indigo-400">Audio Preview (TTS)</h5>
-                                <button onclick="playPreview()" class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center hover:bg-indigo-500 transition">
-                                    <i class="fas fa-play text-xs"></i>
-                                </button>
-                            </div>
-                            <p id="ttsScript" class="text-xs text-slate-400 italic">Clicca play per ascoltare il tono di voce suggerito.</p>
+                        <div>
+                            <h5 class="text-[10px] font-black uppercase text-slate-500 mb-4">Keyword Semantiche Suggerite</h5>
+                            <div id="keywordCloud" class="flex flex-wrap gap-3"></div>
                         </div>
                     </div>
 
-                    <!-- AI Generation Tab -->
-                    <div id="content-ai" class="hidden space-y-6">
-                        <div class="text-center py-6">
-                            <h5 class="text-lg font-bold mb-2">Generatore di Varianti Creativa</h5>
-                            <p class="text-sm text-slate-400 mb-8">Usa Imagen 4.0 per creare un'alternativa ottimizzata basata sui dati dell'analisi.</p>
-                            <button id="generateBtn" class="accent-gradient px-8 py-4 rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-xl hover:scale-105 transition">
-                                <i class="fas fa-magic mr-3"></i> Genera Variante
+                    <!-- Copy & Social Tab -->
+                    <div id="content-pnl" class="hidden space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <h5 class="text-[10px] font-black uppercase text-indigo-400">Social Caption (IG/FB)</h5>
+                                <div id="socialCaption" class="bg-slate-800/50 p-6 rounded-3xl border border-slate-700 text-sm text-slate-300 leading-relaxed italic whitespace-pre-wrap"></div>
+                            </div>
+                            <div class="space-y-4">
+                                <h5 class="text-[10px] font-black uppercase text-purple-400">PNL & Ganci Mentali</h5>
+                                <div id="copySuggestions" class="space-y-4"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-8 bg-indigo-600/10 rounded-[2.5rem] border border-indigo-500/20 flex flex-col md:flex-row items-center gap-8">
+                            <div class="flex-1">
+                                <h5 class="text-[10px] font-black uppercase text-indigo-400 mb-2">Voice Strategy Preview</h5>
+                                <p id="ttsScript" class="text-sm text-slate-400">Ascolta il tono di voce suggerito per video/reel.</p>
+                            </div>
+                            <button onclick="playPreview()" class="h-16 w-16 rounded-full accent-gradient flex items-center justify-center text-white shadow-xl hover:scale-110 transition duration-300">
+                                <i class="fas fa-play text-xl ml-1"></i>
                             </button>
                         </div>
-                        <div id="generatedImageArea" class="hidden flex flex-col items-center">
-                            <div class="w-full max-w-md aspect-square rounded-3xl bg-slate-800 overflow-hidden shadow-2xl" id="genLoading">
-                                <div class="w-full h-full flex items-center justify-center bg-slate-800 animate-pulse">
-                                    <i class="fas fa-sparkles text-3xl text-indigo-500"></i>
+                    </div>
+
+                    <!-- AI Lab Tab -->
+                    <div id="content-ai" class="hidden text-center py-10">
+                        <div class="max-w-xl mx-auto">
+                            <h4 class="text-2xl font-black mb-4">Generatore di Varianti</h4>
+                            <p class="text-slate-400 text-sm mb-10">Hai bisogno di un test A/B? Chiedi a Imagen 4.0 di generare una versione ottimizzata basata sui punti deboli dell'asset attuale.</p>
+                            <button id="generateBtn" class="accent-gradient px-10 py-5 rounded-2xl font-black uppercase text-[10px] tracking-[0.3em] shadow-2xl hover:translate-y-[-4px] transition-all">
+                                <i class="fas fa-magic mr-3"></i> Genera Nuova Creative
+                            </button>
+                        </div>
+                        
+                        <div id="generatedImageArea" class="hidden mt-12 flex flex-col items-center">
+                            <div class="w-full max-w-md aspect-square rounded-[3rem] bg-slate-800 overflow-hidden shadow-2xl relative" id="genLoading">
+                                <div class="absolute inset-0 flex items-center justify-center animate-pulse">
+                                    <i class="fas fa-wand-magic-sparkles text-5xl text-indigo-500"></i>
                                 </div>
                             </div>
-                            <img id="genResult" class="hidden w-full max-w-md aspect-square rounded-3xl object-cover shadow-2xl">
+                            <img id="genResult" class="hidden w-full max-w-md aspect-square rounded-[3rem] object-cover shadow-2xl border-4 border-slate-800">
                         </div>
                     </div>
 
@@ -189,11 +232,11 @@
     </main>
 
     <script>
-        const apiKey = "";
+        const apiKey = ""; // Gestito dall'ambiente
         let radarChart = null;
         let currentAnalysis = null;
 
-        // UI Handlers
+        // Gestione UI
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
         
@@ -215,16 +258,17 @@
             document.getElementById('uploadArea').classList.add('hidden');
             document.getElementById('loadingState').classList.remove('hidden');
 
-            const prompt = `Analizza come esperto SEO e PNL. Restituisci JSON: 
+            const prompt = `Analizza questo asset come esperto Senior di Marketing, SEO e Social Media. Restituisci JSON: 
             {
                 "score": 0-100, "seo_rank": 0-100, 
-                "radar": {"SEO":0,"PNL":0,"UX":0,"Visual":0,"Conv":0},
-                "summary": "...", "badges": ["Punto di forza"],
-                "colors": [{"hex": "#...", "p": "30%"}], "psychology": "...",
-                "seo": {"alt": "...", "intent": "TRANSAZIONALE", "keywords": ["..."]},
-                "pnl": [{"type": "Pattern Interrupt", "text": "...", "impact": "High"}],
-                "tts": "Script audio ottimizzato...",
-                "gen_prompt": "Prompt dettagliato per Imagen 4.0 per migliorare questa immagine"
+                "radar": {"SEO":0,"Persuasione":0,"UX":0,"Design":0,"Conversione":0},
+                "summary": "Riassunto strategico di max 200 battute", "badges": ["Badge Strategico"],
+                "colors": [{"hex": "#...", "p": "30%"}], "psychology": "Spiegazione psicologica colori",
+                "seo": {"alt": "Alt text ottimizzato SEO", "intent": "INFO/TRANS/NAV", "keywords": ["kw1", "kw2"]},
+                "pnl": [{"type": "Trigger", "text": "...", "impact": "High"}],
+                "social": "Caption completa per Instagram/Facebook con hashtag",
+                "tts": "Script per un video promozionale di 15 secondi",
+                "gen_prompt": "Prompt artistico dettagliato per Imagen 4.0 per creare una versione migliore"
             }`;
 
             try {
@@ -234,7 +278,7 @@
                     body: JSON.stringify({
                         contents: [{
                             parts: [
-                                {text: "Analizza strategicamente questo asset per un web designer/copywriter."},
+                                {text: "Esegui un'analisi completa per un web designer SEO-focused."},
                                 {inlineData: {mimeType: "image/png", data: base64.split(',')[1]}}
                             ]
                         }],
@@ -248,7 +292,7 @@
                 renderDashboard(currentAnalysis);
             } catch (err) {
                 console.error(err);
-                alert("Errore durante l'analisi.");
+                alert("Si è verificato un errore nell'analisi AI.");
             }
         }
 
@@ -257,37 +301,40 @@
             document.getElementById('dashboard').classList.remove('hidden');
             document.getElementById('topActions').classList.remove('hidden');
 
-            document.getElementById('scoreText').innerText = data.score + "%";
-            document.getElementById('seoRank').innerText = data.seo_rank + "%";
+            document.getElementById('scoreText').innerText = data.score;
+            document.getElementById('seoRank').innerText = data.seo_rank;
             document.getElementById('strategicSummary').innerText = data.summary;
             document.getElementById('seoAlt').innerText = data.seo.alt;
             document.getElementById('seoIntent').innerText = data.seo.intent;
             document.getElementById('psychologyNote').innerText = data.psychology;
-            document.getElementById('ttsScript').innerText = data.tts;
+            document.getElementById('socialCaption').innerText = data.social;
 
-            // Badges
+            // Render Badges
             document.getElementById('badgeList').innerHTML = data.badges.map(b => 
-                `<span class="bg-indigo-600/20 text-indigo-400 px-3 py-1 rounded-full text-[10px] font-black uppercase">${b}</span>`
+                `<span class="bg-indigo-600/20 text-indigo-400 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tight border border-indigo-500/20">${b}</span>`
             ).join('');
 
             // Keywords
             document.getElementById('keywordCloud').innerHTML = data.seo.keywords.map(k => 
-                `<span class="bg-slate-800 text-slate-400 px-3 py-1.5 rounded-xl text-xs font-bold border border-slate-700">#${k}</span>`
+                `<span class="bg-slate-800 text-slate-300 px-4 py-2 rounded-2xl text-xs font-semibold border border-slate-700">#${k}</span>`
             ).join('');
 
             // Colors
             document.getElementById('colorContainer').innerHTML = data.colors.map(c => 
-                `<div class="h-10 w-10 rounded-xl shadow-lg border border-white/10" style="background:${c.hex}" title="${c.hex}"></div>`
+                `<div class="h-12 w-12 rounded-2xl shadow-xl ring-2 ring-white/5" style="background:${c.hex}" title="${c.hex} - ${c.p}"></div>`
             ).join('');
 
-            // Copy
+            // Copy/PNL
             document.getElementById('copySuggestions').innerHTML = data.pnl.map(p => `
-                <div class="p-6 bg-slate-800/40 border border-slate-700 rounded-3xl">
+                <div class="p-6 bg-slate-800/40 border border-slate-700 rounded-3xl group hover:border-indigo-500/50 transition">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-[9px] font-black uppercase text-indigo-400">${p.type}</span>
-                        <span class="text-[9px] font-black text-slate-500">Impatto: ${p.impact}</span>
+                        <div class="flex gap-1">
+                            <div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>
+                        </div>
                     </div>
-                    <p class="text-sm font-medium text-white italic">"${p.text}"</p>
+                    <p class="text-sm font-medium text-slate-200">"${p.text}"</p>
                 </div>
             `).join('');
 
@@ -305,12 +352,20 @@
                         data: Object.values(scores),
                         backgroundColor: 'rgba(99, 102, 241, 0.2)',
                         borderColor: '#6366f1',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#fff'
+                        borderWidth: 4,
+                        pointBackgroundColor: '#fff',
+                        pointRadius: 4
                     }]
                 },
                 options: {
-                    scales: { r: { grid: { color: '#334155' }, angleLines: { color: '#334155' }, ticks: { display: false }, pointLabels: { color: '#94a3b8', font: { weight: 'bold' } } } },
+                    scales: { 
+                        r: { 
+                            grid: { color: 'rgba(255,255,255,0.05)' }, 
+                            angleLines: { color: 'rgba(255,255,255,0.05)' }, 
+                            ticks: { display: false }, 
+                            pointLabels: { color: '#64748b', font: { size: 10, weight: 'bold' } } 
+                        } 
+                    },
                     plugins: { legend: { display: false } }
                 }
             });
@@ -319,17 +374,22 @@
         function showTab(id) {
             ['seo', 'pnl', 'ai'].forEach(t => {
                 document.getElementById(`content-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('tab-active');
+                document.getElementById(`tab-${t}`).classList.replace('tab-active', 'text-slate-500');
             });
             document.getElementById(`content-${id}`).classList.remove('hidden');
             document.getElementById(`tab-${id}`).classList.add('tab-active');
+            document.getElementById(`tab-${id}`).classList.remove('text-slate-500');
+        }
+
+        function toggleHeatmap() {
+            document.getElementById('imgFrame').classList.toggle('heatmap-visible');
         }
 
         document.getElementById('toggleMobile').onclick = () => {
             document.getElementById('imgFrame').classList.toggle('mobile-mode');
         };
 
-        // TTS Function
+        // TTS
         async function playPreview() {
             if (!currentAnalysis) return;
             try {
@@ -337,7 +397,7 @@
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Dì con tono professionale e persuasivo: ${currentAnalysis.tts}` }] }],
+                        contents: [{ parts: [{ text: `In modo estremamente persuasivo, dì: ${currentAnalysis.tts}` }] }],
                         generationConfig: { 
                             responseModalities: ["AUDIO"],
                             speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } }
@@ -346,13 +406,12 @@
                 });
                 const result = await response.json();
                 const pcmData = result.candidates[0].content.parts[0].inlineData.data;
-                const audioBlob = pcmToWav(pcmData, 24000); // Helper per convertire L16 a WAV
-                const audio = new Audio(URL.createObjectURL(audioBlob));
-                audio.play();
-            } catch (err) { alert("Audio non disponibile al momento."); }
+                const audioBlob = pcmToWav(pcmData, 24000);
+                new Audio(URL.createObjectURL(audioBlob)).play();
+            } catch (err) { alert("TTS temporaneamente non disponibile."); }
         }
 
-        // AI Generation with Imagen 4.0
+        // Imagen 4.0
         document.getElementById('generateBtn').onclick = async () => {
             const area = document.getElementById('generatedImageArea');
             area.classList.remove('hidden');
@@ -371,16 +430,16 @@
                 const result = await response.json();
                 const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
                 document.getElementById('genLoading').classList.add('hidden');
-                document.getElementById('genResult').src = imageUrl;
-                document.getElementById('genResult').classList.remove('hidden');
-            } catch (err) { alert("Generazione immagine fallita."); }
+                const img = document.getElementById('genResult');
+                img.src = imageUrl;
+                img.classList.remove('hidden');
+            } catch (err) { alert("Errore generazione immagine."); }
         };
 
-        // PCM to WAV Utility
         function pcmToWav(base64, sampleRate) {
             const buffer = Uint8Array.from(atob(base64), c => c.charCodeAt(0)).buffer;
             const view = new DataView(new ArrayBuffer(44 + buffer.byteLength));
-            const writeString = (offset, string) => { for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i)); };
+            const writeString = (o, s) => { for (let i = 0; i < s.length; i++) view.setUint8(o + i, s.charCodeAt(i)); };
             writeString(0, 'RIFF'); view.setUint32(4, 32 + buffer.byteLength, true); writeString(8, 'WAVE');
             writeString(12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
             view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 2, true); view.setUint16(32, 2, true);
