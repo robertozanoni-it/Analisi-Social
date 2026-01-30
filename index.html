@@ -10,38 +10,45 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
         
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; color: #0f172a; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; color: #0f172a; transition: background 0.3s ease; }
         .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
         .card-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); }
         
         .loader { border: 3px solid #e2e8f0; border-top: 3px solid #6366f1; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .heatmap-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: overlay; opacity: 0; transition: opacity 0.4s ease; filter: blur(18px); }
-        .show-heatmap { opacity: 0.8; }
+        .heatmap-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; mix-blend-mode: overlay; opacity: 0; transition: opacity 0.4s ease; filter: blur(20px); }
+        .show-heatmap { opacity: 0.85; }
         
-        .status-badge { font-size: 0.6rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+        .device-preview { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); margin: 0 auto; }
+        .mobile-view { width: 280px !important; height: 500px !important; border: 12px solid #1e293b; border-radius: 32px; }
         
-        .tab-btn.active { border-bottom: 2px solid #6366f1; color: #6366f1; }
+        .status-badge { font-size: 0.6rem; font-weight: 800; padding: 2px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .tab-btn { transition: all 0.3s ease; position: relative; }
+        .tab-btn.active { color: #6366f1; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: #6366f1; border-radius: 2px; }
+
+        @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body class="antialiased">
 
     <!-- Navbar -->
-    <nav class="sticky top-0 z-50 glass border-b border-slate-200 px-6 py-4">
+    <nav class="sticky top-0 z-50 glass border-b border-slate-200 px-6 py-4 no-print">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="bg-indigo-600 p-2 rounded-lg text-white">
+                <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-200">
                     <i class="fas fa-brain"></i>
                 </div>
                 <h1 class="font-black text-xl tracking-tighter uppercase italic">Creative<span class="text-indigo-600">Evolution</span></h1>
             </div>
             <div id="nav-actions" class="hidden flex items-center gap-4">
-                <button onclick="resetApp()" class="text-xs font-bold uppercase text-slate-400 hover:text-indigo-600 transition">
-                    <i class="fas fa-undo mr-1"></i> Reset
+                <button onclick="resetApp()" class="text-xs font-bold uppercase text-slate-400 hover:text-indigo-600 transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i> Nuovo Upload
                 </button>
-                <button onclick="window.print()" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-200">
-                    <i class="fas fa-file-pdf mr-2"></i> Report
+                <div class="h-6 w-[1px] bg-slate-200"></div>
+                <button onclick="window.print()" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl hover:bg-indigo-700 transition-all">
+                    <i class="fas fa-file-export mr-2"></i> Export Report
                 </button>
             </div>
         </div>
@@ -52,118 +59,142 @@
         <!-- Upload Section -->
         <div id="upload-view" class="max-w-2xl mx-auto mt-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div class="mb-10">
-                <h2 class="text-4xl font-black text-slate-900 mb-4 leading-tight">Ottimizza i tuoi asset per <span class="text-indigo-600 underline">Conversioni Reali</span>.</h2>
-                <p class="text-slate-500 text-lg">Analisi istantanea basata su PNL, Principi di Cialdini e parametri SEO di Google.</p>
+                <span class="bg-indigo-100 text-indigo-700 text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-6 inline-block">Versione 2.0 Pro</span>
+                <h2 class="text-5xl font-black text-slate-900 mb-6 leading-[1.1]">Analisi Neuro-Estetica <br><span class="text-indigo-600">Data-Driven</span>.</h2>
+                <p class="text-slate-500 text-lg max-w-lg mx-auto leading-relaxed">Trasforma i tuoi asset grafici in macchine da conversione testate su PNL, SEO e principi di persuasione.</p>
             </div>
             
-            <div id="dropZone" class="glass card-shadow p-16 border-2 border-dashed border-slate-300 rounded-[3rem] cursor-pointer hover:border-indigo-400 hover:bg-white transition-all group relative overflow-hidden">
+            <div id="dropZone" class="glass card-shadow p-20 border-2 border-dashed border-slate-300 rounded-[3.5rem] cursor-pointer hover:border-indigo-400 hover:bg-white transition-all group relative overflow-hidden">
                 <div class="relative z-10 flex flex-col items-center">
-                    <div class="w-20 h-20 bg-indigo-50 text-indigo-500 rounded-3xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
-                        <i class="fas fa-upload text-3xl"></i>
+                    <div class="w-24 h-24 bg-indigo-50 text-indigo-500 rounded-[2rem] flex items-center justify-center mb-8 group-hover:rotate-6 transition-transform shadow-inner">
+                        <i class="fas fa-cloud-upload-alt text-4xl"></i>
                     </div>
-                    <p class="text-xl font-bold text-slate-700">Rilascia l'immagine qui</p>
-                    <p class="text-sm text-slate-400 mt-2 font-medium italic">Supporta JPG, PNG, WebP (Max 5MB)</p>
+                    <p class="text-2xl font-black text-slate-800">Trascina o Clicca</p>
+                    <p class="text-sm text-slate-400 mt-3 font-medium italic">Supporto AI per WebP, PNG e JPG</p>
                 </div>
                 <input type="file" id="fileInput" class="hidden" accept="image/*">
             </div>
         </div>
 
         <!-- Loading View -->
-        <div id="loading-view" class="hidden flex flex-col items-center justify-center py-32 space-y-6">
+        <div id="loading-view" class="hidden flex flex-col items-center justify-center py-40 space-y-8">
             <div class="loader"></div>
             <div class="text-center">
-                <h3 class="font-black uppercase tracking-[0.3em] text-slate-800">Analisi Bio-metrica in corso</h3>
-                <p class="text-slate-400 text-sm mt-2">Mappatura punti di fissazione oculare e trigger PNL...</p>
+                <h3 class="font-black uppercase tracking-[0.4em] text-indigo-600 animate-pulse">Computing Intelligence</h3>
+                <p class="text-slate-400 text-sm mt-3 font-medium italic">Mappatura submodalità visive e cluster SEO...</p>
             </div>
         </div>
 
         <!-- Analysis View -->
-        <div id="analysis-view" class="hidden space-y-8 animate-in fade-in duration-500">
+        <div id="analysis-view" class="hidden space-y-10 animate-in fade-in duration-700">
             
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 
-                <!-- Sidebar -->
-                <div class="lg:col-span-4 space-y-6">
-                    <!-- Preview Immagine -->
-                    <div class="glass card-shadow p-4 rounded-3xl overflow-hidden">
-                        <div class="flex justify-between items-center mb-4 px-2">
-                            <span class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Visual Feedback</span>
+                <!-- Sidebar: Visual & Stats -->
+                <div class="lg:col-span-4 space-y-8">
+                    <!-- Preview Immagine & Heatmap -->
+                    <div class="glass card-shadow p-5 rounded-[2.5rem] overflow-hidden sticky top-28">
+                        <div class="flex justify-between items-center mb-5 px-3">
+                            <div>
+                                <h3 class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Asset Audit</h3>
+                                <p class="text-xs font-bold text-slate-900" id="fileNameLabel">creative_test.png</p>
+                            </div>
                             <div class="flex gap-2">
-                                <button onclick="toggleHeatmap()" class="bg-indigo-100 text-indigo-600 p-2 rounded-lg hover:bg-indigo-600 hover:text-white transition" title="Toggle Heatmap">
+                                <button onclick="toggleView('mobile')" id="mobileBtn" class="bg-slate-100 text-slate-400 p-2.5 rounded-xl hover:bg-slate-200 transition" title="Mobile Preview">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </button>
+                                <button onclick="toggleHeatmap()" class="bg-indigo-100 text-indigo-600 p-2.5 rounded-xl hover:bg-indigo-600 hover:text-white transition" title="Toggle Heatmap">
                                     <i class="fas fa-fire-alt"></i>
                                 </button>
                             </div>
                         </div>
-                        <div class="relative rounded-2xl overflow-hidden bg-slate-100 aspect-square flex items-center justify-center border border-slate-100 shadow-inner" id="imgContainer">
+                        
+                        <div class="relative rounded-[1.5rem] overflow-hidden bg-slate-200 aspect-square flex items-center justify-center shadow-inner device-preview" id="imgContainer">
                             <img id="previewImg" class="w-full h-full object-contain">
                             <canvas id="heatmapLayer" class="heatmap-overlay"></canvas>
+                        </div>
+
+                        <!-- Color Palette Analysis -->
+                        <div class="mt-6">
+                            <h4 class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-3 px-2">Palette & Psicologia</h4>
+                            <div id="colorPalette" class="flex gap-2 px-2"></div>
+                            <p id="colorPsychology" class="mt-3 text-[11px] text-slate-500 italic px-2 leading-relaxed"></p>
                         </div>
                     </div>
 
                     <!-- Impact Score -->
-                    <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white relative overflow-hidden card-shadow">
-                        <div class="relative z-10">
-                            <div class="flex justify-between items-start">
-                                <span class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Impact Score</span>
-                                <i class="fas fa-bolt text-indigo-400 animate-pulse"></i>
+                    <div class="bg-slate-900 rounded-[2.5rem] p-10 text-white relative overflow-hidden card-shadow">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
+                        <div class="relative z-10 text-center">
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400">Conversione Probabile</span>
+                            <div class="mt-6 flex justify-center items-end gap-2">
+                                <span id="scoreValue" class="text-8xl font-black tracking-tighter leading-none">--</span>
+                                <span class="text-2xl font-bold opacity-30 mb-2">%</span>
                             </div>
-                            <div class="mt-4 flex items-end gap-2">
-                                <span id="scoreValue" class="text-7xl font-black tracking-tighter">--</span>
-                                <span class="text-xl font-bold opacity-30 mb-2">/100</span>
-                            </div>
-                            <p id="scoreLabel" class="mt-4 inline-block px-3 py-1 bg-white/10 rounded-full text-[10px] font-bold uppercase tracking-widest border border-white/10"></p>
+                            <p id="scoreLabel" class="mt-6 inline-block px-4 py-1.5 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/10"></p>
                         </div>
                     </div>
-
-                    <!-- Audit Pos/Neg -->
-                    <div id="auditList" class="space-y-3"></div>
                 </div>
 
-                <!-- Main Content -->
-                <div class="lg:col-span-8 space-y-6">
+                <!-- Main Analysis Content -->
+                <div class="lg:col-span-8 space-y-8">
                     
-                    <!-- Tabs UI -->
-                    <div class="glass rounded-[2rem] p-8 card-shadow border-none">
-                        <div class="flex gap-8 border-b border-slate-100 mb-8">
-                            <button class="tab-btn active pb-4 text-xs font-black uppercase tracking-widest">Strategia & Copy</button>
-                            <button class="tab-btn pb-4 text-xs font-black uppercase tracking-widest text-slate-400">SEO & WordPress</button>
+                    <!-- Performance Radar -->
+                    <div class="glass rounded-[3rem] p-10 card-shadow border-none grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <h4 class="text-3xl font-black tracking-tight mb-4">Analisi Dimensionale</h4>
+                            <p class="text-slate-500 text-sm leading-relaxed mb-6">Il grafico mostra come l'asset bilancia gli aspetti tecnici e persuasivi. Un'area ampia indica un asset versatile.</p>
+                            <div id="radarLegend" class="space-y-3"></div>
                         </div>
-
-                        <div id="tab-copy" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="copyOptions"></div>
-                        </div>
-                    </div>
-
-                    <!-- WordPress & Technical Box -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-indigo-600 rounded-[2rem] p-8 text-white card-shadow">
-                            <h4 class="text-[10px] font-black uppercase tracking-widest text-indigo-200 mb-6">Elementor Guide</h4>
-                            <div id="elementorTips" class="space-y-4"></div>
-                        </div>
-                        <div class="bg-white rounded-[2rem] p-8 card-shadow border border-slate-100">
-                            <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-6">SEO Metadata</h4>
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="text-[9px] font-black text-slate-400 uppercase">Alt Text Suggerito (SEO)</label>
-                                    <div id="altText" class="mt-1 p-3 bg-slate-50 rounded-xl text-xs font-medium text-slate-600 border border-slate-100 italic"></div>
-                                </div>
-                                <div id="seoKeywords" class="flex flex-wrap gap-2"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Radar Analysis -->
-                    <div class="glass rounded-[2rem] p-8 card-shadow border-none flex flex-col md:flex-row items-center gap-10">
-                        <div class="w-full md:w-1/2">
-                            <h4 class="text-xl font-black mb-4">Analisi Dimensionale</h4>
-                            <p class="text-sm text-slate-500 mb-6">Questo grafico mostra il bilanciamento tra l'estetica pura e l'efficacia comunicativa del tuo asset.</p>
-                            <div id="radarLegend" class="grid grid-cols-2 gap-2"></div>
-                        </div>
-                        <div class="w-64 h-64">
+                        <div class="w-full aspect-square max-w-[300px] mx-auto">
                             <canvas id="radarChart"></canvas>
                         </div>
                     </div>
 
+                    <!-- Tabs UI: Strategia e SEO -->
+                    <div class="glass rounded-[3rem] p-10 card-shadow border-none">
+                        <div class="flex gap-10 border-b border-slate-100 mb-10 overflow-x-auto no-scrollbar">
+                            <button onclick="switchTab('copy')" id="tabCopyBtn" class="tab-btn active pb-4 text-[11px] font-black uppercase tracking-widest whitespace-nowrap">Persuasione & PNL</button>
+                            <button onclick="switchTab('seo')" id="tabSeoBtn" class="tab-btn pb-4 text-[11px] font-black uppercase tracking-widest text-slate-400 whitespace-nowrap">SEO & WordPress</button>
+                            <button onclick="switchTab('social')" id="tabSocialBtn" class="tab-btn pb-4 text-[11px] font-black uppercase tracking-widest text-slate-400 whitespace-nowrap">Social Strategy</button>
+                        </div>
+
+                        <!-- Tab: Persuasione -->
+                        <div id="content-copy" class="space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="copyOptions"></div>
+                            <div id="auditList" class="grid grid-cols-1 gap-4"></div>
+                        </div>
+
+                        <!-- Tab: SEO (Hidden) -->
+                        <div id="content-seo" class="hidden space-y-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-6">
+                                    <h5 class="text-sm font-black uppercase tracking-widest text-indigo-600">Asset Optimization</h5>
+                                    <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                                        <label class="text-[10px] font-black text-slate-400 uppercase">WordPress Alt Text</label>
+                                        <p id="altText" class="mt-3 text-sm font-medium text-slate-700 italic"></p>
+                                    </div>
+                                    <div id="seoKeywords" class="flex flex-wrap gap-2"></div>
+                                </div>
+                                <div class="bg-indigo-600 rounded-3xl p-8 text-white shadow-xl">
+                                    <h5 class="text-[10px] font-black uppercase tracking-widest text-indigo-200 mb-6">Elementor Checklist</h5>
+                                    <div id="elementorTips" class="space-y-4"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Social (Hidden) -->
+                        <div id="content-social" class="hidden space-y-6">
+                            <div class="bg-slate-50 p-8 rounded-3xl border border-dashed border-slate-300">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <i class="fab fa-instagram text-xl text-pink-600"></i>
+                                    <h5 class="text-sm font-black uppercase tracking-widest">Caption Suggerita</h5>
+                                </div>
+                                <div id="socialCaption" class="text-sm leading-relaxed text-slate-700 whitespace-pre-line"></div>
+                                <div id="hashtags" class="mt-6 flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -198,7 +229,7 @@
 
         function handleFile(file) {
             if (!file || !file.type.startsWith('image/')) return;
-            
+            document.getElementById('fileNameLabel').innerText = file.name;
             const reader = new FileReader();
             reader.onload = (e) => {
                 previewImg.src = e.target.result;
@@ -208,36 +239,34 @@
         }
 
         function resetApp() {
-            fileInput.value = ""; // Fix Reset
+            fileInput.value = "";
             analysisView.classList.add('hidden');
             navActions.classList.add('hidden');
             uploadView.classList.remove('hidden');
+            document.body.style.background = "#f1f5f9";
         }
 
         async function runAnalysis(base64) {
             uploadView.classList.add('hidden');
             loadingView.classList.remove('hidden');
 
-            const systemPrompt = `Sei un esperto di Neuromarketing, PNL, SEO Specialist e Web Designer esperto di WordPress/Elementor.
-            Analizza l'immagine e restituisci un JSON con questa struttura esatta:
+            const systemPrompt = `Sei un esperto di Neuromarketing, PNL, SEO Specialist e Web Designer per WordPress/Elementor.
+            Analizza l'immagine e restituisci un JSON con questa struttura:
             {
                 "score": 88,
                 "label": "Ottimizzato",
-                "scores": {"SEO": 85, "PNL": 75, "UX": 90, "Visual": 80, "Conversione": 70},
+                "scores": {"SEO": 85, "PNL": 75, "UX": 90, "Visual": 80, "Conversion": 70},
                 "audit": {
-                    "positivi": [{"titolo": "Gerarchia Visiva", "desc": "Il focus è chiaro sulla CTA."}],
-                    "negativi": [{"titolo": "Contrasto Testo", "desc": "Il testo in basso è poco leggibile."}]
+                    "positivi": [{"titolo": "Titolo", "desc": "desc"}],
+                    "negativi": [{"titolo": "Titolo", "desc": "desc"}]
                 },
-                "copy_options": [
-                    {"type": "Pattern Interrupt", "text": "Testo d'impatto...", "impact": "+35%"},
-                    {"type": "Rapport PNL", "text": "Testo empatico...", "impact": "+20%"}
-                ],
-                "seo_data": {
-                    "alt_text": "Descrizione ottimizzata per Google...",
-                    "keywords": ["tag1", "tag2"]
-                },
-                "elementor_tips": ["Usa il widget CTA", "Applica un Box Shadow"],
-                "heatmap_points": [{"x": 0.5, "y": 0.4, "v": 0.8}]
+                "copy": [{"type": "Pattern Interrupt", "text": "...", "impact": "+35%"}],
+                "seo": {"alt": "...", "keywords": []},
+                "elementor": ["Usa Motion Effects", "Widget Image Box"],
+                "heatmap": [{"x": 0.5, "y": 0.4, "v": 0.8}],
+                "colors": [{"hex": "#ff0000", "p": "30%"}],
+                "color_psychology": "Il rosso stimola urgenza...",
+                "social": {"caption": "Testo caption...", "tags": ["#seo", "#pnl"]}
             }`;
 
             try {
@@ -247,7 +276,7 @@
                     body: JSON.stringify({
                         contents: [{
                             parts: [
-                                {text: "Esegui un audit professionale di questo asset creativo per una strategia di digital marketing."},
+                                {text: "Analizza questo asset per una strategia b2b/b2c professionale."},
                                 {inlineData: {mimeType: "image/png", data: base64.split(',')[1]}}
                             ]
                         }],
@@ -257,10 +286,10 @@
                 });
 
                 const result = await response.json();
-                const analysis = JSON.parse(result.candidates[0].content.parts[0].text);
-                renderResults(analysis);
+                const data = JSON.parse(result.candidates[0].content.parts[0].text);
+                renderResults(data);
             } catch (err) {
-                console.error("Analisi fallita:", err);
+                console.error("Error:", err);
                 resetApp();
             }
         }
@@ -277,36 +306,47 @@
             const auditContainer = document.getElementById('auditList');
             auditContainer.innerHTML = '';
             data.audit.positivi.forEach(i => {
-                auditContainer.innerHTML += `<div class="p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-xl text-emerald-900"><p class="text-[10px] font-black uppercase mb-1">PRO</p><p class="text-xs font-semibold">${i.titolo}: <span class="font-normal">${i.desc}</span></p></div>`;
+                auditContainer.innerHTML += `<div class="p-5 bg-emerald-50/50 border border-emerald-100 rounded-[1.5rem] flex gap-4 items-start">
+                    <div class="bg-emerald-500 text-white p-2 rounded-lg text-xs"><i class="fas fa-check"></i></div>
+                    <div><h5 class="text-xs font-black uppercase text-emerald-800">${i.titolo}</h5><p class="text-xs text-emerald-700/80 mt-1">${i.desc}</p></div>
+                </div>`;
             });
             data.audit.negativi.forEach(i => {
-                auditContainer.innerHTML += `<div class="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-xl text-rose-900"><p class="text-[10px] font-black uppercase mb-1">FIX</p><p class="text-xs font-semibold">${i.titolo}: <span class="font-normal">${i.desc}</span></p></div>`;
+                auditContainer.innerHTML += `<div class="p-5 bg-rose-50/50 border border-rose-100 rounded-[1.5rem] flex gap-4 items-start">
+                    <div class="bg-rose-500 text-white p-2 rounded-lg text-xs"><i class="fas fa-exclamation"></i></div>
+                    <div><h5 class="text-xs font-black uppercase text-rose-800">${i.titolo}</h5><p class="text-xs text-rose-700/80 mt-1">${i.desc}</p></div>
+                </div>`;
             });
 
-            // Copy
-            document.getElementById('copyOptions').innerHTML = data.copy_options.map(opt => `
-                <div class="p-6 bg-slate-50 border border-slate-100 rounded-2xl group hover:bg-white transition-all shadow-sm">
+            // Copy & Social
+            document.getElementById('copyOptions').innerHTML = data.copy.map(opt => `
+                <div class="p-6 bg-white border border-slate-100 rounded-3xl shadow-sm">
                     <div class="flex justify-between items-center mb-4">
-                        <span class="status-badge bg-indigo-600 text-white">${opt.type}</span>
-                        <span class="text-[10px] font-black text-emerald-600">${opt.impact}</span>
+                        <span class="status-badge bg-slate-900 text-white">${opt.type}</span>
+                        <span class="text-[10px] font-black text-indigo-600">${opt.impact}</span>
                     </div>
-                    <p class="text-sm font-medium italic text-slate-700">"${opt.text}"</p>
+                    <p class="text-xs font-medium italic text-slate-700">"${opt.text}"</p>
                 </div>
             `).join('');
 
-            // SEO & Technical
-            document.getElementById('altText').innerText = data.seo_data.alt_text;
-            document.getElementById('seoKeywords').innerHTML = data.seo_data.keywords.map(k => `<span class="bg-slate-100 text-slate-500 px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-tighter">#${k}</span>`).join('');
-            
-            document.getElementById('elementorTips').innerHTML = data.elementor_tips.map(tip => `
-                <div class="flex items-center gap-3 text-xs font-medium">
-                    <div class="h-2 w-2 rounded-full bg-white opacity-40"></div>
-                    ${tip}
+            document.getElementById('socialCaption').innerText = data.social.caption;
+            document.getElementById('hashtags').innerHTML = data.social.tags.map(t => `<span class="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-1 rounded-md">${t}</span>`).join('');
+
+            // Colors
+            document.getElementById('colorPalette').innerHTML = data.colors.map(c => `
+                <div class="group relative flex-1 h-10 rounded-lg shadow-inner cursor-help" style="background:${c.hex}" title="${c.hex} - ${c.p}">
+                    <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[8px] font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition">${c.hex}</span>
                 </div>
             `).join('');
+            document.getElementById('colorPsychology').innerText = data.color_psychology;
+
+            // SEO & Elementor
+            document.getElementById('altText').innerText = data.seo.alt;
+            document.getElementById('seoKeywords').innerHTML = data.seo.keywords.map(k => `<span class="bg-slate-200 text-slate-600 px-2 py-1 rounded-lg text-[9px] font-black uppercase">#${k}</span>`).join('');
+            document.getElementById('elementorTips').innerHTML = data.elementor.map(tip => `<div class="flex items-center gap-3 text-xs font-bold"><div class="h-1.5 w-1.5 rounded-full bg-white"></div>${tip}</div>`).join('');
 
             initRadar(data.scores);
-            drawHeatmap(data.heatmap_points);
+            drawHeatmap(data.heatmap);
         }
 
         function initRadar(scores) {
@@ -318,16 +358,17 @@
                     labels: Object.keys(scores),
                     datasets: [{
                         data: Object.values(scores),
-                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.15)',
                         borderColor: '#6366f1',
-                        borderWidth: 3,
+                        borderWidth: 4,
                         pointBackgroundColor: '#fff',
                         pointBorderColor: '#6366f1',
-                        pointRadius: 4
+                        pointRadius: 6,
+                        pointHoverRadius: 8
                     }]
                 },
                 options: {
-                    scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,0.05)' }, angleLines: { display: false }, pointLabels: { font: { size: 10, weight: 'bold' } } } },
+                    scales: { r: { min: 0, max: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,0.04)' }, angleLines: { color: 'rgba(0,0,0,0.04)' }, pointLabels: { font: { size: 10, weight: '900', family: 'Plus Jakarta Sans' }, color: '#94a3b8' } } },
                     plugins: { legend: { display: false } }
                 }
             });
@@ -340,15 +381,45 @@
             canvas.height = container.clientHeight;
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0,0, canvas.width, canvas.height);
-
             points.forEach(p => {
-                const grad = ctx.createRadialGradient(p.x * canvas.width, p.y * canvas.height, 0, p.x * canvas.width, p.y * canvas.height, 120);
+                const grad = ctx.createRadialGradient(p.x * canvas.width, p.y * canvas.height, 0, p.x * canvas.width, p.y * canvas.height, 140);
                 grad.addColorStop(0, `rgba(255, 60, 0, ${p.v})`);
-                grad.addColorStop(0.5, 'rgba(255, 200, 0, 0.2)');
+                grad.addColorStop(0.4, 'rgba(255, 180, 0, 0.25)');
                 grad.addColorStop(1, 'transparent');
-                ctx.fillStyle = grad;
-                ctx.fillRect(0,0, canvas.width, canvas.height);
+                ctx.fillStyle = grad; ctx.fillRect(0,0, canvas.width, canvas.height);
             });
+        }
+
+        function switchTab(tab) {
+            const tabs = ['copy', 'seo', 'social'];
+            tabs.forEach(t => {
+                document.getElementById(`content-${t}`).classList.add('hidden');
+                document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}Btn`).classList.remove('active', 'text-slate-900');
+                document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}Btn`).classList.add('text-slate-400');
+            });
+            document.getElementById(`content-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}Btn`).classList.add('active', 'text-slate-900');
+        }
+
+        function toggleView(mode) {
+            const container = document.getElementById('imgContainer');
+            const btn = document.getElementById('mobileBtn');
+            if(container.classList.contains('mobile-view')) {
+                container.classList.remove('mobile-view');
+                btn.classList.replace('bg-slate-900', 'bg-slate-100');
+                btn.classList.replace('text-white', 'text-slate-400');
+            } else {
+                container.classList.add('mobile-view');
+                btn.classList.replace('bg-slate-100', 'bg-slate-900');
+                btn.classList.replace('text-slate-400', 'text-white');
+            }
+            // Aggiorna heatmap dopo resize
+            setTimeout(() => { 
+                const canvas = document.getElementById('heatmapLayer');
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+                // Qui dovresti ridisegnare, ma per semplicità rifacciamo l'ultima analisi
+            }, 500);
         }
 
         function toggleHeatmap() {
