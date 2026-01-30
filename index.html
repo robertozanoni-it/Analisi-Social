@@ -3,236 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Executive Hub - Strategist Edition</title>
+    <title>Strategist Intelligence Hub v5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap');
         
         :root {
-            --accent: #ec4899;
-            --primary: #6366f1;
-            --bg: #0b0f1a;
+            --accent: #6366f1;
+            --secondary: #ec4899;
+            --bg: #030712;
         }
 
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: #ffffff; overflow-x: hidden; }
-        h1, h2, h3, h4, .font-outfit { font-family: 'Outfit', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: #ffffff; }
+        h1, h2, h3, .font-outfit { font-family: 'Outfit', sans-serif; }
 
-        .glass { background: rgba(23, 32, 53, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .gradient-text { background: linear-gradient(to right, #818cf8, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .gradient-bg { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
+        .gradient-text { background: linear-gradient(to right, #818cf8, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .loader { width: 40px; height: 40px; border: 3px solid rgba(99, 102, 241, 0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .mode-toggle { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mode-active { background: var(--accent); box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+
+        .loader { width: 48px; height: 48px; border: 4px solid rgba(99, 102, 241, 0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--accent)); transition: all 0.3s ease; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -10px var(--primary); }
-
-        .tab-active { color: #ffffff !important; border-bottom: 4px solid var(--accent); opacity: 1 !important; transform: translateY(-2px); }
-
-        .mockup-container { width: 320px; height: 580px; background: #000; border-radius: 35px; overflow: hidden; border: 8px solid #1f2937; position: relative; }
+        .score-circle { position: relative; width: 80px; height: 80px; display: flex; items-center: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.05); }
         
-        #heatmapOverlay { pointer-events: none; mix-blend-mode: overlay; opacity: 0.6; }
+        #heatmapOverlay { pointer-events: none; mix-blend-mode: color-dodge; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        .solution-card { transition: all 0.3s ease; }
-        .solution-card:hover { border-color: rgba(99, 102, 241, 0.4); background: rgba(99, 102, 241, 0.05); }
-
-        @media print { .no-print { display: none !important; } }
+        @media print { .no-print { display: none !important; } body { background: white; color: black; } .glass { border: 1px solid #ddd; background: white; } }
     </style>
 </head>
-<body class="p-0 m-0">
+<body class="antialiased">
 
-    <nav class="sticky top-0 z-50 glass border-b border-white/5 px-8 py-4 no-print">
-        <div class="max-w-[1600px] mx-auto flex justify-between items-center">
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 glass border-b border-white/5 px-6 py-4 no-print">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center shadow-lg">
-                    <i class="fas fa-rocket text-white"></i>
+                <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
+                    <i class="fas fa-brain text-white text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight leading-none text-white">STRATEGIST<span class="text-pink-500 italic">HUB</span></h1>
-                    <p class="text-[9px] uppercase tracking-[0.3em] text-white/60 font-bold">SEO & PNL Conversion Engine</p>
+                    <h1 class="text-xl font-black tracking-tight text-white uppercase">Omni<span class="text-indigo-400 font-light">Audit</span></h1>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <p class="text-[9px] uppercase tracking-widest text-white/50 font-bold">AI Engine Online</p>
+                    </div>
                 </div>
             </div>
-            <div id="navActions" class="hidden flex items-center gap-6">
-                <button onclick="window.print()" class="text-xs font-bold uppercase tracking-widest hover:text-pink-500 transition text-white">
-                    <i class="fas fa-file-pdf mr-2"></i> Report Strategico
-                </button>
-                <button onclick="location.reload()" class="btn-primary px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest text-white shadow-xl">
-                    Nuovo Audit
-                </button>
+            
+            <div class="hidden md:flex items-center bg-white/5 p-1 rounded-full border border-white/10 no-print" id="modeSelector">
+                <button onclick="setMode('brand')" id="mode-brand" class="mode-toggle mode-active px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">Brand & UX</button>
+                <button onclick="setMode('content')" id="mode-content" class="mode-toggle px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest opacity-50">Content & SEO</button>
+            </div>
+
+            <div id="navActions" class="hidden flex items-center gap-4">
+                <button onclick="window.print()" class="p-2 hover:text-indigo-400 transition text-white/70"><i class="fas fa-print"></i></button>
+                <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-500 px-5 py-2 rounded-lg text-xs font-bold transition shadow-lg shadow-indigo-500/20">Nuova Analisi</button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <main class="max-w-[1600px] mx-auto p-8">
+    <main class="max-w-7xl mx-auto px-6 py-12">
         
-        <section id="welcome" class="py-20 text-center">
-            <h2 class="text-6xl md:text-8xl font-black tracking-tighter mb-6 font-outfit text-white">
-                Analisi.<br><span class="gradient-text">Soluzione. Vendita.</span>
+        <!-- Welcome / Upload -->
+        <section id="welcome" class="max-w-3xl mx-auto text-center py-20 animate-in fade-in duration-700">
+            <h2 class="text-5xl md:text-7xl font-black tracking-tighter mb-6 font-outfit">
+                Analisi per <br><span class="gradient-text">Professionisti.</span>
             </h2>
-            <p class="text-white max-w-2xl mx-auto text-lg mb-12 opacity-90">
-                Hub integrato per SEO specialist e content creator. Trasforma asset visivi in macchine da conversione.
+            <p class="text-white/60 text-lg mb-10 leading-relaxed">
+                Strumento unificato per web designer e content creator. Valuta l'impatto visivo del brand o l'efficacia divulgativa dei tuoi contenuti in un solo clic.
             </p>
             
-            <div id="dropZone" class="max-w-xl mx-auto glass rounded-[2.5rem] p-12 border-2 border-dashed border-white/10 hover:border-indigo-500/50 transition-all cursor-pointer group">
+            <div id="dropZone" class="glass rounded-[2rem] p-16 border-2 border-dashed border-white/10 hover:border-indigo-500/50 transition-all cursor-pointer group group relative overflow-hidden">
                 <input type="file" id="fileInput" class="hidden" accept="image/*">
-                <div class="flex flex-col items-center">
-                    <div class="w-20 h-20 rounded-full bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition duration-500">
-                        <i class="fas fa-cloud-upload-alt text-3xl text-indigo-400"></i>
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition duration-500">
+                        <i class="fas fa-file-import text-4xl text-indigo-400"></i>
                     </div>
-                    <span class="text-xl font-bold mb-2 text-white">Carica l'asset da ottimizzare</span>
-                    <span class="text-white/60 text-sm italic">Analisi PNL, SEO & UX Matrice Soluzioni</span>
+                    <span class="text-2xl font-bold mb-2">Carica Screenshot</span>
+                    <span class="text-white/40 text-[10px] uppercase tracking-[0.3em] font-black">Landing Page, Blog Post o Social Ad</span>
                 </div>
             </div>
         </section>
 
-        <div id="loader" class="hidden py-32 flex flex-col items-center">
-            <div class="loader mb-6"></div>
-            <p class="text-indigo-400 font-black uppercase tracking-widest text-[10px] animate-pulse">Generazione Matrice Soluzioni Strategiche...</p>
+        <!-- Loading State -->
+        <div id="loader" class="hidden py-40 flex flex-col items-center">
+            <div class="loader mb-8"></div>
+            <p class="text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px] animate-pulse">Sincronizzazione Neurale...</p>
         </div>
 
-        <div id="dashboard" class="hidden space-y-8 animate-fade-in">
-            <!-- Top Stats - Nuovi parametri -->
-            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <div class="glass p-6 rounded-3xl border-l-4 border-indigo-500">
-                    <span class="text-[9px] font-black uppercase text-indigo-400">Engagement Potential</span>
-                    <div id="impactScore" class="text-3xl font-black text-white">--</div>
+        <!-- DASHBOARD RESULT -->
+        <div id="dashboard" class="hidden space-y-10">
+            
+            <!-- Global Scores -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
+                    <div class="score-circle mb-4 border-indigo-500/50"><span id="score1" class="text-2xl font-black">--</span></div>
+                    <span id="label1" class="text-[9px] font-black uppercase tracking-widest text-indigo-400">Attention</span>
                 </div>
-                <div class="glass p-6 rounded-3xl border-l-4 border-pink-500">
-                    <span class="text-[9px] font-black uppercase text-pink-400">Attention Grip</span>
-                    <div id="attentionScore" class="text-3xl font-black text-white">--</div>
+                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
+                    <div class="score-circle mb-4 border-pink-500/50"><span id="score2" class="text-2xl font-black">--</span></div>
+                    <span id="label2" class="text-[9px] font-black uppercase tracking-widest text-pink-400">Clarity</span>
                 </div>
-                <div class="glass p-6 rounded-3xl border-l-4 border-emerald-500">
-                    <span class="text-[9px] font-black uppercase text-emerald-400">Readability Score</span>
-                    <div id="readabilityScore" class="text-3xl font-black text-white">--</div>
+                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
+                    <div class="score-circle mb-4 border-emerald-500/50"><span id="score3" class="text-2xl font-black">--</span></div>
+                    <span id="label3" class="text-[9px] font-black uppercase tracking-widest text-emerald-400">Trust</span>
                 </div>
-                <div class="glass p-6 rounded-3xl border-l-4 border-amber-500">
-                    <span class="text-[9px] font-black uppercase text-amber-500">Contrast Ratio (UX)</span>
-                    <div id="contrastScore" class="text-3xl font-black text-white">--</div>
+                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
+                    <div class="score-circle mb-4 border-amber-500/50"><span id="score4" class="text-2xl font-black">--</span></div>
+                    <span id="label4" class="text-[9px] font-black uppercase tracking-widest text-amber-400">SEO Strength</span>
                 </div>
-                <div class="glass p-6 rounded-3xl border-l-4 border-purple-500">
-                    <span class="text-[9px] font-black uppercase text-purple-400">Trust Factor</span>
-                    <div id="trustScore" class="text-3xl font-black text-white">--</div>
+                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center hidden lg:flex">
+                    <div class="score-circle mb-4 border-purple-500/50"><span id="score5" class="text-2xl font-black">--</span></div>
+                    <span id="label5" class="text-[9px] font-black uppercase tracking-widest text-purple-400">Conv. Power</span>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                <!-- Colonna Sinistra -->
+                <!-- Assets & Visuals -->
                 <div class="lg:col-span-4 space-y-6">
-                    <div class="glass rounded-[2rem] p-6 sticky top-28">
-                        <h3 class="text-xs font-black uppercase text-white/50 tracking-widest mb-4">Focus & Heatmap</h3>
-                        
-                        <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-black mb-4">
-                            <img id="previewImg" class="w-full">
-                            <canvas id="heatmapOverlay" class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-700"></canvas>
+                    <div class="glass rounded-[2.5rem] p-6 overflow-hidden">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xs font-black uppercase tracking-widest text-white/40">Visual Scan</h3>
+                            <button onclick="toggleHeatmap()" class="text-[9px] font-black bg-indigo-600 px-3 py-1 rounded-full uppercase tracking-tighter">Heatmap</button>
                         </div>
-                        
-                        <button onclick="toggleHeatmap()" class="w-full text-[10px] font-black uppercase tracking-widest py-3 rounded-xl border border-white/10 hover:bg-white/5 transition text-white">
-                            <i class="fas fa-expand-arrows-alt mr-2"></i> Mostra Punti Focali
-                        </button>
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-slate-900 border border-white/5">
+                            <img id="previewImg" class="w-full">
+                            <canvas id="heatmapOverlay" class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-500"></canvas>
+                        </div>
+                        <div class="mt-6 p-4 rounded-xl bg-white/5 border border-white/5 italic text-xs text-white/60" id="aiVisualComment"></div>
+                    </div>
 
-                        <!-- Color Psychology Card - FIXED TEXT CASE -->
-                        <div class="mt-8 p-8 rounded-[2rem] border-2 border-amber-500/20 bg-slate-900/50">
-                            <h4 class="text-[10px] font-black uppercase text-amber-500 mb-6 tracking-[0.2em]">Color Psychology</h4>
-                            <div id="colorFeeling" class="text-2xl font-bold text-white leading-snug">
-                                <!-- Testo caricato dinamicamente -->
+                    <div id="contentAnalysisBox" class="glass rounded-[2.5rem] p-8 space-y-4">
+                        <h3 class="text-[10px] font-black uppercase text-indigo-400 tracking-widest">Divulgazione Semplice</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-black/30 rounded-xl">
+                                <p class="text-[9px] font-bold text-white/40 uppercase mb-1">Livello Complessità</p>
+                                <p id="complexityLevel" class="text-sm font-bold"></p>
+                            </div>
+                            <div class="p-4 bg-black/30 rounded-xl">
+                                <p class="text-[9px] font-bold text-white/40 uppercase mb-1">Suggerimento Semplificazione</p>
+                                <p id="simplificationAdvice" class="text-xs italic text-white/80"></p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Colonna Destra -->
+                <!-- Detailed Analysis -->
                 <div class="lg:col-span-8 space-y-8">
-                    <div class="glass rounded-[3rem] p-8">
-                        <!-- TAB NAVIGATION -->
-                        <div class="flex flex-col md:flex-row gap-8 border-b border-white/5 mb-10 no-scrollbar overflow-x-auto">
-                            <button onclick="switchTab('seo')" id="btn-seo" class="pb-6 text-2xl font-black uppercase tracking-tighter transition-all opacity-40 hover:opacity-100 tab-active">
-                                Audit SEO & UX
-                            </button>
-                            <button onclick="switchTab('pnl')" id="btn-pnl" class="pb-6 text-2xl font-black uppercase tracking-tighter transition-all opacity-40 hover:opacity-100">
-                                Persuasione PNL
-                            </button>
-                            <button onclick="switchTab('social')" id="btn-social" class="pb-6 text-2xl font-black uppercase tracking-tighter transition-all opacity-40 hover:opacity-100">
-                                Social Simulator
-                            </button>
+                    
+                    <!-- Main Insights -->
+                    <div class="glass rounded-[3rem] p-10">
+                        <div class="flex flex-wrap gap-8 border-b border-white/5 mb-8">
+                            <button class="pb-4 text-sm font-black uppercase tracking-widest border-b-2 border-indigo-500">Executive Report</button>
+                            <button class="pb-4 text-sm font-black uppercase tracking-widest opacity-30 hover:opacity-100 transition">Action Plan</button>
                         </div>
 
-                        <!-- SEO Tab -->
-                        <div id="tab-seo" class="space-y-8">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="p-8 bg-slate-800/40 rounded-3xl border border-white/5">
-                                    <h5 class="flex items-center text-xs font-black uppercase text-indigo-400 mb-4">
-                                        <i class="fas fa-flag-it mr-2"></i> Strategia SEO Italia
-                                    </h5>
-                                    <p id="seoIt" class="text-sm text-white leading-relaxed opacity-90"></p>
-                                </div>
-                                <div class="p-8 bg-slate-800/40 rounded-3xl border border-white/5">
-                                    <h5 class="flex items-center text-xs font-black uppercase text-pink-400 mb-4">
-                                        <i class="fas fa-flag-gb mr-2"></i> International SEO UK
-                                    </h5>
-                                    <p id="seoUk" class="text-sm text-white leading-relaxed opacity-90"></p>
-                                </div>
+                        <div class="space-y-10">
+                            <!-- Section 1 -->
+                            <div>
+                                <h4 class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] mb-4">Analisi Strategica</h4>
+                                <p id="strategicAnalysis" class="text-xl font-medium leading-relaxed font-outfit"></p>
                             </div>
 
-                            <!-- NUOVA SEZIONE MATRICE SOLUZIONI -->
-                            <div class="mt-8">
-                                <h5 class="text-xs font-black uppercase text-emerald-400 mb-6 flex items-center">
-                                    <i class="fas fa-tools mr-2"></i> Matrice Problema-Soluzione (CRO & UX)
-                                </h5>
-                                <div id="solutionMatrix" class="grid grid-cols-1 gap-4">
-                                    <!-- Caricato via JS -->
-                                </div>
-                            </div>
-                            
-                            <div class="p-8 bg-white/5 rounded-3xl border border-white/10 mt-8">
-                                <h5 class="text-[10px] font-black uppercase text-white/40 mb-4 tracking-[0.2em]">Semantic & LSI Keywords</h5>
-                                <div id="kwList" class="flex flex-wrap gap-2"></div>
-                            </div>
-                        </div>
-
-                        <!-- PNL Tab -->
-                        <div id="tab-pnl" class="hidden space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="p-6 rounded-2xl border border-white/5 bg-slate-800/40 border-t-4 border-t-indigo-500">
-                                    <span class="text-[9px] font-black text-indigo-400 uppercase">Visivo (V)</span>
-                                    <p class="text-xs text-white mt-2 leading-relaxed" id="visivoDesc"></p>
-                                </div>
-                                <div class="p-6 rounded-2xl border border-white/5 bg-slate-800/40 border-t-4 border-t-pink-500">
-                                    <span class="text-[9px] font-black text-pink-400 uppercase">Auditivo (A)</span>
-                                    <p class="text-xs text-white mt-2 leading-relaxed" id="auditivoDesc"></p>
-                                </div>
-                                <div class="p-6 rounded-2xl border border-white/5 bg-slate-800/40 border-t-4 border-t-emerald-500">
-                                    <span class="text-[9px] font-black text-emerald-400 uppercase">Cinestesico (K)</span>
-                                    <p class="text-xs text-white mt-2 leading-relaxed" id="cinestesicoDesc"></p>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="pnlTriggers"></div>
-                        </div>
-
-                        <!-- Social Simulator -->
-                        <div id="tab-social" class="hidden space-y-8 text-white">
-                            <div class="flex justify-center gap-3 no-scrollbar overflow-x-auto pb-6">
-                                <button onclick="setPlatform('instagram')" class="platform-btn px-8 py-3 rounded-xl glass text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition" data-target="instagram">Instagram</button>
-                                <button onclick="setPlatform('facebook')" class="platform-btn px-8 py-3 rounded-xl glass text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition" data-target="facebook">Facebook</button>
-                                <button onclick="setPlatform('linkedin')" class="platform-btn px-8 py-3 rounded-xl glass text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition" data-target="linkedin">LinkedIn</button>
-                            </div>
-
-                            <div class="flex flex-col xl:flex-row gap-12 items-start justify-center">
-                                <div id="socialMockup" class="mockup-container shadow-2xl flex-shrink-0">
-                                    <div id="mockupContent" class="h-full flex flex-col"></div>
-                                </div>
-                                <div class="flex-grow space-y-6 max-w-xl">
-                                    <div class="p-8 glass rounded-[2.5rem] border border-white/10">
-                                        <h4 id="platformTitle" class="text-2xl font-black mb-3 uppercase tracking-tighter"></h4>
-                                        <div id="platformStrategy" class="text-xs text-indigo-400 font-black mb-6 uppercase tracking-widest"></div>
-                                        <div class="p-6 bg-black/40 rounded-2xl text-sm italic leading-relaxed border border-white/5" id="fullCaptionText"></div>
+                            <!-- Grid Info -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="space-y-4">
+                                    <h5 class="text-xs font-black uppercase text-white/40 tracking-widest">SEO & Search Intent</h5>
+                                    <div id="seoBox" class="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-3">
+                                        <p id="searchIntent" class="text-sm italic font-bold text-emerald-400"></p>
+                                        <p id="seoTips" class="text-xs text-white/70 leading-relaxed"></p>
                                     </div>
-                                    <div id="socialHashtags" class="flex flex-wrap gap-2 text-[10px] font-mono text-pink-400 font-bold bg-pink-500/5 p-4 rounded-xl"></div>
+                                </div>
+                                <div class="space-y-4">
+                                    <h5 class="text-xs font-black uppercase text-white/40 tracking-widest">PNL & Copy Levers</h5>
+                                    <div id="pnlBox" class="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-3">
+                                        <p id="copyLever" class="text-sm font-bold text-pink-400"></p>
+                                        <p id="pnlAdvice" class="text-xs text-white/70 leading-relaxed italic"></p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                            <!-- Solutions / Elementor -->
+                            <div class="p-8 rounded-[2rem] bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20">
+                                <h5 class="text-[10px] font-black uppercase text-indigo-400 mb-4 tracking-widest">Ottimizzazione Elementor / WordPress</h5>
+                                <div id="techSolutions" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -241,12 +202,21 @@
 
     <script>
         const apiKey = ""; 
-        let currentData = null;
+        let currentMode = 'brand';
         let heatmapActive = false;
+        let auditData = null;
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-toggle').forEach(btn => {
+                btn.classList.toggle('mode-active', btn.id === `mode-${mode}`);
+                btn.classList.toggle('opacity-50', btn.id !== `mode-${mode}`);
+            });
+        }
 
         const fileInput = document.getElementById('fileInput');
         document.getElementById('dropZone').onclick = () => fileInput.click();
-        
+
         fileInput.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -254,60 +224,54 @@
                 reader.onload = (ev) => {
                     const b64 = ev.target.result;
                     document.getElementById('previewImg').src = b64;
-                    analyzeAsset(b64);
+                    startAudit(b64);
                 };
                 reader.readAsDataURL(file);
             }
         };
 
-        async function analyzeAsset(base64) {
+        async function startAudit(base64) {
             document.getElementById('welcome').classList.add('hidden');
             document.getElementById('loader').classList.remove('hidden');
 
-            const prompt = `Analisi per Web Designer & SEO Specialist (Elementor Expert). Fornisci un JSON:
+            const systemPrompt = `Sei un esperto Strategist Web (SEO, UX, PNL, Elementor). 
+            Analizza l'immagine caricata considerando la modalità: ${currentMode}.
+            Restituisci esclusivamente un JSON con questa struttura:
             {
-                "scores": {"impact": 85, "attention": 70, "readability": 90, "contrast": 65, "trust": 80},
-                "color_psychology": "Energia, stabilità e benessere. Il giallo (stimolazione) contrasta con il grigio (professionalità)...",
-                "seo": {"it": "Strategia...", "uk": "Strategy...", "keywords": ["..."]},
-                "solutions": [
-                    {"problem": "Titolo poco leggibile su sfondo giallo", "solution": "Aggiungi un text-shadow o un box scuro semitrasparente in Elementor", "priority": "High"},
-                    {"problem": "Assenza di CTA chiara", "solution": "Inserire bottone con contrasto elevato (colore opposto sulla ruota)", "priority": "Urgent"}
-                ],
-                "pnl": {
-                    "sensorial": {"visivo": "...", "auditivo": "...", "cinestesico": "..."},
-                    "triggers": [{"name": "...", "desc": "..."}]
-                },
-                "platforms": {
-                    "instagram": {"caption": "...", "strategy": "...", "tags": "..."},
-                    "facebook": {"caption": "...", "strategy": "...", "tags": "..."},
-                    "linkedin": {"caption": "...", "strategy": "...", "tags": "..."}
-                },
-                "heatmap": [{"x": 0.5, "y": 0.4, "strength": 0.8}]
+                "scores": {"s1": 0-100, "s2": 0-100, "s3": 0-100, "s4": 0-100, "s5": 0-100},
+                "labels": {"l1": "str", "l2": "str", "l3": "str", "l4": "str", "l5": "str"},
+                "analysis": "Testo analisi strategica profonda (italiano)",
+                "visual_comment": "Breve commento heatmap (italiano)",
+                "seo": {"intent": "str", "tips": "str"},
+                "pnl": {"lever": "str", "advice": "str"},
+                "content": {"complexity": "Semplice/Medio/Alto", "simplification": "Come rendere il concetto più semplice per la vendita"},
+                "tech": [{"issue": "str", "fix": "str"}],
+                "heatmap": [{"x": 0-1, "y": 0-1, "strength": 0.5}]
             }`;
 
             try {
-                const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
                         contents: [{
                             parts: [
-                                {text: "Analizza l'immagine caricata fornendo soluzioni tecniche WordPress/Elementor per i problemi UX/SEO rilevati. Mantieni il testo della psicologia dei colori in formato normale (Maiuscolo/Minuscolo)."},
+                                {text: `Analizza questo asset per un pubblico italiano B2B/B2C. Modalità: ${currentMode}. Focus su semplificazione contenuti complessi e conversione.`},
                                 {inlineData: {mimeType: "image/png", data: base64.split(',')[1]}}
                             ]
                         }],
-                        systemInstruction: { parts: [{ text: prompt }] },
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
                         generationConfig: { responseMimeType: "application/json" }
                     })
                 });
 
-                const json = await resp.json();
-                currentData = JSON.parse(json.candidates[0].content.parts[0].text);
+                const data = await response.json();
+                auditData = JSON.parse(data.candidates[0].content.parts[0].text);
                 renderDashboard();
-                drawHeatmap();
             } catch (err) {
                 console.error(err);
-                alert("Errore nell'analisi. Ricarica e riprova.");
+                alert("Errore nell'analisi. Riprova.");
+                location.reload();
             }
         }
 
@@ -316,107 +280,63 @@
             document.getElementById('dashboard').classList.remove('hidden');
             document.getElementById('navActions').classList.remove('hidden');
 
-            document.getElementById('impactScore').innerText = currentData.scores.impact + '%';
-            document.getElementById('attentionScore').innerText = currentData.scores.attention + '%';
-            document.getElementById('readabilityScore').innerText = currentData.scores.readability + '%';
-            document.getElementById('contrastScore').innerText = currentData.scores.contrast + '%';
-            document.getElementById('trustScore').innerText = currentData.scores.trust + '%';
+            // Scores
+            for(let i=1; i<=5; i++) {
+                document.getElementById(`score${i}`).innerText = auditData.scores[`s${i}`] + '%';
+                document.getElementById(`label${i}`).innerText = auditData.labels[`l${i}`];
+            }
 
-            // FIXED: Maiuscolo/Minuscolo
-            document.getElementById('colorFeeling').innerText = currentData.color_psychology;
+            // Main Text
+            document.getElementById('strategicAnalysis').innerText = auditData.analysis;
+            document.getElementById('aiVisualComment').innerText = auditData.visual_comment;
             
-            document.getElementById('seoIt').innerText = currentData.seo.it;
-            document.getElementById('seoUk').innerText = currentData.seo.uk;
-            
-            // Render Solution Matrix
-            document.getElementById('solutionMatrix').innerHTML = currentData.solutions.map(s => `
-                <div class="solution-card p-6 glass rounded-2xl border-l-4 ${s.priority === 'Urgent' ? 'border-red-500' : 'border-indigo-500'} flex flex-col md:flex-row gap-6 items-start">
-                    <div class="flex-shrink-0 bg-white/5 p-3 rounded-lg text-xs font-black uppercase text-white/50">${s.priority}</div>
-                    <div>
-                        <p class="text-[10px] font-black uppercase text-pink-500 mb-1">Criticità Rilevata</p>
-                        <p class="text-sm font-bold text-white mb-3">${s.problem}</p>
-                        <p class="text-[10px] font-black uppercase text-emerald-500 mb-1">Soluzione Tecnica</p>
-                        <p class="text-xs text-white opacity-80 leading-relaxed">${s.solution}</p>
-                    </div>
+            // SEO & PNL
+            document.getElementById('searchIntent').innerText = "Intent: " + auditData.seo.intent;
+            document.getElementById('seoTips').innerText = auditData.seo.tips;
+            document.getElementById('copyLever').innerText = "Leva PNL: " + auditData.pnl.lever;
+            document.getElementById('pnlAdvice').innerText = auditData.pnl.advice;
+
+            // Content
+            document.getElementById('complexityLevel').innerText = auditData.content.complexity;
+            document.getElementById('simplificationAdvice').innerText = auditData.content.simplification;
+
+            // Tech Solutions
+            document.getElementById('techSolutions').innerHTML = auditData.tech.map(t => `
+                <div class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:border-indigo-500/30 transition">
+                    <p class="text-[10px] font-black text-indigo-400 uppercase mb-1">Issue</p>
+                    <p class="text-xs text-white font-bold mb-2">${t.issue}</p>
+                    <p class="text-[9px] text-white/50 leading-relaxed italic">${t.fix}</p>
                 </div>
             `).join('');
 
-            document.getElementById('kwList').innerHTML = currentData.seo.keywords.map(k => 
-                `<span class="bg-indigo-500/10 border border-indigo-500/20 px-4 py-1.5 rounded-full text-[10px] font-bold text-white uppercase">#${k}</span>`
-            ).join('');
-
-            document.getElementById('visivoDesc').innerText = currentData.pnl.sensorial.visivo;
-            document.getElementById('auditivoDesc').innerText = currentData.pnl.sensorial.auditivo;
-            document.getElementById('cinestesicoDesc').innerText = currentData.pnl.sensorial.cinestesico;
-            
-            document.getElementById('pnlTriggers').innerHTML = currentData.pnl.triggers.map(t => `
-                <div class="p-6 glass rounded-2xl border-l-4 border-pink-500">
-                    <h6 class="text-xs font-black uppercase text-pink-500 mb-2 tracking-widest">${t.name}</h6>
-                    <p class="text-xs text-white leading-relaxed opacity-90">${t.desc}</p>
-                </div>
-            `).join('');
-
-            setPlatform('instagram');
+            drawHeatmap();
         }
 
         function drawHeatmap() {
             const canvas = document.getElementById('heatmapOverlay');
             const ctx = canvas.getContext('2d');
             const img = document.getElementById('previewImg');
-            canvas.width = img.clientWidth;
-            canvas.height = img.clientHeight;
+            
+            canvas.width = img.clientWidth || 400;
+            canvas.height = img.clientHeight || 600;
 
-            currentData.heatmap.forEach(point => {
-                const x = point.x * canvas.width;
-                const y = point.y * canvas.height;
-                const rad = 80 * point.strength;
-                const grad = ctx.createRadialGradient(x, y, 0, x, y, rad);
-                grad.addColorStop(0, 'rgba(255, 0, 0, 1)');
-                grad.addColorStop(1, 'rgba(255, 255, 0, 0)');
+            auditData.heatmap.forEach(p => {
+                const x = p.x * canvas.width;
+                const y = p.y * canvas.height;
+                const radius = 80;
+                const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
+                grad.addColorStop(0, 'rgba(236, 72, 153, 0.4)');
+                grad.addColorStop(1, 'rgba(236, 72, 153, 0)');
                 ctx.fillStyle = grad;
-                ctx.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
             });
         }
 
         function toggleHeatmap() {
             heatmapActive = !heatmapActive;
-            document.getElementById('heatmapOverlay').style.opacity = heatmapActive ? '0.7' : '0';
-        }
-
-        function setPlatform(platform) {
-            const pData = currentData.platforms[platform];
-            const content = document.getElementById('mockupContent');
-            const img = document.getElementById('previewImg').src;
-
-            document.querySelectorAll('.platform-btn').forEach(b => {
-                b.classList.toggle('tab-active', b.dataset.target === platform);
-            });
-
-            document.getElementById('platformTitle').innerText = platform;
-            document.getElementById('platformStrategy').innerText = pData.strategy;
-            document.getElementById('fullCaptionText').innerText = pData.caption;
-            document.getElementById('socialHashtags').innerText = pData.tags;
-
-            let html = '';
-            if (platform === 'instagram') {
-                html = `<div class="p-4 flex items-center gap-3 bg-black"><div class="w-8 h-8 rounded-full bg-slate-800"></div><span class="text-[10px] font-bold text-white">tuo_brand</span></div><img src="${img}" class="w-full aspect-square object-cover"><div class="p-4 space-y-3"><div class="flex gap-4 text-xl text-white"><i class="far fa-heart"></i><i class="far fa-comment"></i></div><p class="text-[11px] text-white leading-relaxed line-clamp-2">${pData.caption}</p></div>`;
-            } else if (platform === 'facebook') {
-                html = `<div class="p-3 bg-[#242526] flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-slate-700"></div><div><p class="text-[11px] font-bold text-white">Tuo Brand</p><p class="text-[9px] text-white/50">Sponsored</p></div></div><div class="p-4 text-[12px] text-white leading-relaxed bg-[#1c1e21] flex-grow overflow-y-auto">${pData.caption}</div><img src="${img}" class="w-full object-cover">`;
-            } else if (platform === 'linkedin') {
-                html = `<div class="bg-white h-full"><div class="p-4 flex items-center gap-3 border-b"><div class="w-10 h-10 bg-indigo-900 text-white flex items-center justify-center font-bold">B</div><div><p class="text-[11px] font-bold text-black">Brand Hub</p><p class="text-[9px] text-slate-500 italic">2.340 follower</p></div></div><div class="p-4 text-[12px] text-slate-800 leading-relaxed">${pData.caption}</div><img src="${img}" class="w-full object-cover"></div>`;
-            }
-            content.innerHTML = html;
-        }
-
-        function switchTab(id) {
-            ['seo', 'pnl', 'social'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`btn-${t}`).classList.remove('tab-active');
-                document.getElementById(`btn-${t}`).style.opacity = '0.4';
-            });
-            document.getElementById(`tab-${id}`).classList.remove('hidden');
-            document.getElementById(`btn-${id}`).classList.add('tab-active');
-            document.getElementById(`btn-${id}`).style.opacity = '1';
+            document.getElementById('heatmapOverlay').style.opacity = heatmapActive ? '1' : '0';
         }
     </script>
 </body>
