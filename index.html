@@ -987,6 +987,58 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="mt-10 pt-8 border-t border-white/10">
+                                <div class="flex items-start gap-4 mb-6">
+                                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-bullseye text-purple-400 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-2xl font-black font-outfit">Brief Strategico</h4>
+                                        <p class="text-white/70">
+                                            Inserisci obiettivo e target per generare un prompt completo con tutti i suggerimenti 
+                                            dell'analisi e il post riscritto su misura.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                    <label class="block">
+                                        <span class="text-[12px] font-black uppercase text-white/40">Obiettivo del post</span>
+                                        <input id="postObjective" type="text" placeholder="Es. Aumentare le iscrizioni al webinar"
+                                            class="mt-2 w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-purple-400">
+                                    </label>
+                                    <label class="block">
+                                        <span class="text-[12px] font-black uppercase text-white/40">Target</span>
+                                        <input id="postTarget" type="text" placeholder="Es. Freelance marketing 25-40 anni"
+                                            class="mt-2 w-full rounded-xl bg-black/40 border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-purple-400">
+                                    </label>
+                                </div>
+
+                                <div class="flex flex-wrap items-center gap-3 mb-6">
+                                    <button id="generatePromptBtn" class="px-5 py-3 bg-purple-500/20 text-purple-300 rounded-xl font-bold text-sm hover:bg-purple-500/30 transition">
+                                        <i class="fas fa-magic mr-2"></i> Genera prompt & post
+                                    </button>
+                                    <span class="text-[13px] text-white/50">Il prompt si aggiorna automaticamente quando modifichi i campi.</span>
+                                </div>
+
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="p-5 bg-black/30 rounded-2xl border border-white/10">
+                                        <div class="flex items-center gap-2 mb-3">
+                                            <i class="fas fa-terminal text-purple-400"></i>
+                                            <p class="font-bold">Prompt ad hoc</p>
+                                        </div>
+                                        <pre id="analysisPrompt" class="whitespace-pre-wrap text-sm text-white/80 leading-relaxed min-h-[200px]"></pre>
+                                    </div>
+                                    <div class="p-5 bg-black/30 rounded-2xl border border-white/10">
+                                        <div class="flex items-center gap-2 mb-3">
+                                            <i class="fas fa-pen-nib text-pink-400"></i>
+                                            <p class="font-bold">Post riscritto</p>
+                                        </div>
+                                        <div id="rewrittenPost" class="text-sm text-white/80 leading-relaxed min-h-[200px]"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1056,7 +1108,12 @@
             faceCanvas: document.getElementById('faceCanvas'),
             simulationCanvas: document.getElementById('simulationCanvas'),
             heatmapToggleBtn: document.getElementById('heatmapToggleBtn'),
-            faceToggleBtn: document.getElementById('faceToggleBtn')
+            faceToggleBtn: document.getElementById('faceToggleBtn'),
+            postObjective: document.getElementById('postObjective'),
+            postTarget: document.getElementById('postTarget'),
+            generatePromptBtn: document.getElementById('generatePromptBtn'),
+            analysisPrompt: document.getElementById('analysisPrompt'),
+            rewrittenPost: document.getElementById('rewrittenPost')
         };
 
         // ============ INITIALIZATION ============
@@ -1125,6 +1182,14 @@
             // Heatmap/Face toggles
             elements.heatmapToggleBtn.addEventListener('click', toggleHeatmap);
             elements.faceToggleBtn.addEventListener('click', toggleFaceDetection);
+
+            if (elements.postObjective && elements.postTarget) {
+                elements.postObjective.addEventListener('input', updatePromptFromInputs);
+                elements.postTarget.addEventListener('input', updatePromptFromInputs);
+            }
+            if (elements.generatePromptBtn) {
+                elements.generatePromptBtn.addEventListener('click', updatePromptFromInputs);
+            }
         }
 
         function showPlatformSelector() {
@@ -1733,6 +1798,7 @@
             document.getElementById('wordCount').className = `metric-badge ${results.ocrData.wordCount === 0 ? 'error' : results.ocrData.quality === 'good' ? 'success' : 'warning'}`;
             document.getElementById('textQuality').innerHTML = results.ocrData.qualityMsg;
             document.getElementById('ctaPosition').textContent = results.ocrData.hasCTA ? 'Rilevata - Posizione ottimale' : 'Non rilevata (aggiungi una CTA chiara)';
+            renderCopySuggestions(results.ocrData);
             
             // Color tab
             renderColorPalette(results.colorData);
@@ -1777,6 +1843,120 @@
             drawHeatmap();
             drawFaceLandmarks(results.faceData);
             applyColorSimulation('normal');
+            updatePromptFromInputs();
+        }
+
+        function renderCopySuggestions(ocrData) {
+            const suggestions = [];
+            if (ocrData.wordCount === 0) {
+                suggestions.push('Aggiungi una headline chiara con beneficio principale (5-8 parole).');
+            } else if (ocrData.wordCount > 15) {
+                suggestions.push('Riduci il testo a 5-15 parole per migliorare la leggibilità su mobile.');
+            } else {
+                suggestions.push('Mantieni la frase breve e orientata al risultato per aumentare il focus.');
+            }
+
+            if (!ocrData.hasCTA) {
+                suggestions.push('Inserisci una CTA esplicita con un verbo d’azione (es. “Scopri”, “Iscriviti”, “Prova ora”).');
+            } else {
+                suggestions.push('Rendi la CTA più specifica indicando l’azione e il beneficio immediato.');
+            }
+
+            suggestions.push('Sfrutta numeri o prove sociali per aumentare credibilità (es. “+38%”, “1000+ clienti”).');
+
+            document.getElementById('copySuggestions').innerHTML = suggestions.map(text => `
+                <div class="flex gap-3 p-3 bg-white/5 rounded-lg">
+                    <i class="fas fa-check text-pink-400 mt-1 flex-shrink-0"></i>
+                    <p class="text-sm">${text}</p>
+                </div>
+            `).join('');
+        }
+
+        function getAnalysisSuggestions(results) {
+            const suggestions = [
+                'Posiziona l’elemento principale nel quadrante superiore-centrale per massima attenzione.',
+                'Usa linee diagonali o lo sguardo dei soggetti per guidare l’occhio verso la CTA.',
+                'Mantieni almeno il 60% di spazio negativo per ridurre l’affollamento visivo.'
+            ];
+
+            if (results.ocrData.wordCount === 0) {
+                suggestions.push('Aggiungi una headline chiara e leggibile: 5-15 parole sono ideali.');
+            } else if (results.ocrData.wordCount > 15) {
+                suggestions.push('Riduci il testo a 5-15 parole per migliorare la leggibilità.');
+            }
+
+            if (!results.ocrData.hasCTA) {
+                suggestions.push('Inserisci una CTA esplicita con un verbo d’azione e beneficio immediato.');
+            }
+
+            if (results.colorData.length > 0) {
+                suggestions.push(`Usa un colore di rottura per la CTA, distinto dal primario ${results.colorData[0].hex}.`);
+            }
+
+            if (results.faceData.count === 0) {
+                suggestions.push('Valuta l’inserimento di un volto per aumentare engagement e fiducia.');
+            } else {
+                suggestions.push('Se possibile, orienta lo sguardo del soggetto verso la CTA.');
+            }
+
+            if (results.baseMetrics.normalizedEntropy > 0.6) {
+                suggestions.push('Riduci elementi decorativi per abbassare l’entropia visiva e l’attrito cognitivo.');
+            }
+
+            suggestions.push(`Assicura contrasto testo/sfondo almeno ${results.baseMetrics.wcagRatio} (WCAG AA).`);
+            return suggestions;
+        }
+
+        function generateRewrittenPost(objective, target, results) {
+            const cta = results.ocrData.hasCTA ? 'Scopri di più' : 'Iscriviti ora';
+            const benefit = objective || 'Ottenere un risultato misurabile';
+            const hook = results.ocrData.wordCount > 0 && results.ocrData.text !== 'Nessun testo rilevato'
+                ? results.ocrData.text.split('\n')[0]
+                : `${benefit} in modo semplice e veloce`;
+            return `
+${hook}
+
+✅ ${benefit}
+🎯 Pensato per: ${target}
+⏱️ Setup rapido, risultati immediati
+
+${cta}
+`.trim();
+        }
+
+        function updatePromptFromInputs() {
+            if (!elements.analysisPrompt || !elements.rewrittenPost) return;
+            if (!appState.analysisResults) {
+                elements.analysisPrompt.textContent = 'Esegui prima l’analisi per generare il prompt personalizzato.';
+                elements.rewrittenPost.textContent = '';
+                return;
+            }
+
+            const objective = elements.postObjective.value.trim();
+            const target = elements.postTarget.value.trim();
+            if (!objective || !target) {
+                elements.analysisPrompt.textContent = 'Compila “Obiettivo del post” e “Target” per generare il prompt.';
+                elements.rewrittenPost.textContent = '';
+                return;
+            }
+
+            const suggestions = getAnalysisSuggestions(appState.analysisResults);
+            const prompt = [
+                'Agisci come stratega social e copywriter.',
+                `Obiettivo del post: ${objective}.`,
+                `Target: ${target}.`,
+                '',
+                'Suggerimenti dell’analisi da applicare:',
+                ...suggestions.map((item, index) => `${index + 1}. ${item}`),
+                '',
+                'Output richiesto:',
+                '- Riscrivi il post con un hook forte, beneficio chiaro e CTA.',
+                '- Mantieni il testo conciso e adatto al mobile.',
+                '- Allinea tono e messaggio al target indicato.'
+            ].join('\n');
+
+            elements.analysisPrompt.textContent = prompt;
+            elements.rewrittenPost.textContent = generateRewrittenPost(objective, target, appState.analysisResults);
         }
 
         function updateScoreDisplay(elementId, score) {
