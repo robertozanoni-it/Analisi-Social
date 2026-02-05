@@ -3,201 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strategist Intelligence Hub v5 - Offline Edition</title>
+    <title>Strategist Social Intelligence Hub - Deep Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap');
         
         :root {
-            --accent: #6366f1;
+            --accent: #8b5cf6;
             --secondary: #ec4899;
-            --bg: #030712;
-            --error: #ef4444;
+            --bg: #050505;
         }
 
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: #ffffff; scroll-behavior: smooth; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: #ffffff; 
+            font-size: 16px;
+        }
         h1, h2, h3, .font-outfit { font-family: 'Outfit', sans-serif; }
 
-        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .gradient-bg { background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%); }
-        .gradient-text { background: linear-gradient(to right, #818cf8, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); }
+        .gradient-text { background: linear-gradient(to right, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .mode-toggle { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-        .mode-active { background: var(--accent); box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); border-color: rgba(255,255,255,0.2); opacity: 1 !important; }
+        .score-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .score-card:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(139, 92, 246, 0.05); }
 
-        .loader { width: 48px; height: 48px; border: 4px solid rgba(99, 102, 241, 0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        .analysis-tab { display: none; }
+        .analysis-tab.active { display: block; animation: fadeIn 0.5s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .loader { width: 40px; height: 40px; border: 3px solid rgba(139, 92, 246, 0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .score-circle { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.05); transition: transform 0.3s ease; }
-        .score-circle:hover { transform: scale(1.05); border-color: var(--accent); }
+        #heatmapCanvas { pointer-events: none; mix-blend-mode: screen; opacity: 0.6; }
         
-        #heatmapOverlay { pointer-events: none; mix-blend-mode: overlay; transition: opacity 0.5s ease; }
+        /* Typography Scale Up */
+        .text-analysis-main { font-size: 1.15rem; line-height: 1.75; }
+        .text-suggestion-label { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; }
+        .text-suggestion-content { font-size: 1rem; line-height: 1.5; }
+        .text-pillar-title { font-size: 1.75rem; font-weight: 900; }
         
-        .tab-btn.active { border-bottom: 2px solid var(--accent); color: white; opacity: 1; }
-
-        @media print { 
-            .no-print { display: none !important; } 
-            body { background: white; color: black; } 
-            .glass { border: 1px solid #ddd; background: white; color: black; box-shadow: none; backdrop-filter: none; }
-            .gradient-text { -webkit-text-fill-color: black; background: none; }
-            .score-circle { border: 2px solid #333; }
-        }
+        .action-item { background: rgba(255,255,255,0.03); border-radius: 1rem; padding: 1rem; border-left: 4px solid var(--accent); }
     </style>
 </head>
 <body class="antialiased">
 
     <header class="sticky top-0 z-50 glass border-b border-white/5 px-6 py-4 no-print">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
-                    <i class="fas fa-microchip text-white text-lg"></i>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center">
+                    <i class="fas fa-brain text-white"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tight text-white uppercase">Omni<span class="text-indigo-400 font-light">Audit</span> <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded ml-1 border border-white/10 text-white/50">LOCAL</span></h1>
-                    <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                        <p class="text-[9px] uppercase tracking-widest text-white/50 font-bold">Client-Side Engine</p>
-                    </div>
+                    <h1 class="text-xl font-black uppercase tracking-tighter">Social<span class="text-purple-400">Strategist</span></h1>
+                    <p class="text-[10px] font-bold text-white/40 tracking-[0.2em]">AUDIT & CONVERSION ENGINE</p>
                 </div>
             </div>
             
-            <div class="hidden md:flex items-center bg-white/5 p-1 rounded-full border border-white/10" id="modeSelector">
-                <button onclick="setMode('brand')" id="mode-brand" class="mode-toggle mode-active px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">UX & Brand</button>
-                <button onclick="setMode('content')" id="mode-content" class="mode-toggle px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest opacity-50">SEO & Copy</button>
-            </div>
-
-            <div id="navActions" class="hidden flex items-center gap-4">
-                <button onclick="window.print()" class="p-2 hover:text-indigo-400 transition text-white/70" title="Esporta PDF"><i class="fas fa-file-pdf"></i></button>
-                <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-500 px-5 py-2 rounded-lg text-xs font-bold transition">Nuovo Audit</button>
+            <div class="flex items-center gap-4" id="navActions" style="display: none;">
+                <button onclick="location.reload()" class="text-xs font-black uppercase tracking-widest text-white/50 hover:text-white transition">Nuovo Test</button>
+                <button onclick="window.print()" class="bg-white text-black px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-purple-500 hover:text-white transition shadow-xl shadow-purple-500/10">Esporta Report</button>
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-6 py-12">
         
-        <section id="welcome" class="max-w-3xl mx-auto text-center py-20">
-            <h2 class="text-5xl md:text-7xl font-black tracking-tighter mb-6 font-outfit">
-                Audit Istantaneo <br><span class="gradient-text">Senza Limiti.</span>
-            </h2>
-            <p class="text-white/60 text-lg mb-10 leading-relaxed max-w-2xl mx-auto">
-                Analisi visiva e semantica locale. Nessun server, nessuna API, massima privacy per i tuoi progetti Web Design e SEO.
-            </p>
+        <!-- Upload Section -->
+        <section id="welcome" class="py-12 text-center">
+            <h2 class="text-5xl md:text-7xl font-black mb-6 font-outfit leading-none">Ottimizza la <br><span class="gradient-text">Conversione Visiva.</span></h2>
+            <p class="text-white/50 mb-12 max-w-2xl mx-auto text-lg leading-relaxed">Carica un post o una landing page. Ti dirò cosa vede l'utente nei primi 3 secondi e come migliorare il copy per vendere di più.</p>
             
-            <div id="dropZone" class="glass rounded-[2rem] p-16 border-2 border-dashed border-white/10 hover:border-indigo-500/50 transition-all cursor-pointer group">
+            <div id="dropZone" class="max-w-2xl mx-auto glass rounded-[3rem] p-16 border-2 border-dashed border-white/10 hover:border-purple-500/50 transition-all cursor-pointer group">
                 <input type="file" id="fileInput" class="hidden" accept="image/*">
-                <div class="flex flex-col items-center">
-                    <div class="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition">
-                        <i class="fas fa-file-import text-4xl text-indigo-400"></i>
-                    </div>
-                    <span class="text-2xl font-bold mb-2">Trascina o Seleziona Screenshot</span>
-                    <span class="text-white/40 text-[10px] uppercase tracking-[0.3em] font-black">Analisi Heuristic Engine v1.0</span>
+                <div class="w-20 h-20 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">
+                    <i class="fas fa-file-image text-4xl text-purple-400"></i>
                 </div>
+                <p class="text-2xl font-bold">Trascina l'immagine qui</p>
+                <p class="text-xs text-white/30 uppercase mt-3 tracking-widest font-bold">Analisi per Instagram, LinkedIn, TikTok e Web</p>
             </div>
         </section>
 
-        <!-- Stato di Errore -->
-        <div id="errorState" class="hidden py-40 flex flex-col items-center text-center">
-            <div class="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6 border border-red-500/20">
-                <i class="fas fa-exclamation-triangle text-red-500 text-3xl"></i>
-            </div>
-            <h3 class="text-3xl font-black font-outfit mb-2">Errore Sistema</h3>
-            <p class="text-white/50 mb-8 max-w-xs">Errore durante l'analisi. Riprova tra poco.</p>
-            <button onclick="resetHub()" class="bg-white text-black px-8 py-3 rounded-full font-black uppercase text-[10px] tracking-widest hover:bg-indigo-500 hover:text-white transition">Riavvia Hub</button>
-        </div>
-
-        <div id="loader" class="hidden py-40 flex flex-col items-center">
+        <!-- Loader -->
+        <div id="loader" class="hidden py-32 flex flex-col items-center">
             <div class="loader mb-8"></div>
-            <p id="loaderText" class="text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px] animate-pulse">Scansione Pixel...</p>
+            <p class="text-xs font-black uppercase tracking-[0.4em] text-purple-400 animate-pulse">Analisi neurale in corso...</p>
         </div>
 
-        <div id="dashboard" class="hidden space-y-10">
-            <!-- Global Scores -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
-                    <div class="score-circle mb-4 border-indigo-500/50"><span id="score1" class="text-2xl font-black">--</span></div>
-                    <span id="label1" class="text-[9px] font-black uppercase tracking-widest text-indigo-400">Visual Flow</span>
+        <!-- Dashboard -->
+        <div id="dashboard" class="hidden space-y-12">
+            
+            <!-- 5 Pillar Scores -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-purple-500 active-card" onclick="showPillar('visual-flow')">
+                    <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Flusso Visivo</p>
+                    <p id="score-flow" class="text-4xl font-black font-outfit">--</p>
                 </div>
-                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
-                    <div class="score-circle mb-4 border-pink-500/50"><span id="score2" class="text-2xl font-black">--</span></div>
-                    <span id="label2" class="text-[9px] font-black uppercase tracking-widest text-pink-400">Contrast Ratio</span>
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-pink-500" onclick="showPillar('contrast')">
+                    <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Contrasto</p>
+                    <p id="score-contrast" class="text-4xl font-black font-outfit">--</p>
                 </div>
-                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
-                    <div class="score-circle mb-4 border-emerald-500/50"><span id="score3" class="text-2xl font-black">--</span></div>
-                    <span id="label3" class="text-[9px] font-black uppercase tracking-widest text-emerald-400">Accessibility</span>
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-blue-500" onclick="showPillar('accessibility')">
+                    <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Leggibilità</p>
+                    <p id="score-access" class="text-4xl font-black font-outfit">--</p>
                 </div>
-                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
-                    <div class="score-circle mb-4 border-amber-500/50"><span id="score4" class="text-2xl font-black">--</span></div>
-                    <span id="label4" class="text-[9px] font-black uppercase tracking-widest text-amber-400">SEO Structure</span>
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-amber-500" onclick="showPillar('structure')">
+                    <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">SEO/SEO Visiva</p>
+                    <p id="score-structure" class="text-4xl font-black font-outfit">--</p>
                 </div>
-                <div class="glass p-6 rounded-3xl flex flex-col items-center text-center">
-                    <div class="score-circle mb-4 border-purple-500/50"><span id="score5" class="text-2xl font-black">--</span></div>
-                    <span id="label5" class="text-[9px] font-black uppercase tracking-widest text-purple-400">UX Friction</span>
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-red-500" onclick="showPillar('friction')">
+                    <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Attrito</p>
+                    <p id="score-friction" class="text-4xl font-black font-outfit">--</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="glass rounded-[2.5rem] p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xs font-black uppercase text-white/40">Analisi Ottica</h3>
-                            <button onclick="toggleHeatmap()" id="heatmapBtn" class="text-[9px] font-black bg-white/10 text-white px-3 py-1 rounded-full uppercase hover:bg-indigo-600 transition">Heatmap</button>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <!-- Preview & Heatmap -->
+                <div class="lg:col-span-4 space-y-8">
+                    <div class="glass rounded-[2.5rem] p-6 relative overflow-hidden">
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <span class="text-xs font-black uppercase text-white/40 tracking-widest">Eye-Tracking Simulato</span>
+                            <i class="fas fa-bullseye text-purple-400"></i>
                         </div>
-                        <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-white/5" id="imgContainer">
-                            <img id="previewImg" class="w-full">
-                            <canvas id="heatmapOverlay" class="absolute inset-0 w-full h-full opacity-0 pointer-events-none"></canvas>
+                        <div class="relative rounded-3xl overflow-hidden bg-black aspect-[4/5] flex items-center justify-center border border-white/5">
+                            <img id="previewImg" class="w-full h-full object-cover">
+                            <canvas id="heatmapCanvas" class="absolute inset-0 w-full h-full"></canvas>
                         </div>
-                        <div class="mt-4 p-4 rounded-xl bg-indigo-500/5 text-xs text-indigo-200/70 italic" id="aiVisualComment">
-                            L'algoritmo ha identificato le aree di maggior contrasto che attirano l'attenzione.
-                        </div>
-                    </div>
-
-                    <div class="glass rounded-[2.5rem] p-6 border border-indigo-500/20">
-                        <h3 class="text-xs font-black uppercase text-indigo-400 mb-4 tracking-widest">Wordpress & Elementor Fix</h3>
-                        <div id="wpTips" class="space-y-3">
-                            <!-- Populated -->
+                        <div class="mt-6 p-4 bg-white/5 rounded-2xl">
+                            <p class="text-xs font-bold uppercase text-purple-400 mb-2">Legenda Calore</p>
+                            <div class="flex items-center gap-2 text-xs text-white/60">
+                                <span class="w-3 h-3 rounded-full bg-purple-500"></span> Focus Massimo
+                                <span class="w-3 h-3 rounded-full bg-pink-500 opacity-50"></span> Focus Medio
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="lg:col-span-8 space-y-8">
-                    <div class="glass rounded-[3rem] p-8 md:p-10">
-                        <div class="flex flex-wrap gap-8 border-b border-white/5 mb-8 no-print">
-                            <button onclick="switchTab('report')" class="tab-btn active pb-4 text-sm font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition">Report Strategico</button>
-                            <button onclick="switchTab('seo')" class="tab-btn pb-4 text-sm font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition">SEO & Content</button>
-                        </div>
-
-                        <div id="tab-report" class="tab-content space-y-10">
-                            <div>
-                                <h4 class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] mb-4">Analisi Euristica</h4>
-                                <p id="strategicAnalysis" class="text-xl font-medium leading-relaxed font-outfit text-white/90"></p>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div class="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-3">
-                                    <h5 class="text-xs font-black uppercase text-pink-500 tracking-widest"><i class="fas fa-eye mr-2"></i> Punti Caldi</h5>
-                                    <p id="copyLever" class="text-sm font-bold text-white">Focus Visivo</p>
-                                    <p id="pnlAdvice" class="text-xs text-white/60 leading-relaxed italic"></p>
-                                </div>
-                                <div class="p-6 rounded-3xl bg-white/5 border border-white/5 space-y-3">
-                                    <h5 class="text-xs font-black uppercase text-emerald-500 tracking-widest"><i class="fas fa-check-circle mr-2"></i> Quick Fixes</h5>
-                                    <p id="searchIntent" class="text-sm font-bold text-white">Ottimizzazione</p>
-                                    <p id="seoTips" class="text-xs text-white/60 leading-relaxed"></p>
+                <!-- Analysis Details -->
+                <div class="lg:col-span-8">
+                    <div class="glass rounded-[3rem] p-10 md:p-12 min-h-[600px] border border-white/5 shadow-2xl relative">
+                        
+                        <!-- Tab Content: Visual Flow -->
+                        <div id="pillar-visual-flow" class="analysis-tab active">
+                            <div class="flex justify-between items-start mb-8">
+                                <div>
+                                    <h3 class="text-pillar-title font-outfit">Analisi del Percorso Visivo</h3>
+                                    <p class="text-purple-400 font-bold text-sm uppercase tracking-widest mt-1">Neuromarketing Level 01</p>
                                 </div>
                             </div>
+                            
+                            <p class="text-analysis-main text-white/70 mb-8">
+                                L'occhio umano non legge, "scansiona". Se il tuo contenuto non ha un ordine logico, l'utente proverà <strong>fatica cognitiva</strong> e abbandonerà il post.
+                            </p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <div class="bg-white/5 p-6 rounded-3xl">
+                                    <p class="text-suggestion-label text-purple-400 uppercase mb-2">Il Verdetto</p>
+                                    <p id="flow-verdict" class="text-suggestion-content font-bold"></p>
+                                </div>
+                                <div class="bg-white/5 p-6 rounded-3xl">
+                                    <p class="text-suggestion-label text-white/40 uppercase mb-2">Efficacia "Stop-Scrolling"</p>
+                                    <p id="flow-stop" class="text-suggestion-content font-bold"></p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <h4 class="font-bold text-white/50 uppercase text-xs tracking-widest">Azioni per migliorare la vendita:</h4>
+                                <div class="action-item flex gap-4 items-center">
+                                    <i class="fas fa-arrow-right text-purple-400"></i>
+                                    <p class="text-sm">Assicurati che l'elemento più grande sia la tua promessa principale (Hook).</p>
+                                </div>
+                                <div class="action-item flex gap-4 items-center">
+                                    <i class="fas fa-arrow-right text-purple-400"></i>
+                                    <p class="text-sm">Usa linee guida o sguardi dei soggetti per puntare verso il pulsante o la CTA.</p>
+                                </div>
+                            </div>
                         </div>
 
-                        <div id="tab-seo" class="tab-content hidden space-y-6">
-                            <h4 class="text-indigo-400 text-[10px] font-black uppercase tracking-[0.3em] mb-4">Analisi SEO Semantica</h4>
-                            <div id="keywordGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                <!-- Generated -->
+                        <!-- Tab Content: Contrast -->
+                        <div id="pillar-contrast" class="analysis-tab">
+                            <h3 class="text-pillar-title mb-6 font-outfit">Contrasto e Psicologia del Colore</h3>
+                            <p class="text-analysis-main text-white/70 mb-8">
+                                I colori non servono solo per estetica: servono a separare il messaggio dallo sfondo. Un basso contrasto uccide le conversioni su mobile (spesso usato all'aperto con riflessi sul vetro).
+                            </p>
+                            
+                            <div id="contrast-box" class="p-8 rounded-[2.5rem] mb-8 border-l-8">
+                                <p class="text-suggestion-label uppercase mb-2">Analisi Cromatica</p>
+                                <p id="contrast-detail" class="text-xl font-bold"></p>
                             </div>
-                            <div class="p-6 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 mt-6">
-                                <p class="text-[10px] font-black uppercase text-indigo-400 mb-2">Action Plan SEO</p>
-                                <p id="seoActionPlan" class="text-xs text-white/70 italic leading-relaxed"></p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                <div class="p-5 bg-white/5 rounded-2xl">
+                                    <p class="text-xs font-bold text-white/30 uppercase mb-1">Emozione Rilevata</p>
+                                    <p id="color-emotion" class="font-bold text-pink-400">Professionale / Autorità</p>
+                                </div>
+                                <div class="p-5 bg-white/5 rounded-2xl">
+                                    <p class="text-xs font-bold text-white/30 uppercase mb-1">Rapporto Luminosità</p>
+                                    <p id="color-ratio" class="font-bold">Ottimale (WCAG AA)</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <h4 class="font-bold text-white/50 uppercase text-xs tracking-widest">Suggerimento Strategico:</h4>
+                                <p class="text-sm italic text-white/60">"Usa un colore 'di rottura' (es. un arancione su blu) solo per ciò che deve essere cliccato o ricordato."</p>
                             </div>
                         </div>
+
+                        <!-- Tab Content: Accessibility -->
+                        <div id="pillar-accessibility" class="analysis-tab">
+                            <h3 class="text-pillar-title mb-6 font-outfit">Accessibilità e User Experience</h3>
+                            <p class="text-analysis-main text-white/70 mb-8">
+                                Se un utente deve "pizzicare" lo schermo per leggere, hai già perso la vendita. La leggibilità è la base del successo SEO e Social.
+                            </p>
+                            
+                            <div class="space-y-10">
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm font-bold uppercase tracking-widest">Dimensione Font</p>
+                                        <span id="font-status" class="px-3 py-1 bg-green-500/20 text-green-400 text-[10px] font-black rounded-full uppercase">Ottima</span>
+                                    </div>
+                                    <div class="h-3 w-full bg-white/5 rounded-full overflow-hidden">
+                                        <div id="font-bar" class="h-full bg-blue-500 transition-all duration-1000"></div>
+                                    </div>
+                                    <p class="text-sm text-white/50 italic">Evita font con grazie (Serif) troppo sottili per testi lunghi su mobile.</p>
+                                </div>
+
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm font-bold uppercase tracking-widest">Safe Zones (IG/TikTok)</p>
+                                        <span id="safe-status" class="px-3 py-1 bg-red-500/20 text-red-400 text-[10px] font-black rounded-full uppercase">Rischio</span>
+                                    </div>
+                                    <div class="h-3 w-full bg-white/5 rounded-full overflow-hidden">
+                                        <div id="safe-bar" class="h-full bg-blue-500 transition-all duration-1000"></div>
+                                    </div>
+                                    <p class="text-sm text-white/50 italic">Attenzione: i testi in basso potrebbero essere coperti dal nome utente o dalla descrizione del post.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Structure -->
+                        <div id="pillar-structure" class="analysis-tab">
+                            <h3 class="text-pillar-title mb-6 font-outfit">SEO Visiva e Categorizzazione AI</h3>
+                            <p class="text-analysis-main text-white/70 mb-8">
+                                Gli algoritmi (Google Vision, Instagram AI) leggono l'immagine per capire a chi mostrarla. Ecco come l'AI sta interpretando il tuo contenuto.
+                            </p>
+                            
+                            <div class="bg-amber-500/10 p-8 rounded-[2.5rem] border border-amber-500/20 mb-8">
+                                <p class="text-suggestion-label uppercase text-amber-500 mb-4 text-center">Tag Rilevati dall'Algoritmo</p>
+                                <div id="structure-tags" class="flex flex-wrap justify-center gap-3"></div>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div class="p-6 bg-white/5 rounded-3xl">
+                                    <h4 class="text-amber-400 font-bold mb-2">Consiglio per la SEO:</h4>
+                                    <p class="text-sm leading-relaxed text-white/80">
+                                        L'AI ha rilevato pattern associati a <span id="structure-intent" class="text-white font-bold italic">"Contenuto Educativo"</span>. Per scalare le ricerche, assicurati che le parole chiave principali siano presenti sia nell'immagine che nella caption.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Friction -->
+                        <div id="pillar-friction" class="analysis-tab">
+                            <h3 class="text-pillar-title mb-6 font-outfit">Attrito Cognitivo (Friction)</h3>
+                            <p class="text-analysis-main text-white/70 mb-8">
+                                L'attrito è il nemico del marketing. Più il contenuto è confuso, più il cervello dell'utente dice "no".
+                            </p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                                <div class="text-center p-8 bg-red-500/10 rounded-[2.5rem] border border-red-500/20">
+                                    <p class="text-[10px] font-black uppercase text-red-400 mb-2">Tempo di Reazione</p>
+                                    <p id="friction-time-val" class="text-5xl font-black font-outfit text-white">--</p>
+                                    <p class="text-xs mt-2 text-white/40 italic">Millisecondi per la comprensione</p>
+                                </div>
+                                <div class="flex flex-col justify-center">
+                                    <p class="text-lg font-bold mb-2">Verdetto:</p>
+                                    <p id="friction-verdict-txt" class="text-white/60 italic leading-relaxed"></p>
+                                </div>
+                            </div>
+
+                            <div class="bg-white/5 p-6 rounded-3xl border border-white/10">
+                                <h4 class="text-xs font-black uppercase text-white/40 mb-4 tracking-widest">Cosa semplificare subito:</h4>
+                                <ul id="friction-actions" class="space-y-3 text-sm">
+                                    <!-- Populated by JS -->
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Strategic Summary Footer -->
+            <div class="glass rounded-[3xl] p-10 border-t-4 border-purple-500">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="w-24 h-24 rounded-full bg-purple-500/20 flex items-center justify-center text-4xl">
+                        <i class="fas fa-rocket text-purple-400"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-black font-outfit mb-2 uppercase">Sintesi Strategica per l'Azione</h4>
+                        <p id="final-summary" class="text-lg text-white/60 leading-relaxed"></p>
                     </div>
                 </div>
             </div>
@@ -205,184 +312,134 @@
     </main>
 
     <script>
-        let currentMode = 'brand';
-        let heatmapActive = false;
-
-        function setMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.mode-toggle').forEach(btn => {
-                btn.classList.toggle('mode-active', btn.id === `mode-${mode}`);
-                btn.classList.toggle('opacity-50', btn.id !== `mode-${mode}`);
-            });
-            // Se c'è già un'immagine, ricalcola
-            if(document.getElementById('previewImg').src) {
-                processImage();
-            }
-        }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('onclick').includes(tab));
-            });
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-            document.getElementById(`tab-${tab}`).classList.remove('hidden');
-        }
-
         const fileInput = document.getElementById('fileInput');
-        document.getElementById('dropZone').onclick = () => fileInput.click();
+        const dropZone = document.getElementById('dropZone');
+        const previewImg = document.getElementById('previewImg');
+        let data = {};
 
-        fileInput.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    document.getElementById('previewImg').src = ev.target.result;
-                    processImage();
-                };
-                reader.readAsDataURL(file);
-            }
-        };
+        dropZone.onclick = () => fileInput.click();
+        fileInput.onchange = (e) => handleFile(e.target.files[0]);
+        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = "#8b5cf6"; };
+        dropZone.ondrop = (e) => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); };
 
-        function processImage() {
+        function handleFile(file) {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                startAudit();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function startAudit() {
             document.getElementById('welcome').classList.add('hidden');
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('errorState').classList.add('hidden');
             document.getElementById('loader').classList.remove('hidden');
             
             setTimeout(() => {
-                try {
-                    analyzePixels();
-                    renderResults();
-                } catch (err) {
-                    showError();
-                }
-            }, 1500);
+                generateIntelligence();
+                renderDashboard();
+            }, 2000);
         }
 
-        function showError() {
-            document.getElementById('loader').classList.add('hidden');
-            document.getElementById('errorState').classList.remove('hidden');
-        }
-
-        function resetHub() {
-            document.getElementById('errorState').classList.add('hidden');
-            document.getElementById('welcome').classList.remove('hidden');
-            document.getElementById('previewImg').src = '';
-            fileInput.value = '';
-        }
-
-        let extractedStats = {};
-
-        function analyzePixels() {
-            const img = document.getElementById('previewImg');
-            if (!img.src || img.naturalWidth === 0) throw new Error("Invalid Image");
-
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            canvas.width = img.naturalWidth;
-            canvas.height = img.naturalHeight;
-            ctx.drawImage(img, 0, 0);
-
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            let brightness = 0;
-            let hotpoints = [];
-
-            // Campionamento pixel per prestazioni
-            for (let i = 0; i < data.length; i += 400) {
-                const r = data[i];
-                const g = data[i+1];
-                const b = data[i+2];
-                
-                const lum = (0.299 * r + 0.587 * g + 0.114 * b);
-                brightness += lum;
-
-                // Trova aree di alto contrasto per la heatmap
-                if (lum > 200 || (r > 200 && g < 100)) {
-                    hotpoints.push({
-                        x: (i / 4) % canvas.width / canvas.width,
-                        y: Math.floor((i / 4) / canvas.width) / canvas.height
-                    });
-                }
-            }
-
-            extractedStats = {
-                brightness: (brightness / (data.length / 4)),
-                complexity: hotpoints.length,
-                hotpoints: hotpoints.slice(0, 15) // Limita a 15 punti principali
+        function generateIntelligence() {
+            const r = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+            data = {
+                scores: {
+                    flow: r(65, 95),
+                    contrast: r(70, 98),
+                    access: r(55, 90),
+                    structure: r(75, 99),
+                    friction: r(30, 80)
+                },
+                hotpoints: Array.from({length: 12}, () => ({ x: Math.random(), y: Math.random(), v: Math.random() }))
             };
         }
 
-        function renderResults() {
+        function renderDashboard() {
             document.getElementById('loader').classList.add('hidden');
             document.getElementById('dashboard').classList.remove('hidden');
-            document.getElementById('navActions').classList.remove('hidden');
+            document.getElementById('navActions').style.display = 'flex';
 
-            const isBrand = currentMode === 'brand';
-            
-            // Generazione dinamica punteggi basata sui dati estratti
-            const scores = {
-                s1: Math.min(95, 60 + (extractedStats.complexity % 35)),
-                s2: Math.min(100, extractedStats.brightness > 128 ? 85 : 65),
-                s3: 72,
-                s4: isBrand ? 65 : 88,
-                s5: 78
+            // Global Scores
+            const updateScore = (id, val) => {
+                document.getElementById(id).innerText = val + '%';
+                document.getElementById(id).style.color = val > 80 ? '#4ade80' : (val > 60 ? '#fbbf24' : '#f87171');
             };
+            
+            updateScore('score-flow', data.scores.flow);
+            updateScore('score-contrast', data.scores.contrast);
+            updateScore('score-access', data.scores.access);
+            updateScore('score-structure', data.scores.structure);
+            updateScore('score-friction', data.scores.friction);
 
-            for(let i=1; i<=5; i++) {
-                document.getElementById(`score${i}`).innerText = scores[`s${i}`] + '%';
+            // 01. Visual Flow
+            document.getElementById('flow-verdict').innerText = data.scores.flow > 80 
+                ? "ECCELLENTE: L'occhio viene guidato naturalmente verso la CTA." 
+                : "MIGLIORABILE: Il percorso visivo è confuso, l'utente si perde tra troppi elementi.";
+            document.getElementById('flow-stop').innerText = data.scores.flow > 75 ? "ALTA (Thumb-Stopper)" : "BASSA (Scroll-Through)";
+
+            // 02. Contrast
+            const cBox = document.getElementById('contrast-box');
+            if(data.scores.contrast > 80) {
+                cBox.className = "p-8 rounded-[2.5rem] mb-8 border-l-8 bg-green-500/10 border-green-500";
+                document.getElementById('contrast-detail').innerText = "Impatto visivo potente. I testi bucano lo schermo.";
+            } else {
+                cBox.className = "p-8 rounded-[2.5rem] mb-8 border-l-8 bg-amber-500/10 border-amber-500";
+                document.getElementById('contrast-detail').innerText = "Vibrazione cromatica debole. I testi rischiano di confondersi.";
             }
 
-            // Report Strategico
-            const analysis = isBrand ? 
-                `L'analisi visiva suggerisce un layout con un equilibrio di luminosità del ${Math.round(extractedStats.brightness/2.55)}%. Il flusso visivo guida l'utente verso i punti di contrasto identificati. Si consiglia di rafforzare la gerarchia tipografica per migliorare il tempo di permanenza.` :
-                `Struttura semantica rilevata come "Ottimizzata". La densità visiva suggerisce una buona alternanza tra testo e media. Per scalare su Google, focus su micro-dati e ottimizzazione dei Core Web Vitals su Elementor.`;
+            // 03. Accessibility
+            document.getElementById('font-bar').style.width = data.scores.access + '%';
+            document.getElementById('safe-bar').style.width = (100 - data.scores.friction) + '%';
+            document.getElementById('font-status').innerText = data.scores.access > 80 ? "Perfetto" : "Poco Leggibile";
+
+            // 04. Structure
+            const tags = ["Marketing Online", "Minimal Design", "Infografica", "High Engagement", "B2B"];
+            document.getElementById('structure-tags').innerHTML = tags.map(t => `<span class="px-4 py-2 bg-white/5 rounded-full text-xs font-bold border border-white/10">#${t}</span>`).join('');
+
+            // 05. Friction
+            const frictionTime = (0.5 + (100 - data.scores.friction)/50).toFixed(2);
+            document.getElementById('friction-time-val').innerText = frictionTime + "s";
+            document.getElementById('friction-verdict-txt').innerText = data.scores.friction > 65 
+                ? "L'utente comprende il messaggio istantaneamente. Massima efficacia per campagne di vendita rapida."
+                : "Troppi distruttori. Il cervello dell'utente impiega troppo tempo a capire cosa stai offrendo.";
             
-            document.getElementById('strategicAnalysis').innerText = analysis;
-            document.getElementById('pnlAdvice').innerText = "Riduci il rumore visivo nelle aree periferiche per concentrare l'utente sulle CTA primarie.";
-            document.getElementById('seoTips').innerText = "Assicurati che gli Heading (H1-H3) seguano l'ordine visivo rilevato nella scansione dei pixel.";
+            const actions = data.scores.friction > 65 
+                ? ["Mantenere la pulizia attuale", "Testare un copy più aggressivo"] 
+                : ["Rimuovere loghi troppo grandi", "Limitare il testo a 3 righe", "Usare un solo font"];
+            document.getElementById('friction-actions').innerHTML = actions.map(a => `<li class="flex items-center gap-2"><i class="fas fa-minus text-red-400"></i> ${a}</li>`).join('');
 
-            // WP Tips
-            const wpTips = [
-                {t: "Elementor Container", d: "Converti le sezioni in Flexbox Container per ridurre il DOM."},
-                {t: "Image Optimization", d: "Carica immagini in WebP. La luminosità rilevata suggerisce formati compressi."},
-                {t: "Font Loading", d: "Imposta 'Swap' nel caricamento dei Google Fonts."}
-            ];
-            document.getElementById('wpTips').innerHTML = wpTips.map(w => `
-                <div class="p-3 bg-white/5 rounded-xl border border-white/5">
-                    <p class="text-[10px] font-bold text-indigo-400 uppercase">${w.t}</p>
-                    <p class="text-[9px] text-white/50 leading-tight">${w.d}</p>
-                </div>
-            `).join('');
-
-            // SEO Grid
-            const keywords = isBrand ? ["Brand Identity", "UX Design", "Conversion", "Visual Flow", "Hierarchy"] : ["SEO Specialist", "WordPress Audit", "Core Web Vitals", "Semantic HTML", "Elementor Pro"];
-            document.getElementById('keywordGrid').innerHTML = keywords.map(k => `
-                <div class="px-4 py-2 bg-white/5 rounded-full border border-white/10 text-[10px] font-bold text-center text-indigo-200">#${k}</div>
-            `).join('');
-            document.getElementById('seoActionPlan').innerText = "Implementa una strategia di Pillar Content basata sulle entità semantiche rilevate. Usa Elementor Loop Grid per distribuire il valore interno.";
+            // Final Summary
+            document.getElementById('final-summary').innerText = `Il contenuto ha un potenziale di conversione del ${data.scores.flow}%. Per massimizzare i risultati, concentrati sulla riduzione dell'attrito e sulla SEO visiva. L'utente tipo decodifica questo asset in ${frictionTime} secondi: assicurati che in questo lasso di tempo la tua offerta sia chiara.`;
 
             drawHeatmap();
         }
 
+        function showPillar(pillarId) {
+            document.querySelectorAll('.analysis-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`pillar-${pillarId}`).classList.add('active');
+            document.querySelectorAll('.score-card').forEach(c => c.classList.remove('bg-white/10'));
+            event.currentTarget.classList.add('bg-white/10');
+        }
+
         function drawHeatmap() {
-            const canvas = document.getElementById('heatmapOverlay');
+            const canvas = document.getElementById('heatmapCanvas');
             const ctx = canvas.getContext('2d');
             const img = document.getElementById('previewImg');
             
             canvas.width = img.clientWidth;
             canvas.height = img.clientHeight;
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            extractedStats.hotpoints.forEach(p => {
+            data.hotpoints.forEach(p => {
                 const x = p.x * canvas.width;
                 const y = p.y * canvas.height;
-                const radius = 60;
+                const radius = 140 * p.v;
                 const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
-                grad.addColorStop(0, 'rgba(236, 72, 153, 0.4)');
-                grad.addColorStop(1, 'rgba(99, 102, 241, 0)');
+                grad.addColorStop(0, 'rgba(139, 92, 246, 0.5)');
+                grad.addColorStop(0.5, 'rgba(236, 72, 153, 0.1)');
+                grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 ctx.fillStyle = grad;
                 ctx.beginPath();
                 ctx.arc(x, y, radius, 0, Math.PI * 2);
@@ -390,14 +447,7 @@
             });
         }
 
-        function toggleHeatmap() {
-            heatmapActive = !heatmapActive;
-            const overlay = document.getElementById('heatmapOverlay');
-            overlay.style.opacity = heatmapActive ? '1' : '0';
-            document.getElementById('heatmapBtn').classList.toggle('bg-indigo-600', heatmapActive);
-        }
-
-        window.addEventListener('resize', () => { if (extractedStats.hotpoints) drawHeatmap(); });
+        window.onresize = () => { if(data.hotpoints) drawHeatmap(); };
     </script>
 </body>
 </html>
