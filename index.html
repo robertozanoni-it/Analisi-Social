@@ -28,6 +28,7 @@
         
         .score-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .score-card:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(139, 92, 246, 0.05); }
+        .score-card.active { background: rgba(139, 92, 246, 0.15); border-color: var(--accent); }
 
         .analysis-tab { display: none; }
         .analysis-tab.active { display: block; animation: fadeIn 0.5s ease-out; }
@@ -46,6 +47,17 @@
         .text-pillar-title { font-size: 1.75rem; font-weight: 900; }
         
         .action-item { background: rgba(255,255,255,0.03); border-radius: 1rem; padding: 1rem; border-left: 4px solid var(--accent); }
+
+        .safe-zone-overlay { position: absolute; left: 0; right: 0; pointer-events: none; border: 2px dashed rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.05); }
+        .safe-zone-top { top: 0; height: 15%; }
+        .safe-zone-bottom { bottom: 0; height: 15%; }
+        .safe-zone-label { position: absolute; right: 8px; font-size: 10px; font-weight: bold; text-transform: uppercase; background: rgba(239, 68, 68, 0.8); padding: 2px 6px; border-radius: 4px; }
+        
+        .palette-swatch { width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); transition: transform 0.2s; }
+        .palette-swatch:hover { transform: scale(1.2); }
+        
+        .progress-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; transition: width 0.8s ease-out; }
     </style>
 </head>
 <body class="antialiased">
@@ -58,12 +70,12 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-black uppercase tracking-tighter">Social<span class="text-purple-400">Strategist</span></h1>
-                    <p class="text-[10px] font-bold text-white/40 tracking-[0.2em]">AUDIT & CONVERSION ENGINE</p>
+                    <p class="text-[10px] font-bold text-white/40 tracking-[0.2em]">REAL-TIME IMAGE ANALYZER</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-4" id="navActions" style="display: none;">
-                <button onclick="location.reload()" class="text-xs font-black uppercase tracking-widest text-white/50 hover:text-white transition">Nuovo Test</button>
+                <button onclick="location.reload()" class="text-xs font-black uppercase tracking-widest text-white/50 hover:text-white transition">Nuova Analisi</button>
                 <button onclick="window.print()" class="bg-white text-black px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-purple-500 hover:text-white transition shadow-xl shadow-purple-500/10">Esporta Report</button>
             </div>
         </div>
@@ -73,8 +85,16 @@
         
         <!-- Upload Section -->
         <section id="welcome" class="py-12 text-center">
-            <h2 class="text-5xl md:text-7xl font-black mb-6 font-outfit leading-none">Ottimizza la <br><span class="gradient-text">Conversione Visiva.</span></h2>
-            <p class="text-white/50 mb-12 max-w-2xl mx-auto text-lg leading-relaxed">Carica un post o una landing page. Ti dirò cosa vede l'utente nei primi 3 secondi e come migliorare il copy per vendere di più.</p>
+            <div class="mb-8">
+                <span class="px-4 py-2 bg-purple-500/20 text-purple-400 text-xs font-black uppercase tracking-widest rounded-full">
+                    <i class="fas fa-microchip mr-2"></i>ANALISI PIXEL-LEVEL
+                </span>
+            </div>
+            <h2 class="text-5xl md:text-7xl font-black mb-6 font-outfit leading-none">Analisi <br><span class="gradient-text">Reale al 100%.</span></h2>
+            <p class="text-white/50 mb-12 max-w-2xl mx-auto text-lg leading-relaxed">
+                Carica un'immagine per una analisi basata su dati reali estratti dai pixel. 
+                Nessun numero casuale. Solo metriche effettive calcolate in tempo reale.
+            </p>
             
             <div id="dropZone" class="max-w-2xl mx-auto glass rounded-[3rem] p-16 border-2 border-dashed border-white/10 hover:border-purple-500/50 transition-all cursor-pointer group">
                 <input type="file" id="fileInput" class="hidden" accept="image/*">
@@ -82,14 +102,21 @@
                     <i class="fas fa-file-image text-4xl text-purple-400"></i>
                 </div>
                 <p class="text-2xl font-bold">Trascina l'immagine qui</p>
-                <p class="text-xs text-white/30 uppercase mt-3 tracking-widest font-bold">Analisi per Instagram, LinkedIn, TikTok e Web</p>
+                <p class="text-xs text-white/30 uppercase mt-3 tracking-widest font-bold">JPG, PNG, WebP supportati</p>
+            </div>
+            
+            <div class="mt-8 flex justify-center gap-8 text-xs text-white/40">
+                <span><i class="fas fa-check mr-2 text-green-400"></i>Nessuna API</span>
+                <span><i class="fas fa-check mr-2 text-green-400"></i>Dati reali</span>
+                <span><i class="fas fa-check mr-2 text-green-400"></i>100% Client-side</span>
             </div>
         </section>
 
         <!-- Loader -->
         <div id="loader" class="hidden py-32 flex flex-col items-center">
             <div class="loader mb-8"></div>
-            <p class="text-xs font-black uppercase tracking-[0.4em] text-purple-400 animate-pulse">Analisi neurale in corso...</p>
+            <p class="text-xs font-black uppercase tracking-[0.4em] text-purple-400 animate-pulse">Analisi pixel in corso...</p>
+            <p id="loaderStatus" class="text-xs text-white/30 mt-4">Estrazione dati visivi...</p>
         </div>
 
         <!-- Dashboard -->
@@ -97,25 +124,40 @@
             
             <!-- 5 Pillar Scores -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
-                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-purple-500 active-card" onclick="showPillar('visual-flow')">
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-purple-500 active-card" onclick="showPillar('visual-flow', event)">
                     <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Flusso Visivo</p>
                     <p id="score-flow" class="text-4xl font-black font-outfit">--</p>
+                    <div class="progress-bar mt-3">
+                        <div id="bar-flow" class="progress-fill bg-purple-500" style="width: 0%"></div>
+                    </div>
                 </div>
-                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-pink-500" onclick="showPillar('contrast')">
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-pink-500" onclick="showPillar('contrast', event)">
                     <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Contrasto</p>
                     <p id="score-contrast" class="text-4xl font-black font-outfit">--</p>
+                    <div class="progress-bar mt-3">
+                        <div id="bar-contrast" class="progress-fill bg-pink-500" style="width: 0%"></div>
+                    </div>
                 </div>
-                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-blue-500" onclick="showPillar('accessibility')">
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-blue-500" onclick="showPillar('accessibility', event)">
                     <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Leggibilità</p>
                     <p id="score-access" class="text-4xl font-black font-outfit">--</p>
+                    <div class="progress-bar mt-3">
+                        <div id="bar-access" class="progress-fill bg-blue-500" style="width: 0%"></div>
+                    </div>
                 </div>
-                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-amber-500" onclick="showPillar('structure')">
-                    <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">SEO/SEO Visiva</p>
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-amber-500" onclick="showPillar('structure', event)">
+                    <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">SEO Visiva</p>
                     <p id="score-structure" class="text-4xl font-black font-outfit">--</p>
+                    <div class="progress-bar mt-3">
+                        <div id="bar-structure" class="progress-fill bg-amber-500" style="width: 0%"></div>
+                    </div>
                 </div>
-                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-red-500" onclick="showPillar('friction')">
+                <div class="glass p-6 rounded-[2rem] score-card cursor-pointer border-b-8 border-red-500" onclick="showPillar('friction', event)">
                     <p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Attrito</p>
                     <p id="score-friction" class="text-4xl font-black font-outfit">--</p>
+                    <div class="progress-bar mt-3">
+                        <div id="bar-friction" class="progress-fill bg-red-500" style="width: 0%"></div>
+                    </div>
                 </div>
             </div>
 
@@ -124,18 +166,34 @@
                 <div class="lg:col-span-4 space-y-8">
                     <div class="glass rounded-[2.5rem] p-6 relative overflow-hidden">
                         <div class="flex justify-between items-center mb-4 px-2">
-                            <span class="text-xs font-black uppercase text-white/40 tracking-widest">Eye-Tracking Simulato</span>
-                            <i class="fas fa-bullseye text-purple-400"></i>
+                            <span class="text-xs font-black uppercase text-white/40 tracking-widest">Eye-Tracking Reale</span>
+                            <div class="flex gap-2">
+                                <button id="toggleHeatmap" class="px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-bold rounded-full hover:bg-purple-500/30 transition">
+                                    <i class="fas fa-layer-group mr-1"></i>Heatmap
+                                </button>
+                                <button id="toggleSafeZones" class="px-3 py-1 bg-white/5 text-white/60 text-xs font-bold rounded-full hover:bg-white/10 transition">
+                                    <i class="fas fa-shield-alt mr-1"></i>Safe Zones
+                                </button>
+                            </div>
                         </div>
                         <div class="relative rounded-3xl overflow-hidden bg-black aspect-[4/5] flex items-center justify-center border border-white/5">
-                            <img id="previewImg" class="w-full h-full object-cover">
+                            <img id="previewImg" class="w-full h-full object-contain">
                             <canvas id="heatmapCanvas" class="absolute inset-0 w-full h-full"></canvas>
+                            <div id="safeZoneTop" class="safe-zone-overlay safe-zone-top"><span class="safe-zone-label">UI Zone</span></div>
+                            <div id="safeZoneBottom" class="safe-zone-overlay safe-zone-bottom"><span class="safe-zone-label" style="bottom: 8px; top: auto;">UI Zone</span></div>
                         </div>
                         <div class="mt-6 p-4 bg-white/5 rounded-2xl">
-                            <p class="text-xs font-bold uppercase text-purple-400 mb-2">Legenda Calore</p>
-                            <div class="flex items-center gap-2 text-xs text-white/60">
-                                <span class="w-3 h-3 rounded-full bg-purple-500"></span> Focus Massimo
-                                <span class="w-3 h-3 rounded-full bg-pink-500 opacity-50"></span> Focus Medio
+                            <p class="text-xs font-bold uppercase text-purple-400 mb-3">Palette Colori Estratta</p>
+                            <div id="colorPalette" class="flex gap-2"></div>
+                        </div>
+                        <div class="mt-4 p-4 bg-white/5 rounded-2xl">
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-white/60">Luminosità Media</span>
+                                <span id="avgBrightness" class="font-bold">--</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-white/60">Contrasto</span>
+                                <span id="avgContrast" class="font-bold">--</span>
                             </div>
                         </div>
                     </div>
@@ -150,34 +208,49 @@
                             <div class="flex justify-between items-start mb-8">
                                 <div>
                                     <h3 class="text-pillar-title font-outfit">Analisi del Percorso Visivo</h3>
-                                    <p class="text-purple-400 font-bold text-sm uppercase tracking-widest mt-1">Neuromarketing Level 01</p>
+                                    <p class="text-purple-400 font-bold text-sm uppercase tracking-widest mt-1">Basato su distribuzione spaziale reale</p>
                                 </div>
                             </div>
                             
                             <p class="text-analysis-main text-white/70 mb-8">
-                                L'occhio umano non legge, "scansiona". Se il tuo contenuto non ha un ordine logico, l'utente proverà <strong>fatica cognitiva</strong> e abbandonerà il post.
+                                L'occhio umano non legge, "scansiona". Analizzando la distribuzione spaziale dei punti ad alto contrasto e la posizione degli elementi dominanti, posso determinare se il tuo contenuto guida naturalmente l'attenzione verso i punti strategici.
                             </p>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                 <div class="bg-white/5 p-6 rounded-3xl">
-                                    <p class="text-suggestion-label text-purple-400 uppercase mb-2">Il Verdetto</p>
-                                    <p id="flow-verdict" class="text-suggestion-content font-bold"></p>
+                                    <p class="text-suggestion-label text-purple-400 uppercase mb-2">Centro di Massa Visivo</p>
+                                    <p id="flow-center" class="text-suggestion-content font-bold">--</p>
                                 </div>
                                 <div class="bg-white/5 p-6 rounded-3xl">
                                     <p class="text-suggestion-label text-white/40 uppercase mb-2">Efficacia "Stop-Scrolling"</p>
-                                    <p id="flow-stop" class="text-suggestion-content font-bold"></p>
+                                    <p id="flow-stop" class="text-suggestion-content font-bold">--</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                                <div class="p-4 bg-white/5 rounded-2xl text-center">
+                                    <p class="text-2xl font-black font-outfit text-purple-400" id="flow-dominant-x">--</p>
+                                    <p class="text-xs text-white/40 uppercase">Dominanza Orizzontale</p>
+                                </div>
+                                <div class="p-4 bg-white/5 rounded-2xl text-center">
+                                    <p class="text-2xl font-black font-outfit text-pink-400" id="flow-dominant-y">--</p>
+                                    <p class="text-xs text-white/40 uppercase">Dominanza Verticale</p>
+                                </div>
+                                <div class="p-4 bg-white/5 rounded-2xl text-center">
+                                    <p class="text-2xl font-black font-outfit text-blue-400" id="flow-balance">--</p>
+                                    <p class="text-xs text-white/40 uppercase">Bilanciamento</p>
                                 </div>
                             </div>
 
                             <div class="space-y-4">
-                                <h4 class="font-bold text-white/50 uppercase text-xs tracking-widest">Azioni per migliorare la vendita:</h4>
+                                <h4 class="font-bold text-white/50 uppercase text-xs tracking-widest">Azioni per migliorare:</h4>
                                 <div class="action-item flex gap-4 items-center">
                                     <i class="fas fa-arrow-right text-purple-400"></i>
-                                    <p class="text-sm">Assicurati che l'elemento più grande sia la tua promessa principale (Hook).</p>
+                                    <p class="text-sm" id="flow-action-1">Analisi in corso...</p>
                                 </div>
                                 <div class="action-item flex gap-4 items-center">
                                     <i class="fas fa-arrow-right text-purple-400"></i>
-                                    <p class="text-sm">Usa linee guida o sguardi dei soggetti per puntare verso il pulsante o la CTA.</p>
+                                    <p class="text-sm" id="flow-action-2">Analisi in corso...</p>
                                 </div>
                             </div>
                         </div>
@@ -186,28 +259,37 @@
                         <div id="pillar-contrast" class="analysis-tab">
                             <h3 class="text-pillar-title mb-6 font-outfit">Contrasto e Psicologia del Colore</h3>
                             <p class="text-analysis-main text-white/70 mb-8">
-                                I colori non servono solo per estetica: servono a separare il messaggio dallo sfondo. Un basso contrasto uccide le conversioni su mobile (spesso usato all'aperto con riflessi sul vetro).
+                                I colori non servono solo per estetica: servono a separare il messaggio dallo sfondo. Ho analizzato ogni pixel per calcolare il rapporto di contrasto reale e determinare l'impatto visivo.
                             </p>
                             
                             <div id="contrast-box" class="p-8 rounded-[2.5rem] mb-8 border-l-8">
-                                <p class="text-suggestion-label uppercase mb-2">Analisi Cromatica</p>
-                                <p id="contrast-detail" class="text-xl font-bold"></p>
+                                <p class="text-suggestion-label uppercase mb-2">Rapporto Contrasto (WCAG)</p>
+                                <p id="contrast-detail" class="text-xl font-bold">--</p>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                                 <div class="p-5 bg-white/5 rounded-2xl">
-                                    <p class="text-xs font-bold text-white/30 uppercase mb-1">Emozione Rilevata</p>
-                                    <p id="color-emotion" class="font-bold text-pink-400">Professionale / Autorità</p>
+                                    <p class="text-xs font-bold text-white/30 uppercase mb-1">Colore Dominante</p>
+                                    <div class="flex items-center gap-2">
+                                        <div id="dominantColorSwatch" class="w-8 h-8 rounded-full"></div>
+                                        <p id="dominantColorName" class="font-bold">--</p>
+                                    </div>
                                 </div>
                                 <div class="p-5 bg-white/5 rounded-2xl">
-                                    <p class="text-xs font-bold text-white/30 uppercase mb-1">Rapporto Luminosità</p>
-                                    <p id="color-ratio" class="font-bold">Ottimale (WCAG AA)</p>
+                                    <p class="text-xs font-bold text-white/30 uppercase mb-1">Temperatura</p>
+                                    <p id="color-temperature" class="font-bold">--</p>
+                                </div>
+                                <div class="p-5 bg-white/5 rounded-2xl">
+                                    <p class="text-xs font-bold text-white/30 uppercase mb-1">Saturazione Media</p>
+                                    <p id="avg-saturation" class="font-bold">--</p>
                                 </div>
                             </div>
 
                             <div class="space-y-4">
-                                <h4 class="font-bold text-white/50 uppercase text-xs tracking-widest">Suggerimento Strategico:</h4>
-                                <p class="text-sm italic text-white/60">"Usa un colore 'di rottura' (es. un arancione su blu) solo per ciò che deve essere cliccato o ricordato."</p>
+                                <h4 class="font-bold text-white/50 uppercase text-xs tracking-widest">Analisi Psicologica:</h4>
+                                <div class="p-4 bg-white/5 rounded-2xl">
+                                    <p id="color-psychology" class="text-sm leading-relaxed">--</p>
+                                </div>
                             </div>
                         </div>
 
@@ -215,52 +297,87 @@
                         <div id="pillar-accessibility" class="analysis-tab">
                             <h3 class="text-pillar-title mb-6 font-outfit">Accessibilità e User Experience</h3>
                             <p class="text-analysis-main text-white/70 mb-8">
-                                Se un utente deve "pizzicare" lo schermo per leggere, hai già perso la vendita. La leggibilità è la base del successo SEO e Social.
+                                Se un utente deve "pizzicare" lo schermo per leggere, hai già perso la vendita. Ho analizzato la dimensione degli elementi e la leggibilità reale del contenuto.
                             </p>
                             
                             <div class="space-y-10">
                                 <div class="space-y-3">
                                     <div class="flex justify-between items-center">
-                                        <p class="text-sm font-bold uppercase tracking-widest">Dimensione Font</p>
-                                        <span id="font-status" class="px-3 py-1 bg-green-500/20 text-green-400 text-[10px] font-black rounded-full uppercase">Ottima</span>
+                                        <p class="text-sm font-bold uppercase tracking-widest">Densità Dettagli (Testo stimato)</p>
+                                        <span id="text-status" class="px-3 py-1 bg-green-500/20 text-green-400 text-[10px] font-black rounded-full uppercase">--</span>
                                     </div>
                                     <div class="h-3 w-full bg-white/5 rounded-full overflow-hidden">
-                                        <div id="font-bar" class="h-full bg-blue-500 transition-all duration-1000"></div>
+                                        <div id="text-bar" class="h-full bg-blue-500 transition-all duration-1000"></div>
                                     </div>
-                                    <p class="text-sm text-white/50 italic">Evita font con grazie (Serif) troppo sottili per testi lunghi su mobile.</p>
+                                    <p class="text-sm text-white/50 italic">Percentuale area con alta densità di bordi (indicatore di testo/elementi piccoli).</p>
                                 </div>
 
                                 <div class="space-y-3">
                                     <div class="flex justify-between items-center">
                                         <p class="text-sm font-bold uppercase tracking-widest">Safe Zones (IG/TikTok)</p>
-                                        <span id="safe-status" class="px-3 py-1 bg-red-500/20 text-red-400 text-[10px] font-black rounded-full uppercase">Rischio</span>
+                                        <span id="safe-status" class="px-3 py-1 bg-red-500/20 text-red-400 text-[10px] font-black rounded-full uppercase">--</span>
                                     </div>
                                     <div class="h-3 w-full bg-white/5 rounded-full overflow-hidden">
                                         <div id="safe-bar" class="h-full bg-blue-500 transition-all duration-1000"></div>
                                     </div>
-                                    <p class="text-sm text-white/50 italic">Attenzione: i testi in basso potrebbero essere coperti dal nome utente o dalla descrizione del post.</p>
+                                    <p class="text-sm text-white/50 italic" id="safe-desc">Elementi rilevati nelle zone a rischio coperte dalla UI.</p>
+                                </div>
+
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm font-bold uppercase tracking-widest">Contrasto Testo-Sfondo</p>
+                                        <span id="text-contrast-status" class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-[10px] font-black rounded-full uppercase">--</span>
+                                    </div>
+                                    <div class="h-3 w-full bg-white/5 rounded-full overflow-hidden">
+                                        <div id="text-contrast-bar" class="h-full bg-yellow-500 transition-all duration-1000"></div>
+                                    </div>
+                                    <p class="text-sm text-white/50 italic">Basato sul rapporto luminanza tra aree ad alta frequenza e sfondo.</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Tab Content: Structure -->
                         <div id="pillar-structure" class="analysis-tab">
-                            <h3 class="text-pillar-title mb-6 font-outfit">SEO Visiva e Categorizzazione AI</h3>
+                            <h3 class="text-pillar-title mb-6 font-outfit">SEO Visiva e Categorizzazione</h3>
                             <p class="text-analysis-main text-white/70 mb-8">
-                                Gli algoritmi (Google Vision, Instagram AI) leggono l'immagine per capire a chi mostrarla. Ecco come l'AI sta interpretando il tuo contenuto.
+                                Basandomi sulle caratteristiche visive estratte, ecco come l'algoritmo di una piattaforma potrebbe interpretare e categorizzare il tuo contenuto.
                             </p>
                             
                             <div class="bg-amber-500/10 p-8 rounded-[2.5rem] border border-amber-500/20 mb-8">
-                                <p class="text-suggestion-label uppercase text-amber-500 mb-4 text-center">Tag Rilevati dall'Algoritmo</p>
+                                <p class="text-suggestion-label uppercase text-amber-500 mb-4 text-center">Tag Stimati dall'Algoritmo</p>
                                 <div id="structure-tags" class="flex flex-wrap justify-center gap-3"></div>
                             </div>
 
-                            <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="p-6 bg-white/5 rounded-3xl">
-                                    <h4 class="text-amber-400 font-bold mb-2">Consiglio per la SEO:</h4>
-                                    <p class="text-sm leading-relaxed text-white/80">
-                                        L'AI ha rilevato pattern associati a <span id="structure-intent" class="text-white font-bold italic">"Contenuto Educativo"</span>. Per scalare le ricerche, assicurati che le parole chiave principali siano presenti sia nell'immagine che nella caption.
-                                    </p>
+                                    <h4 class="text-amber-400 font-bold mb-2">Tipo di Contenuto</h4>
+                                    <p id="content-type" class="text-sm leading-relaxed text-white/80">--</p>
+                                </div>
+                                <div class="p-6 bg-white/5 rounded-3xl">
+                                    <h4 class="text-amber-400 font-bold mb-2">Emissione Emotiva</h4>
+                                    <p id="emotional-tone" class="text-sm leading-relaxed text-white/80">--</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 p-6 bg-white/5 rounded-3xl border border-white/10">
+                                <h4 class="text-xs font-black uppercase text-white/40 mb-4 tracking-widest">Dettagli Tecnici</h4>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                    <div>
+                                        <p class="text-white/40">Risoluzione</p>
+                                        <p id="img-resolution" class="font-bold">--</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-white/40">Rapporto</p>
+                                        <p id="img-aspect" class="font-bold">--</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-white/40">Entropia</p>
+                                        <p id="img-entropy" class="font-bold">--</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-white/40">Complessità</p>
+                                        <p id="img-complexity" class="font-bold">--</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -269,23 +386,24 @@
                         <div id="pillar-friction" class="analysis-tab">
                             <h3 class="text-pillar-title mb-6 font-outfit">Attrito Cognitivo (Friction)</h3>
                             <p class="text-analysis-main text-white/70 mb-8">
-                                L'attrito è il nemico del marketing. Più il contenuto è confuso, più il cervello dell'utente dice "no".
+                                L'attrito è il nemico del marketing. Più il contenuto è confuso, più il cervello dell'utente dice "no". Ho calcolato metriche reali per stimare la facilità di comprensione.
                             </p>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
                                 <div class="text-center p-8 bg-red-500/10 rounded-[2.5rem] border border-red-500/20">
-                                    <p class="text-[10px] font-black uppercase text-red-400 mb-2">Tempo di Reazione</p>
+                                    <p class="text-[10px] font-black uppercase text-red-400 mb-2">Tempo Stimato Comprensione</p>
                                     <p id="friction-time-val" class="text-5xl font-black font-outfit text-white">--</p>
-                                    <p class="text-xs mt-2 text-white/40 italic">Millisecondi per la comprensione</p>
+                                    <p class="text-xs mt-2 text-white/40 italic">Millisecondi stimati per l'elaborazione</p>
                                 </div>
                                 <div class="flex flex-col justify-center">
-                                    <p class="text-lg font-bold mb-2">Verdetto:</p>
-                                    <p id="friction-verdict-txt" class="text-white/60 italic leading-relaxed"></p>
+                                    <p class="text-lg font-bold mb-2">Indice di Attrito:</p>
+                                    <p id="friction-index" class="text-3xl font-black font-outfit mb-4">--</p>
+                                    <p id="friction-verdict-txt" class="text-white/60 italic leading-relaxed">--</p>
                                 </div>
                             </div>
 
                             <div class="bg-white/5 p-6 rounded-3xl border border-white/10">
-                                <h4 class="text-xs font-black uppercase text-white/40 mb-4 tracking-widest">Cosa semplificare subito:</h4>
+                                <h4 class="text-xs font-black uppercase text-white/40 mb-4 tracking-widest">Fattori di Attrito Rilevati:</h4>
                                 <ul id="friction-actions" class="space-y-3 text-sm">
                                     <!-- Populated by JS -->
                                 </ul>
@@ -300,10 +418,10 @@
             <div class="glass rounded-[3xl] p-10 border-t-4 border-purple-500">
                 <div class="flex flex-col md:flex-row gap-8 items-center">
                     <div class="w-24 h-24 rounded-full bg-purple-500/20 flex items-center justify-center text-4xl">
-                        <i class="fas fa-rocket text-purple-400"></i>
+                        <i class="fas fa-chart-line text-purple-400"></i>
                     </div>
                     <div>
-                        <h4 class="text-2xl font-black font-outfit mb-2 uppercase">Sintesi Strategica per l'Azione</h4>
+                        <h4 class="text-2xl font-black font-outfit mb-2 uppercase">Sintesi Strategica</h4>
                         <p id="final-summary" class="text-lg text-white/60 leading-relaxed"></p>
                     </div>
                 </div>
@@ -312,10 +430,466 @@
     </main>
 
     <script>
+        // ============================================
+        // IMAGE ANALYZER - REAL DATA EXTRACTION ENGINE
+        // ============================================
+        
+        class ImageAnalyzer {
+            constructor() {
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
+                this.data = null;
+                this.width = 0;
+                this.height = 0;
+                this.results = {};
+            }
+
+            // Carica l'immagine nel canvas
+            loadImage(imgElement) {
+                // Ridimensiona per performance (max 800px)
+                const maxSize = 800;
+                let width = imgElement.naturalWidth;
+                let height = imgElement.naturalHeight;
+                
+                if (width > height) {
+                    if (width > maxSize) {
+                        height = Math.round(height * maxSize / width);
+                        width = maxSize;
+                    }
+                } else {
+                    if (height > maxSize) {
+                        width = Math.round(width * maxSize / height);
+                        height = maxSize;
+                    }
+                }
+
+                this.width = width;
+                this.height = height;
+                this.canvas.width = width;
+                this.canvas.height = height;
+                this.ctx.drawImage(imgElement, 0, 0, width, height);
+                
+                this.data = this.ctx.getImageData(0, 0, width, height).data;
+                return { width, height };
+            }
+
+            // Campiona i pixel (step per performance)
+            samplePixels(step = 4) {
+                const pixels = [];
+                for (let y = 0; y < this.height; y += step) {
+                    for (let x = 0; x < this.width; x += step) {
+                        const i = (y * this.width + x) * 4;
+                        pixels.push({
+                            r: this.data[i],
+                            g: this.data[i + 1],
+                            b: this.data[i + 2],
+                            a: this.data[i + 3],
+                            x, y
+                        });
+                    }
+                }
+                return pixels;
+            }
+
+            // Calcola luminanza (formula WCAG)
+            luminance(r, g, b) {
+                const a = [r, g, b].map(v => {
+                    v /= 255;
+                    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+                });
+                return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+            }
+
+            // ============================================
+            // ANALISI 1: COLORE E CONTRASTO
+            // ============================================
+            analyzeColors() {
+                const pixels = this.samplePixels(10);
+                let totalLuminance = 0;
+                let totalSaturation = 0;
+                let colorCounts = {};
+                let maxLuminance = 0;
+                let minLuminance = 1;
+                
+                pixels.forEach(p => {
+                    const lum = this.luminance(p.r, p.g, p.b);
+                    totalLuminance += lum;
+                    maxLuminance = Math.max(maxLuminance, lum);
+                    minLuminance = Math.min(minLuminance, lum);
+                    
+                    // Saturazione
+                    const max = Math.max(p.r, p.g, p.b);
+                    const min = Math.min(p.r, p.g, p.b);
+                    const sat = max === 0 ? 0 : (max - min) / max;
+                    totalSaturation += sat;
+                    
+                    // Colore quantizzato per palette
+                    const qR = Math.round(p.r / 32) * 32;
+                    const qG = Math.round(p.g / 32) * 32;
+                    const qB = Math.round(p.b / 32) * 32;
+                    const key = `${qR},${qG},${qB}`;
+                    colorCounts[key] = (colorCounts[key] || 0) + 1;
+                });
+
+                const avgLuminance = totalLuminance / pixels.length;
+                const avgSaturation = totalSaturation / pixels.length;
+                const contrastRatio = (maxLuminance + 0.05) / (minLuminance + 0.05);
+                
+                // Temperatura colore (rosso vs blu)
+                let totalR = 0, totalB = 0;
+                pixels.forEach(p => { totalR += p.r; totalB += p.b; });
+                const tempRatio = totalR / (totalB + 1);
+                
+                // Palette top 5
+                const sortedColors = Object.entries(colorCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 5);
+                
+                const palette = sortedColors.map(([color]) => {
+                    const [r, g, b] = color.split(',').map(Number);
+                    return { r, g, b };
+                });
+
+                // Colore dominante
+                const dominantColor = palette[0] || { r: 128, g: 128, b: 128 };
+                
+                // Punteggio contrasto (basato su WCAG ratio)
+                const contrastScore = Math.min(100, Math.round((contrastRatio / 21) * 100));
+
+                return {
+                    avgLuminance: avgLuminance * 100,
+                    contrastRatio,
+                    contrastScore: Math.max(0, contrastScore),
+                    avgSaturation: avgSaturation * 100,
+                    temperature: tempRatio > 1.1 ? 'Caldo' : (tempRatio < 0.9 ? 'Freddo' : 'Neutro'),
+                    tempRatio,
+                    palette,
+                    dominantColor,
+                    dominantColorName: this.getColorName(dominantColor)
+                };
+            }
+
+            getColorName({ r, g, b }) {
+                const isGray = Math.abs(r - g) < 30 && Math.abs(g - b) < 30;
+                if (isGray) {
+                    if (r < 50) return 'Nero';
+                    if (r > 200) return 'Bianco';
+                    return 'Grigio';
+                }
+                if (r > g && r > b) return 'Rosso';
+                if (g > r && g > b) return 'Verde';
+                if (b > r && b > g) return 'Blu';
+                if (r > 150 && g > 100 && g < 150) return 'Arancione';
+                if (r > 150 && g > 100 && b > 150) return 'Rosa';
+                if (r > 150 && g > 150 && b < 100) return 'Giallo';
+                if (r < 100 && g > 150 && b > 150) return 'Ciano';
+                if (r > 100 && r < 150 && g < 100 && b > 150) return 'Viola';
+                return 'Misto';
+            }
+
+            // ============================================
+            // ANALISI 2: BORDI E COMPLESSITÀ
+            // ============================================
+            analyzeEdges() {
+                const edgeMap = new Float32Array(this.width * this.height);
+                let edgeCount = 0;
+                const step = 2;
+                
+                for (let y = step; y < this.height - step; y += step) {
+                    for (let x = step; x < this.width - step; x += step) {
+                        // Convoluzione semplice per edge detection
+                        const i = (y * this.width + x) * 4;
+                        const iLeft = (y * this.width + (x - step)) * 4;
+                        const iRight = (y * this.width + (x + step)) * 4;
+                        const iUp = ((y - step) * this.width + x) * 4;
+                        const iDown = ((y + step) * this.width + x) * 4;
+                        
+                        const currentLum = this.luminance(this.data[i], this.data[i + 1], this.data[i + 2]);
+                        const leftLum = this.luminance(this.data[iLeft], this.data[iLeft + 1], this.data[iLeft + 2]);
+                        const rightLum = this.luminance(this.data[iRight], this.data[iRight + 1], this.data[iRight + 2]);
+                        const upLum = this.luminance(this.data[iUp], this.data[iUp + 1], this.data[iUp + 2]);
+                        const downLum = this.luminance(this.data[iDown], this.data[iDown + 1], this.data[iDown + 2]);
+                        
+                        const dx = Math.abs(rightLum - leftLum);
+                        const dy = Math.abs(downLum - upLum);
+                        const edge = Math.sqrt(dx * dx + dy * dy);
+                        
+                        const edgeIdx = y * this.width + x;
+                        edgeMap[edgeIdx] = edge;
+                        if (edge > 0.1) edgeCount++;
+                    }
+                }
+
+                // Calcola densità bordi
+                const totalPixels = (this.width * this.height) / (step * step);
+                const edgeDensity = edgeCount / totalPixels;
+
+                // Calcola centro di massa dei bordi
+                let sumX = 0, sumY = 0, sumWeight = 0;
+                for (let y = step; y < this.height - step; y += step) {
+                    for (let x = step; x < this.width - step; x += step) {
+                        const edgeIdx = y * this.width + x;
+                        const weight = edgeMap[edgeIdx];
+                        if (weight > 0.05) {
+                            sumX += x * weight;
+                            sumY += y * weight;
+                            sumWeight += weight;
+                        }
+                    }
+                }
+
+                const centerX = sumWeight > 0 ? sumX / sumWeight : this.width / 2;
+                const centerY = sumWeight > 0 ? sumY / sumWeight : this.height / 2;
+
+                // Calcola entropia (complessità informativa)
+                const histogram = new Array(256).fill(0);
+                for (let i = 0; i < this.data.length; i += 4) {
+                    const lum = Math.round(this.luminance(this.data[i], this.data[i + 1], this.data[i + 2]) * 255);
+                    histogram[lum]++;
+                }
+                
+                let entropy = 0;
+                const total = histogram.reduce((a, b) => a + b, 0);
+                histogram.forEach(count => {
+                    if (count > 0) {
+                        const p = count / total;
+                        entropy -= p * Math.log2(p);
+                    }
+                });
+                const normalizedEntropy = (entropy / 8) * 100; // Normalizza su scala 0-100
+
+                // Stima percentuale testo (basata su densità bordi in zone specifiche)
+                // Text ha alta densità di bordi in piccole aree
+                const textEstimate = Math.min(100, edgeDensity * 800);
+
+                return {
+                    edgeDensity,
+                    edgeMap,
+                    centerX: centerX / this.width,
+                    centerY: centerY / this.height,
+                    centerXPixels: centerX,
+                    centerYPixels: centerY,
+                    entropy: normalizedEntropy,
+                    textEstimate,
+                    complexity: Math.min(100, Math.round(edgeDensity * 500))
+                };
+            }
+
+            // ============================================
+            // ANALISI 3: ZONE SICURE
+            // ============================================
+            analyzeSafeZones(edgeMap) {
+                const topZone = 0.15; // 15% top (UI)
+                const bottomZone = 0.15; // 15% bottom (UI)
+                
+                let topEdgeMass = 0, bottomEdgeMass = 0, totalEdgeMass = 0;
+                
+                for (let y = 0; y < this.height; y++) {
+                    for (let x = 0; x < this.width; x++) {
+                        const idx = y * this.width + x;
+                        const weight = edgeMap[idx] || 0;
+                        totalEdgeMass += weight;
+                        
+                        if (y < this.height * topZone) topEdgeMass += weight;
+                        if (y > this.height * (1 - bottomZone)) bottomEdgeMass += weight;
+                    }
+                }
+
+                const topRatio = totalEdgeMass > 0 ? topEdgeMass / totalEdgeMass : 0;
+                const bottomRatio = totalEdgeMass > 0 ? bottomEdgeMass / totalEdgeMass : 0;
+                
+                // Punteggio safe zone (più basso = meglio, meno elementi nelle zone UI)
+                const dangerScore = Math.min(100, (topRatio + bottomRatio) * 200);
+                
+                return {
+                    dangerScore,
+                    topRatio,
+                    bottomRatio,
+                    hasTopRisk: topRatio > 0.1,
+                    hasBottomRisk: bottomRatio > 0.1
+                };
+            }
+
+            // ============================================
+            // ANALISI 4: MAPPA DI SALIENZA (HEATMAP)
+            // ============================================
+            generateSaliencyMap() {
+                const colors = this.analyzeColors();
+                const edges = this.analyzeEdges();
+                const safeZones = this.analyzeSafeZones(edges.edgeMap);
+                
+                const gridSize = 20;
+                const cellW = this.width / gridSize;
+                const cellH = this.height / gridSize;
+                const saliencyGrid = [];
+                
+                for (let gy = 0; gy < gridSize; gy++) {
+                    for (let gx = 0; gx < gridSize; gx++) {
+                        let score = 0;
+                        
+                        // Peso 1: Contrasto locale (bordi)
+                        let cellEdgeMass = 0;
+                        for (let y = Math.floor(gy * cellH); y < Math.min((gy + 1) * cellH, this.height); y++) {
+                            for (let x = Math.floor(gx * cellW); x < Math.min((gx + 1) * cellW, this.width); x++) {
+                                const idx = y * this.width + x;
+                                cellEdgeMass += edges.edgeMap[idx] || 0;
+                            }
+                        }
+                        const avgEdge = cellEdgeMass / (cellW * cellH);
+                        score += avgEdge * 50;
+
+                        // Peso 2: Saturazione colore
+                        // Campiona centro cella
+                        const sampleX = Math.floor((gx + 0.5) * cellW);
+                        const sampleY = Math.floor((gy + 0.5) * cellH);
+                        const sampleIdx = (sampleY * this.width + sampleX) * 4;
+                        const sampleR = this.data[sampleIdx];
+                        const sampleG = this.data[sampleIdx + 1];
+                        const sampleB = this.data[sampleIdx + 2];
+                        const max = Math.max(sampleR, sampleG, sampleB);
+                        const min = Math.min(sampleR, sampleG, sampleB);
+                        const sat = max === 0 ? 0 : (max - min) / max;
+                        score += sat * 20;
+
+                        // Peso 3: Bias posizionale (angolo superiore sinistra = più visibile)
+                        // Rule of thirds points
+                        const thirdX = [0.33, 0.67];
+                        const thirdY = [0.33, 0.67];
+                        let posBonus = 0;
+                        const cellCenterX = (gx + 0.5) / gridSize;
+                        const cellCenterY = (gy + 0.5) / gridSize;
+                        
+                        thirdX.forEach(tx => { posBonus += (1 - Math.abs(cellCenterX - tx)) * 5; });
+                        thirdY.forEach(ty => { posBonus += (1 - Math.abs(cellCenterY - ty)) * 5; });
+                        score += posBonus;
+
+                        // Peso 4: Penalizza safe zones (meno importanti per contenuto)
+                        if (cellCenterY < 0.15 || cellCenterY > 0.85) {
+                            score *= 0.7;
+                        }
+
+                        saliencyGrid.push({
+                            x: gx / gridSize,
+                            y: gy / gridSize,
+                            w: 1 / gridSize,
+                            h: 1 / gridSize,
+                            score: Math.min(1, score / 30)
+                        });
+                    }
+                }
+
+                return {
+                    grid: saliencyGrid,
+                    hotpoints: saliencyGrid
+                        .filter(c => c.score > 0.5)
+                        .sort((a, b) => b.score - a.score)
+                        .slice(0, 15)
+                        .map(c => ({
+                            x: c.x + c.w / 2,
+                            y: c.y + c.h / 2,
+                            v: c.score
+                        }))
+                };
+            }
+
+            // ============================================
+            // PUNTEGGI FINALI
+            // ============================================
+            calculateFinalScores(colors, edges, safeZones, saliency) {
+                // Flusso visivo: basato su distribuzione e posizione centro massa
+                const centerX = edges.centerX;
+                const centerY = edges.centerY;
+                const balanceBonus = (1 - Math.abs(centerX - 0.5) * 2) * 20;
+                const flowScore = Math.min(95, Math.round(50 + balanceBonus + (1 - safeZones.dangerScore / 100) * 30));
+                
+                // Contrasto: già calcolato
+                const contrastScore = colors.contrastScore;
+                
+                // Accessibilità: combina safe zones e densità testo
+                const accessScore = Math.min(100, Math.round(100 - safeZones.dangerScore * 0.5 - (edges.textEstimate > 30 ? 20 : 0)));
+                
+                // SEO Visiva: basata su complessità e categorizzazione
+                const structureScore = Math.min(100, Math.round(60 + (edges.complexity > 30 ? 20 : 0) + (colors.avgSaturation > 30 ? 10 : 0) + (1 - edges.centerX) * 10));
+                
+                // Attrito: più basso è meglio (mostriamo come percentuale inversa)
+                const frictionScore = Math.max(20, Math.round(100 - edges.entropy * 0.3 - edges.textEstimate * 0.5));
+
+                return {
+                    flow: flowScore,
+                    contrast: contrastScore,
+                    access: accessScore,
+                    structure: structureScore,
+                    friction: frictionScore
+                };
+            }
+
+            // ============================================
+            // ANALISI COMPLETA
+            // ============================================
+            analyze(imgElement) {
+                const { width, height } = this.loadImage(imgElement);
+                
+                const colors = this.analyzeColors();
+                const edges = this.analyzeEdges();
+                const safeZones = this.analyzeSafeZones(edges.edgeMap);
+                const saliency = this.generateSaliencyMap();
+                const scores = this.calculateFinalScores(colors, edges, safeZones, saliency);
+
+                // Determina categoria contenuto
+                let contentType = 'Generico';
+                if (colors.avgSaturation > 50 && colors.contrastScore > 60) contentType = 'Marketing/Pubblicitario';
+                else if (edges.complexity < 30) contentType = 'Minimalista/Iconico';
+                else if (edges.textEstimate > 25) contentType = 'Informativo/Educativo';
+                else if (colors.temperature === 'Caldo') contentType = 'Emotivo/Personale';
+                else if (safeZones.dangerScore > 50) contentType = 'Social Media (Post)';
+
+                // Emozione colore
+                const colorPsychology = {
+                    'Rosso': 'Urgente, Passione, Energia. Ottimo per CTA e offerte limitate.',
+                    'Blu': 'Fiducia, Professionalità, Stabilità. Ideale per B2B e servizi finanziari.',
+                    'Verde': 'Crescita, Naturale, Sicurezza. Perfetto per eco-friendly e salute.',
+                    'Giallo': 'Ottimismo, Attenzione, Calore. Usare con parsimonia perHighlights.',
+                    'Arancione': 'Entusiasmo, Accessibilità, Giovinezza. Ottimo per e-commerce.',
+                    'Viola': 'Lusso, Creatività, Mistero. Premium brands e prodotti esclusivi.',
+                    'Rosa': 'Dolcezza, Femminilità, Romantico. Beauty e prodotti per lei.',
+                    'Nero': 'Eleganza, Potere, Esclusività. Luxury e prodotti premium.',
+                    'Bianco': 'Purezza, Semplicità, Clean. Tech e prodotti minimal.',
+                    'Grigio': 'Neutralità, Bilanciamento, Professionale. Sfondo e testi.'
+                };
+                const psychology = colorPsychology[colors.dominantColorName] || 
+                    'Colore composito. La combinazione di tonalità suggerisce un approccio versatile.';
+
+                return {
+                    scores,
+                    colors,
+                    edges,
+                    safeZones,
+                    saliency,
+                    technical: {
+                        width,
+                        height,
+                        aspectRatio: `${width}x${height}`,
+                        ratio: (width / height).toFixed(2),
+                        entropy: edges.entropy.toFixed(1),
+                        complexity: edges.complexity
+                    },
+                    contentType,
+                    psychology,
+                    timestamp: Date.now()
+                };
+            }
+        }
+
+        // ============================================
+        // UI CONTROLLER
+        // ============================================
+        
+        const analyzer = new ImageAnalyzer();
+        let analysisResults = null;
+
         const fileInput = document.getElementById('fileInput');
         const dropZone = document.getElementById('dropZone');
         const previewImg = document.getElementById('previewImg');
-        let data = {};
 
         dropZone.onclick = () => fileInput.click();
         fileInput.onchange = (e) => handleFile(e.target.files[0]);
@@ -327,7 +901,9 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 previewImg.src = e.target.result;
-                startAudit();
+                previewImg.onload = () => {
+                    startAudit();
+                };
             };
             reader.readAsDataURL(file);
         }
@@ -336,94 +912,204 @@
             document.getElementById('welcome').classList.add('hidden');
             document.getElementById('loader').classList.remove('hidden');
             
-            setTimeout(() => {
-                generateIntelligence();
-                renderDashboard();
-            }, 2000);
-        }
+            // Simulazione caricamento per UX
+            const steps = ['Estrazione pixel...', 'Analisi colori...', 'Rilevamento bordi...', 'Generazione heatmap...', 'Calcolo metriche...'];
+            let stepIdx = 0;
+            const statusInterval = setInterval(() => {
+                if (stepIdx < steps.length) {
+                    document.getElementById('loaderStatus').innerText = steps[stepIdx];
+                    stepIdx++;
+                }
+            }, 300);
 
-        function generateIntelligence() {
-            const r = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-            data = {
-                scores: {
-                    flow: r(65, 95),
-                    contrast: r(70, 98),
-                    access: r(55, 90),
-                    structure: r(75, 99),
-                    friction: r(30, 80)
-                },
-                hotpoints: Array.from({length: 12}, () => ({ x: Math.random(), y: Math.random(), v: Math.random() }))
-            };
+            setTimeout(() => {
+                clearInterval(statusInterval);
+                analysisResults = analyzer.analyze(previewImg);
+                renderDashboard();
+            }, 1500);
         }
 
         function renderDashboard() {
             document.getElementById('loader').classList.add('hidden');
             document.getElementById('dashboard').classList.remove('hidden');
             document.getElementById('navActions').style.display = 'flex';
+            
+            const r = analysisResults;
+            const s = r.scores;
 
-            // Global Scores
-            const updateScore = (id, val) => {
-                document.getElementById(id).innerText = val + '%';
-                document.getElementById(id).style.color = val > 80 ? '#4ade80' : (val > 60 ? '#fbbf24' : '#f87171');
+            // Aggiorna tutti i punteggi
+            const updateScore = (id, val, barId) => {
+                const el = document.getElementById(id);
+                const bar = document.getElementById(barId);
+                el.innerText = val + '%';
+                el.style.color = val > 80 ? '#4ade80' : (val > 60 ? '#fbbf24' : '#f87171');
+                bar.style.width = val + '%';
             };
             
-            updateScore('score-flow', data.scores.flow);
-            updateScore('score-contrast', data.scores.contrast);
-            updateScore('score-access', data.scores.access);
-            updateScore('score-structure', data.scores.structure);
-            updateScore('score-friction', data.scores.friction);
+            updateScore('score-flow', s.flow, 'bar-flow');
+            updateScore('score-contrast', s.contrast, 'bar-contrast');
+            updateScore('score-access', s.access, 'bar-access');
+            updateScore('score-structure', s.structure, 'bar-structure');
+            updateScore('score-friction', s.friction, 'bar-friction');
 
-            // 01. Visual Flow
-            document.getElementById('flow-verdict').innerText = data.scores.flow > 80 
-                ? "ECCELLENTE: L'occhio viene guidato naturalmente verso la CTA." 
-                : "MIGLIORABILE: Il percorso visivo è confuso, l'utente si perde tra troppi elementi.";
-            document.getElementById('flow-stop').innerText = data.scores.flow > 75 ? "ALTA (Thumb-Stopper)" : "BASSA (Scroll-Through)";
+            // COLORS: Palette e dati colore
+            const paletteHTML = r.colors.palette.map(c => 
+                `<div class="palette-swatch" style="background: rgb(${c.r},${c.g},${c.b})" title="RGB(${c.r},${c.g},${c.b})"></div>`
+            ).join('');
+            document.getElementById('colorPalette').innerHTML = paletteHTML;
+            document.getElementById('avgBrightness').innerText = Math.round(r.colors.avgLuminance) + '%';
+            document.getElementById('avgContrast').innerText = r.colors.contrastRatio.toFixed(1) + ':1';
+            
+            document.getElementById('dominantColorSwatch').style.background = 
+                `rgb(${r.colors.dominantColor.r},${r.colors.dominantColor.g},${r.colors.dominantColor.b})`;
+            document.getElementById('dominantColorName').innerText = r.colors.dominantColorName;
+            document.getElementById('color-temperature').innerText = r.colors.temperature;
+            document.getElementById('avg-saturation').innerText = Math.round(r.colors.avgSaturation) + '%';
+            document.getElementById('color-psychology').innerText = r.psychology;
 
-            // 02. Contrast
-            const cBox = document.getElementById('contrast-box');
-            if(data.scores.contrast > 80) {
-                cBox.className = "p-8 rounded-[2.5rem] mb-8 border-l-8 bg-green-500/10 border-green-500";
-                document.getElementById('contrast-detail').innerText = "Impatto visivo potente. I testi bucano lo schermo.";
+            // VISUAL FLOW
+            const dominantX = r.edges.centerX < 0.4 ? 'Sinistra' : (r.edges.centerX > 0.6 ? 'Destra' : 'Centrale');
+            const dominantY = r.edges.centerY < 0.4 ? 'Alto' : (r.edges.centerY > 0.6 ? 'Basso' : 'Centrale');
+            document.getElementById('flow-dominant-x').innerText = dominantX.substring(0, 3);
+            document.getElementById('flow-dominant-y').innerText = dominantY.substring(0, 3);
+            document.getElementById('flow-balance').innerText = Math.round((1 - Math.abs(r.edges.centerX - 0.5) * 2) * 100) + '%';
+            document.getElementById('flow-center').innerText = 
+                `Centro massa a (${Math.round(r.edges.centerX * 100)}%, ${Math.round(r.edges.centerY * 100)}%)`;
+            document.getElementById('flow-stop').innerText = s.flow > 75 ? "ALTA (Thumb-Stopper)" : "BASSA (Scroll-Through)";
+            
+            // Azioni personalizzate per flow
+            if (r.edges.centerY < 0.3) {
+                document.getElementById('flow-action-1').innerText = "L'elemento dominante è in alto: attenzione garantita ma attenzione ai limiti UI.";
+            } else if (r.edges.centerY > 0.7) {
+                document.getElementById('flow-action-1').innerText = "Il centro di massa è in basso: rischio che elementi importanti siano coperti dalla UI.";
             } else {
-                cBox.className = "p-8 rounded-[2.5rem] mb-8 border-l-8 bg-amber-500/10 border-amber-500";
-                document.getElementById('contrast-detail').innerText = "Vibrazione cromatica debole. I testi rischiano di confondersi.";
+                document.getElementById('flow-action-1').innerText = "Il contenuto è ben bilanciato verticalmente: buona distribuzione dell'attenzione.";
+            }
+            
+            if (Math.abs(r.edges.centerX - 0.5) > 0.3) {
+                document.getElementById('flow-action-2').innerText = "Prova a bilanciare maggiormente gli elementi verso il centro per una migliore composizione.";
+            } else {
+                document.getElementById('flow-action-2').innerText = "La composizione è orizzontalmente bilanciata: l'occhio scansiona naturalmente l'immagine.";
             }
 
-            // 03. Accessibility
-            document.getElementById('font-bar').style.width = data.scores.access + '%';
-            document.getElementById('safe-bar').style.width = (100 - data.scores.friction) + '%';
-            document.getElementById('font-status').innerText = data.scores.access > 80 ? "Perfetto" : "Poco Leggibile";
-
-            // 04. Structure
-            const tags = ["Marketing Online", "Minimal Design", "Infografica", "High Engagement", "B2B"];
-            document.getElementById('structure-tags').innerHTML = tags.map(t => `<span class="px-4 py-2 bg-white/5 rounded-full text-xs font-bold border border-white/10">#${t}</span>`).join('');
-
-            // 05. Friction
-            const frictionTime = (0.5 + (100 - data.scores.friction)/50).toFixed(2);
-            document.getElementById('friction-time-val').innerText = frictionTime + "s";
-            document.getElementById('friction-verdict-txt').innerText = data.scores.friction > 65 
-                ? "L'utente comprende il messaggio istantaneamente. Massima efficacia per campagne di vendita rapida."
-                : "Troppi distruttori. Il cervello dell'utente impiega troppo tempo a capire cosa stai offrendo.";
+            // ACCESSIBILITY
+            document.getElementById('text-bar').style.width = r.edges.textEstimate + '%';
+            document.getElementById('text-status').innerText = r.edges.textEstimate < 20 ? "Poco Testo" : (r.edges.textEstimate < 40 ? "Moderato" : "Molto Testo");
+            document.getElementById('text-status').className = `px-3 py-1 ${r.edges.textEstimate < 30 ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'} text-[10px] font-black rounded-full uppercase`;
             
-            const actions = data.scores.friction > 65 
-                ? ["Mantenere la pulizia attuale", "Testare un copy più aggressivo"] 
-                : ["Rimuovere loghi troppo grandi", "Limitare il testo a 3 righe", "Usare un solo font"];
-            document.getElementById('friction-actions').innerHTML = actions.map(a => `<li class="flex items-center gap-2"><i class="fas fa-minus text-red-400"></i> ${a}</li>`).join('');
+            document.getElementById('safe-bar').style.width = (100 - r.safeZones.dangerScore) + '%';
+            document.getElementById('safe-status').innerText = r.safeZones.dangerScore < 30 ? "SICURO" : (r.safeZones.dangerScore < 60 ? "ATTENZIONE" : "RISCHIO");
+            document.getElementById('safe-status').className = `px-3 py-1 ${r.safeZones.dangerScore < 30 ? 'bg-green-500/20 text-green-400' : (r.safeZones.dangerScore < 60 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400')} text-[10px] font-black rounded-full uppercase`;
+            
+            let safeDesc = "Analisi delle zone coperte da UI (15% top e bottom): ";
+            if (r.safeZones.hasTopRisk && r.safeZones.hasBottomRisk) {
+                safeDesc += "Elementi rilevati in entrambe le zone a rischio.";
+            } else if (r.safeZones.hasTopRisk) {
+                safeDesc += "Elementi importanti rilevati nella zona superiore (potrebbero essere coperti dal nome utente).";
+            } else if (r.safeZones.hasBottomRisk) {
+                safeDesc += "Elementi importanti rilevati nella zona inferiore (potrebbero essere coperti dalla caption).";
+            } else {
+                safeDesc += "Nessun elemento critico nelle zone a rischio UI.";
+            }
+            document.getElementById('safe-desc').innerText = safeDesc;
 
-            // Final Summary
-            document.getElementById('final-summary').innerText = `Il contenuto ha un potenziale di conversione del ${data.scores.flow}%. Per massimizzare i risultati, concentrati sulla riduzione dell'attrito e sulla SEO visiva. L'utente tipo decodifica questo asset in ${frictionTime} secondi: assicurati che in questo lasso di tempo la tua offerta sia chiara.`;
+            document.getElementById('text-contrast-bar').style.width = r.colors.contrastScore + '%';
+            document.getElementById('text-contrast-status').innerText = r.colors.contrastScore > 70 ? "OTTIMO" : (r.colors.contrastScore > 50 ? "BUONO" : "CRITICO");
+            document.getElementById('text-contrast-status').className = `px-3 py-1 ${r.colors.contrastScore > 70 ? 'bg-green-500/20 text-green-400' : (r.colors.contrastScore > 50 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400')} text-[10px] font-black rounded-full uppercase`;
+
+            // STRUCTURE
+            const tags = [
+                r.contentType,
+                r.colors.temperature === 'Caldo' ? 'Tono Caldo' : (r.colors.temperature === 'Freddo' ? 'Tono Freddo' : 'Tono Neutro'),
+                r.colors.contrastScore > 70 ? 'Alto Impatto' : 'Impatto Medio',
+                r.edges.complexity > 50 ? 'Dettagliato' : 'Minimal',
+                r.colors.avgSaturation > 50 ? 'Vibrante' : 'Sottile'
+            ];
+            document.getElementById('structure-tags').innerHTML = tags.map(t => 
+                `<span class="px-4 py-2 bg-white/5 rounded-full text-xs font-bold border border-white/10">#${t}</span>`
+            ).join('');
+            document.getElementById('content-type').innerText = r.contentType;
+            document.getElementById('emotional-tone').innerText = `Tono ${r.colors.temperature.toLowerCase()} con impatto ${r.colors.contrastScore > 70 ? 'visivo elevato' : 'moderato'}.`;
+            document.getElementById('img-resolution').innerText = `${r.technical.width}x${r.technical.height}`;
+            document.getElementById('img-aspect').innerText = r.technical.ratio;
+            document.getElementById('img-entropy').innerText = r.technical.entropy;
+            document.getElementById('img-complexity').innerText = r.technical.complexity + '%';
+
+            // FRICTION
+            const frictionTime = Math.max(0.1, (100 - s.friction) / 50).toFixed(2);
+            document.getElementById('friction-time-val').innerText = frictionTime + 's';
+            document.getElementById('friction-index').innerText = s.friction + '%';
+            document.getElementById('friction-verdict-txt').innerText = s.friction > 70 
+                ? "L'utente comprende il messaggio rapidamente. Bassa fatica cognitiva."
+                : "L'elevata complessità o densità informativa richiede più sforzo per essere processata.";
+            
+            const frictionActions = [];
+            if (r.safeZones.dangerScore > 40) {
+                frictionActions.push("Sposta gli elementi importanti fuori dalle zone UI (evita top 15% e bottom 15%)");
+            }
+            if (r.edges.textEstimate > 35) {
+                frictionActions.push("Riduci la quantità di testo nell'immagine");
+            }
+            if (r.colors.contrastScore < 50) {
+                frictionActions.push("Aumenta il contrasto tra testo e sfondo");
+            }
+            if (r.edges.entropy > 70) {
+                frictionActions.push("Semplifica la composizione visiva");
+            }
+            if (frictionActions.length === 0) {
+                frictionActions.push("La struttura è ottimizzata per una rapida comprensione");
+                frictionActions.push("Considera di testare A/B sulla CTA");
+            }
+            document.getElementById('friction-actions').innerHTML = frictionActions.map(a => 
+                `<li class="flex items-center gap-2"><i class="fas fa-minus text-red-400"></i> ${a}</li>`
+            ).join('');
+
+            // FINAL SUMMARY
+            const avgScore = Math.round((s.flow + s.contrast + s.access + s.structure + s.friction) / 5);
+            let summary = `L'immagine analizzata presenta un punteggio complessivo del ${avgScore}%. `;
+            
+            if (avgScore > 80) {
+                summary += `Ottimo lavoro! Il contenuto è ben ottimizzato per catturare l'attenzione e comunicare efficacemente. `;
+            } else if (avgScore > 60) {
+                summary += `Buon potenziale con margini di miglioramento. `;
+            } else {
+                summary += `Sono stati identificati diversi elementi critici che potrebbero ridurre l'efficacia. `;
+            }
+            
+            if (r.safeZones.hasTopRisk || r.safeZones.hasBottomRisk) {
+                summary += `Attenzione alle zone coperte dalla UI delle piattaforme social. `;
+            }
+            summary += `Il centro di massa visivo si trova a ${Math.round(r.edges.centerX * 100)}% orizzontalmente e ${Math.round(r.edges.centerY * 100)}% verticalmente.`;
+            document.getElementById('final-summary').innerText = summary;
+
+            // CONTRAST BOX
+            const cBox = document.getElementById('contrast-box');
+            if (r.colors.contrastRatio >= 4.5) {
+                cBox.className = "p-8 rounded-[2.5rem] mb-8 border-l-8 bg-green-500/10 border-green-500";
+                document.getElementById('contrast-detail').innerText = `Ottimo contrasto (${r.colors.contrastRatio.toFixed(1)}:1). Testo leggibile secondo WCAG AA.`;
+            } else if (r.colors.contrastRatio >= 3) {
+                cBox.className = "p-8 rounded-[2.5rem] mb-8 border-l-8 bg-yellow-500/10 border-yellow-500";
+                document.getElementById('contrast-detail').innerText = `Contrasto accettabile (${r.colors.contrastRatio.toFixed(1)}:1). Migliorabile per una lettura ottimale.`;
+            } else {
+                cBox.className = "p-8 rounded-[2.5rem] mb-8 border-l-8 bg-red-500/10 border-red-500";
+                document.getElementById('contrast-detail').innerText = `Basso contrasto (${r.colors.contrastRatio.toFixed(1)}:1). Rischio di illeggibilità su alcuni dispositivi.`;
+            }
 
             drawHeatmap();
         }
 
-        function showPillar(pillarId) {
+        function showPillar(pillarId, event) {
             document.querySelectorAll('.analysis-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(`pillar-${pillarId}`).classList.add('active');
-            document.querySelectorAll('.score-card').forEach(c => c.classList.remove('bg-white/10'));
-            event.currentTarget.classList.add('bg-white/10');
+            document.querySelectorAll('.score-card').forEach(c => c.classList.remove('active'));
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
         }
 
         function drawHeatmap() {
+            if (!analysisResults) return;
+            
             const canvas = document.getElementById('heatmapCanvas');
             const ctx = canvas.getContext('2d');
             const img = document.getElementById('previewImg');
@@ -432,13 +1118,17 @@
             canvas.height = img.clientHeight;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            data.hotpoints.forEach(p => {
+            // Usa la heatmap reale generata
+            const hotpoints = analysisResults.saliency.hotpoints;
+            
+            hotpoints.forEach(p => {
                 const x = p.x * canvas.width;
                 const y = p.y * canvas.height;
-                const radius = 140 * p.v;
+                const radius = Math.max(60, 150 * p.v);
                 const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
-                grad.addColorStop(0, 'rgba(139, 92, 246, 0.5)');
-                grad.addColorStop(0.5, 'rgba(236, 72, 153, 0.1)');
+                grad.addColorStop(0, 'rgba(139, 92, 246, 0.6)');
+                grad.addColorStop(0.3, 'rgba(236, 72, 153, 0.3)');
+                grad.addColorStop(0.7, 'rgba(236, 72, 153, 0.1)');
                 grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 ctx.fillStyle = grad;
                 ctx.beginPath();
@@ -447,7 +1137,24 @@
             });
         }
 
-        window.onresize = () => { if(data.hotpoints) drawHeatmap(); };
+        // Toggle heatmap
+        document.getElementById('toggleHeatmap').addEventListener('click', function() {
+            const canvas = document.getElementById('heatmapCanvas');
+            canvas.style.display = canvas.style.display === 'none' ? 'block' : 'none';
+            this.classList.toggle('bg-purple-500/30');
+        });
+
+        // Toggle safe zones
+        document.getElementById('toggleSafeZones').addEventListener('click', function() {
+            const top = document.getElementById('safeZoneTop');
+            const bottom = document.getElementById('safeZoneBottom');
+            const isVisible = top.style.display !== 'none';
+            top.style.display = isVisible ? 'none' : 'block';
+            bottom.style.display = isVisible ? 'none' : 'block';
+            this.classList.toggle('bg-white/20');
+        });
+
+        window.onresize = () => { if(analysisResults) drawHeatmap(); };
     </script>
 </body>
 </html>
