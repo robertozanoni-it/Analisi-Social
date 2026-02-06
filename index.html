@@ -179,6 +179,40 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 .swa-download-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,92,246,0.35)}
 .swa-download-btn:disabled{opacity:0.5;cursor:wait;transform:none}
 
+/* === PROMPT GENERATOR === */
+.swa-prompt-section{margin-top:32px}
+.swa-prompt-card{border-radius:28px;border-top:4px solid #06b6d4;padding:32px;position:relative}
+.swa-prompt-header{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-bottom:24px}
+.swa-prompt-icon{width:72px;height:72px;border-radius:50%;background:rgba(6,182,212,0.15);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#22d3ee;flex-shrink:0}
+.swa-prompt-info{flex:1;min-width:200px}
+.swa-prompt-info h4{font-size:1.3rem;font-weight:900;font-family:'Outfit',sans-serif;text-transform:uppercase;margin-bottom:4px}
+.swa-prompt-info p{color:rgba(255,255,255,0.5);font-size:0.9rem}
+.swa-prompt-controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.swa-prompt-style-btn{padding:10px 20px;border:2px solid rgba(255,255,255,0.1);border-radius:14px;background:rgba(30,41,59,0.6);color:#fff;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:8px}
+.swa-prompt-style-btn:hover{border-color:rgba(6,182,212,0.4);background:rgba(30,41,59,0.9)}
+.swa-prompt-style-btn.active{border-color:#06b6d4;background:rgba(6,182,212,0.2);box-shadow:0 4px 16px rgba(6,182,212,0.15)}
+.swa-prompt-output{background:rgba(6,182,212,0.04);border:1px solid rgba(6,182,212,0.2);border-radius:16px;padding:20px;position:relative;min-height:120px}
+.swa-prompt-text{font-size:0.9rem;line-height:1.7;color:rgba(255,255,255,0.85);white-space:pre-wrap;word-break:break-word}
+.swa-prompt-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.swa-prompt-copy-btn{background:linear-gradient(135deg,#06b6d4,#0891b2);color:#fff;border:none;padding:12px 24px;font-size:0.9rem;font-weight:700;border-radius:14px;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(6,182,212,0.2)}
+.swa-prompt-copy-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(6,182,212,0.3)}
+.swa-prompt-lang-btn{padding:8px 16px;border:1px solid rgba(255,255,255,0.1);border-radius:10px;background:rgba(30,41,59,0.5);color:rgba(255,255,255,0.6);font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+.swa-prompt-lang-btn:hover{border-color:rgba(6,182,212,0.3);color:#fff}
+.swa-prompt-lang-btn.active{border-color:#06b6d4;color:#22d3ee;background:rgba(6,182,212,0.1)}
+.swa-prompt-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:0.7rem;font-weight:700;background:rgba(6,182,212,0.12);color:#22d3ee;margin-right:4px;margin-bottom:4px}
+.swa-prompt-note{font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:12px;display:flex;align-items:center;gap:6px}
+
+/* === PROMPT TABS === */
+.swa-prompt-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:20px;overflow-x:auto;scrollbar-width:none}
+.swa-prompt-tabs::-webkit-scrollbar{display:none}
+.swa-prompt-tab{padding:12px 20px;background:none;border:none;color:rgba(255,255,255,0.4);font-weight:700;font-size:0.85rem;cursor:pointer;position:relative;transition:color 0.2s;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.swa-prompt-tab:hover{color:rgba(255,255,255,0.7)}
+.swa-prompt-tab.active{color:#22d3ee}
+.swa-prompt-tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:3px;background:linear-gradient(90deg,#06b6d4,#8b5cf6);border-radius:3px 3px 0 0}
+.swa-prompt-tab i{font-size:0.9rem}
+.swa-prompt-tab-content{display:none}
+.swa-prompt-tab-content.active{display:block;animation:swa-fadeIn 0.4s ease}
+
 /* === PRIVACY === */
 .swa-privacy{max-width:700px;margin:40px auto 0;border-radius:16px;padding:20px 24px;border:1px solid rgba(139,92,246,0.15);display:flex;align-items:flex-start;gap:14px}
 .swa-privacy i{color:var(--accent-light);margin-top:2px}
@@ -357,6 +391,96 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 <button id="downloadBtn" class="swa-download-btn" onclick="SWA.downloadDocx()">
 <i class="fas fa-download"></i> Scarica Report .docx
 </button>
+</div>
+
+<!-- AI Prompt Generator -->
+<div class="swa-prompt-section" id="promptSection">
+<div class="swa-prompt-card glass">
+<div class="swa-prompt-header">
+<div class="swa-prompt-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+<div class="swa-prompt-info">
+<h4 class="font-outfit">Genera Post Completo con AI</h4>
+<p>Due prompt ottimizzati dall'analisi: uno per l'immagine, uno per il testo/caption. Copia e incolla nell'AI che preferisci.</p>
+</div>
+</div>
+
+<!-- Tab navigation -->
+<div class="swa-prompt-tabs">
+<button class="swa-prompt-tab active" data-tab="image" onclick="SWA.switchPromptTab('image')">
+<i class="fas fa-image"></i> Prompt Immagine
+</button>
+<button class="swa-prompt-tab" data-tab="content" onclick="SWA.switchPromptTab('content')">
+<i class="fas fa-pen-fancy"></i> Prompt Testo / Caption
+</button>
+<button class="swa-prompt-tab" data-tab="combined" onclick="SWA.switchPromptTab('combined')">
+<i class="fas fa-layer-group"></i> Prompt Completo
+</button>
+</div>
+
+<!-- IMAGE PROMPT TAB -->
+<div class="swa-prompt-tab-content active" id="tabImage">
+<div style="margin-bottom:16px">
+<p style="font-size:0.85rem;font-weight:700;margin-bottom:10px">Stile visivo:</p>
+<div class="swa-prompt-controls" id="promptStyleBtns">
+<button class="swa-prompt-style-btn active" data-style="photo"><i class="fas fa-camera"></i> Fotografico</button>
+<button class="swa-prompt-style-btn" data-style="graphic"><i class="fas fa-palette"></i> Grafico</button>
+<button class="swa-prompt-style-btn" data-style="illustration"><i class="fas fa-pen-nib"></i> Illustrazione</button>
+<button class="swa-prompt-style-btn" data-style="minimal"><i class="fas fa-minimize"></i> Minimal</button>
+</div>
+</div>
+<div class="swa-prompt-output" style="border-color:rgba(6,182,212,0.2)">
+<div class="swa-prompt-text" id="promptTextImage">Analisi in corso...</div>
+</div>
+<div class="swa-prompt-actions">
+<button class="swa-prompt-copy-btn" onclick="SWA.copyPrompt('image')"><i class="fas fa-copy"></i> Copia</button>
+<button class="swa-prompt-copy-btn" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)" onclick="SWA.copyPromptForChatGPT('image')"><i class="fas fa-robot"></i> Per ChatGPT/DALL-E</button>
+<button class="swa-prompt-copy-btn" style="background:linear-gradient(135deg,#1e3a5f,#0f172a)" onclick="SWA.copyPromptForMidjourney()"><i class="fas fa-image"></i> Per Midjourney</button>
+</div>
+</div>
+
+<!-- CONTENT PROMPT TAB -->
+<div class="swa-prompt-tab-content" id="tabContent">
+<div style="margin-bottom:16px">
+<p style="font-size:0.85rem;font-weight:700;margin-bottom:10px">Tono di voce:</p>
+<div class="swa-prompt-controls" id="promptToneBtns">
+<button class="swa-prompt-style-btn active" data-tone="professional"><i class="fas fa-briefcase"></i> Professionale</button>
+<button class="swa-prompt-style-btn" data-tone="friendly"><i class="fas fa-face-smile"></i> Amichevole</button>
+<button class="swa-prompt-style-btn" data-tone="bold"><i class="fas fa-bolt"></i> Bold / Diretto</button>
+<button class="swa-prompt-style-btn" data-tone="storytelling"><i class="fas fa-book-open"></i> Storytelling</button>
+</div>
+</div>
+<div class="swa-prompt-output" style="border-color:rgba(168,85,247,0.2)">
+<div class="swa-prompt-text" id="promptTextContent">Analisi in corso...</div>
+</div>
+<div class="swa-prompt-actions">
+<button class="swa-prompt-copy-btn" style="background:linear-gradient(135deg,#a855f7,#7c3aed)" onclick="SWA.copyPrompt('content')"><i class="fas fa-copy"></i> Copia</button>
+<button class="swa-prompt-copy-btn" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)" onclick="SWA.copyPromptForChatGPT('content')"><i class="fas fa-robot"></i> Per ChatGPT / Claude</button>
+</div>
+</div>
+
+<!-- COMBINED PROMPT TAB -->
+<div class="swa-prompt-tab-content" id="tabCombined">
+<p style="font-size:0.85rem;color:rgba(255,255,255,0.5);margin-bottom:16px"><i class="fas fa-info-circle"></i> Prompt unico che include sia le istruzioni per l'immagine che per il testo — ideale per ChatGPT o Claude che possono fare entrambe le cose.</p>
+<div class="swa-prompt-output" style="border-color:rgba(236,72,153,0.2)">
+<div class="swa-prompt-text" id="promptTextCombined">Analisi in corso...</div>
+</div>
+<div class="swa-prompt-actions">
+<button class="swa-prompt-copy-btn" style="background:linear-gradient(135deg,#ec4899,#8b5cf6)" onclick="SWA.copyPrompt('combined')"><i class="fas fa-copy"></i> Copia Prompt Completo</button>
+</div>
+</div>
+
+<!-- Shared controls -->
+<div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06)">
+<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+<div style="display:flex;gap:8px;align-items:center">
+<span style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.4)">Lingua:</span>
+<button class="swa-prompt-lang-btn active" data-lang="it" onclick="SWA.setPromptLang('it')">🇮🇹 IT</button>
+<button class="swa-prompt-lang-btn" data-lang="en" onclick="SWA.setPromptLang('en')">🇬🇧 EN</button>
+</div>
+<p class="swa-prompt-note" style="margin:0"><i class="fas fa-lightbulb"></i> Prompts basati su palette, composizione, metriche e raccomandazioni reali dell'analisi.</p>
+</div>
+</div>
+</div>
 </div>
 
 </section>
@@ -1161,6 +1285,9 @@ function renderDashboard(a, img) {
             <tr><td>Armonia Colori</td><td>${a.harmonyType}</td><td>Schema definito</td><td>${a.harmonyType!=='Mista'?'<span style="color:var(--green)">✓ Ok</span>':'<span style="color:var(--amber)">⚠ Da migliorare</span>'}</td></tr>
         </tbody>
     `;
+    
+    // Render AI prompts
+    renderAllPrompts();
 }
 
 function statusIcon(value, threshold) {
@@ -1505,8 +1632,38 @@ async function downloadDocx() {
         body += p('• Palette colori: clustering per quantizzazione (bucket 32-step) con merge di colori simili (ΔE < 80)');
         body += p('• Heatmap: combinazione pesata di edge-saliency (50%), center-bias gaussiano (35%) e saturazione (15%), con gaussian blur σ=12');
         
+        // AI Prompts
+        body += p('8. Prompt AI per il Post Completo', 'Heading1');
+        
+        body += p('8.1 Prompt Immagine', 'Heading2');
+        body += p('Copia e incolla in ChatGPT/DALL-E, Midjourney o qualsiasi AI di generazione immagini:');
+        const docImgPrompt = generateImagePrompt(a, state.platform, state.goal, state.target, 'graphic', 'it');
+        for (const line of docImgPrompt.split('\n')) {
+            if (line.trim()) body += `<w:p><w:pPr><w:shd w:val="clear" w:color="auto" w:fill="F0FDFA"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Consolas" w:hAnsi="Consolas"/><w:sz w:val="18"/><w:color w:val="0F766E"/></w:rPr><w:t xml:space="preserve">${esc(line)}</w:t></w:r></w:p>`;
+        }
+        body += p('');
+        body += p('Versione inglese (per Midjourney/DALL-E):', null, {bold:true});
+        const docImgPromptEn = generateImagePrompt(a, state.platform, state.goal, state.target, 'graphic', 'en');
+        for (const line of docImgPromptEn.split('\n')) {
+            if (line.trim()) body += `<w:p><w:pPr><w:shd w:val="clear" w:color="auto" w:fill="EFF6FF"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Consolas" w:hAnsi="Consolas"/><w:sz w:val="18"/><w:color w:val="1E40AF"/></w:rPr><w:t xml:space="preserve">${esc(line)}</w:t></w:r></w:p>`;
+        }
+        
+        body += p('');
+        body += p('8.2 Prompt Testo / Caption', 'Heading2');
+        body += p('Copia e incolla in ChatGPT, Claude o qualsiasi AI testuale per generare la caption del post:');
+        const docTxtPrompt = generateContentPrompt(a, state.platform, state.goal, state.target, 'professional', 'it');
+        for (const line of docTxtPrompt.split('\n')) {
+            if (line.trim()) body += `<w:p><w:pPr><w:shd w:val="clear" w:color="auto" w:fill="FFF7ED"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Consolas" w:hAnsi="Consolas"/><w:sz w:val="18"/><w:color w:val="9A3412"/></w:rPr><w:t xml:space="preserve">${esc(line)}</w:t></w:r></w:p>`;
+        }
+        body += p('');
+        body += p('Versione inglese:', null, {bold:true});
+        const docTxtPromptEn = generateContentPrompt(a, state.platform, state.goal, state.target, 'professional', 'en');
+        for (const line of docTxtPromptEn.split('\n')) {
+            if (line.trim()) body += `<w:p><w:pPr><w:shd w:val="clear" w:color="auto" w:fill="EFF6FF"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Consolas" w:hAnsi="Consolas"/><w:sz w:val="18"/><w:color w:val="1E40AF"/></w:rPr><w:t xml:space="preserve">${esc(line)}</w:t></w:r></w:p>`;
+        }
+        
         // Next steps
-        body += p('8. Prossimi Passi', 'Heading1');
+        body += p('9. Prossimi Passi', 'Heading1');
         body += p(`1. Implementa le raccomandazioni ad alta priorità (${recs.filter(r=>r.priority==='high').length} identificate)`);
         body += p('2. Conduci A/B test: minimo 1.000 impression per variante');
         body += p('3. Monitora CTR, engagement rate e tempo di visualizzazione');
@@ -1563,8 +1720,373 @@ async function downloadDocx() {
     }
 }
 
+// ==================== AI PROMPT GENERATOR ====================
+let promptLang = 'it';
+let promptStyle = 'photo';
+let promptTone = 'professional';
+
+// Style button handlers (image)
+document.querySelectorAll('#promptStyleBtns .swa-prompt-style-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('#promptStyleBtns .swa-prompt-style-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        promptStyle = btn.dataset.style;
+        if (state.analysis) renderAllPrompts();
+    });
+});
+
+// Tone button handlers (content)
+document.querySelectorAll('#promptToneBtns .swa-prompt-style-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('#promptToneBtns .swa-prompt-style-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        promptTone = btn.dataset.tone;
+        if (state.analysis) renderAllPrompts();
+    });
+});
+
+function switchPromptTab(tab) {
+    document.querySelectorAll('.swa-prompt-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    document.querySelectorAll('.swa-prompt-tab-content').forEach(c => c.classList.remove('active'));
+    const map = {image:'tabImage', content:'tabContent', combined:'tabCombined'};
+    $(map[tab]).classList.add('active');
+}
+
+function setPromptLang(lang) {
+    promptLang = lang;
+    document.querySelectorAll('.swa-prompt-lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    if (state.analysis) renderAllPrompts();
+}
+
+function renderAllPrompts() {
+    const a = state.analysis;
+    if (!a) return;
+    $('promptTextImage').textContent = generateImagePrompt(a, state.platform, state.goal, state.target, promptStyle, promptLang);
+    $('promptTextContent').textContent = generateContentPrompt(a, state.platform, state.goal, state.target, promptTone, promptLang);
+    $('promptTextCombined').textContent = generateCombinedPrompt(a, state.platform, state.goal, state.target, promptStyle, promptTone, promptLang);
+}
+
+// Alias for DOCX generation compatibility
+function generatePromptText(a, platform, goal, target, style, lang) {
+    return generateImagePrompt(a, platform, goal, target, style, lang);
+}
+
+// ==================== IMAGE PROMPT ====================
+function generateImagePrompt(a, platform, goal, target, style, lang) {
+    const recs = a.recommendations || [];
+    const fixes = recs.slice(0, 4).map(r => recToImageFix(r, lang, platform));
+    const topColors = a.palette.slice(0, 4).map(c => rgbToHex(c.r, c.g, c.b));
+    const paletteDesc = topColors.join(', ');
+    const platDims = platformFormats(platform, lang);
+    const harmony = harmonyTranslate(a.harmonyType, lang);
+    
+    const styleDesc = {
+        photo: {en:'Professional photography style, photorealistic, high resolution, studio lighting, sharp details', it:'Stile fotografico professionale, fotorealistico, alta risoluzione, illuminazione da studio, dettagli nitidi'},
+        graphic: {en:'Modern graphic design, flat design with subtle gradients, bold typography, vector-style elements', it:'Design grafico moderno, flat design con gradienti sottili, tipografia bold, elementi stile vettoriale'},
+        illustration: {en:'Digital illustration style, artistic, hand-drawn feel with digital polish, expressive colors', it:'Stile illustrazione digitale, artistico, tratto a mano con finitura digitale, colori espressivi'},
+        minimal: {en:'Minimalist design, lots of white space, essential elements only, elegant simplicity, clean lines', it:'Design minimalista, molto spazio bianco, solo elementi essenziali, semplicità elegante, linee pulite'}
+    };
+    
+    const goalImg = {
+        sales: {en:'Drive direct sales/conversions. Include a prominent, high-contrast CTA button or text. Create urgency.', it:'Stimolare vendite/conversioni dirette. Includi una CTA prominente e ad alto contrasto. Crea senso di urgenza.'},
+        awareness: {en:'Build brand awareness and memorability. Focus on brand identity, distinctive visual style, and emotional impact.', it:'Costruire brand awareness e memorabilità. Focus su identità di marca, stile visivo distintivo e impatto emotivo.'},
+        engagement: {en:'Maximize engagement. Include curiosity-triggering elements, questions, or relatable content.', it:'Massimizzare engagement. Includi elementi che stimolano curiosità, domande o contenuti in cui identificarsi.'},
+        leads: {en:'Generate leads/contacts. Include a clear value proposition and CTA for sign-up/download.', it:'Generare lead/contatti. Includi una proposta di valore chiara e CTA verso iscrizione/download.'},
+        traffic: {en:'Drive website traffic. Include a clear visual hook and text suggesting "learn more".', it:'Generare traffico al sito. Includi un hook visivo chiaro e testo "scopri di più".'}
+    };
+    
+    const targetLine = target ? (lang==='en' ? `Target audience: ${target}.` : `Target di riferimento: ${target}.`) : '';
+    
+    const compNotes = [];
+    if (a.negativeSpace < 25) compNotes.push(lang==='en' ? 'Use generous whitespace (at least 30-35% of canvas)' : 'Ampio spazio vuoto (almeno 30-35% del canvas)');
+    if (a.entropy > 5.5) compNotes.push(lang==='en' ? 'Keep design simple: max 5 visual elements' : 'Design semplice: massimo 5 elementi visivi');
+    if (a.centerBias < 50) compNotes.push(lang==='en' ? 'Place main subject/CTA at center or rule-of-thirds points' : 'Soggetto/CTA al centro o nei punti regola dei terzi');
+    
+    if (lang === 'en') {
+        let p = `Create a ${platDims} image for a ${pName(platform,'en')} post.\n\nSTYLE: ${styleDesc[style].en}\n\nOBJECTIVE: ${goalImg[goal].en}\n`;
+        if (targetLine) p += targetLine + '\n';
+        p += `\nCOLOR PALETTE: Reference colors: ${paletteDesc}. Harmony: ${harmony}.\n\nCOMPOSITION REQUIREMENTS:\n`;
+        for (const f of fixes) p += `- ${f}\n`;
+        for (const n of compNotes) p += `- ${n}\n`;
+        p += `\nTECHNICAL SPECS:\n- Aspect ratio: ${platDims}\n- Text contrast ratio ≥ 7:1\n- All key elements within central 80% (safe zones)\n- High resolution, crisp details, no artifacts\n\nThe image must feel professional and instantly capture attention in a ${pName(platform,'en')} feed.`;
+        return p;
+    } else {
+        let p = `Crea un'immagine ${platDims} per un post ${pName(platform,'it')}.\n\nSTILE: ${styleDesc[style].it}\n\nOBIETTIVO: ${goalImg[goal].it}\n`;
+        if (targetLine) p += targetLine + '\n';
+        p += `\nPALETTE COLORI: Colori di riferimento: ${paletteDesc}. Armonia: ${harmony}.\n\nREQUISITI DI COMPOSIZIONE:\n`;
+        for (const f of fixes) p += `- ${f}\n`;
+        for (const n of compNotes) p += `- ${n}\n`;
+        p += `\nSPECIFICHE TECNICHE:\n- Formato: ${platDims}\n- Contrasto testo ≥ 7:1\n- Elementi chiave entro 80% centrale (safe zones)\n- Alta risoluzione, dettagli nitidi, nessun artefatto\n\nL'immagine deve risultare professionale e catturare immediatamente l'attenzione nel feed ${pName(platform,'it')}.`;
+        return p;
+    }
+}
+
+// ==================== CONTENT / TEXT PROMPT ====================
+function generateContentPrompt(a, platform, goal, target, tone, lang) {
+    const recs = a.recommendations || [];
+    const topColors = a.palette.slice(0, 3).map(c => rgbToHex(c.r,c.g,c.b));
+    
+    // Platform-specific content rules
+    const platRules = {
+        instagram: {
+            en: {maxLen:'2200 characters', format:'caption with line breaks for readability', hashtags:'10-15 relevant hashtags (mix popular + niche) in a separate block at the end', hook:'First line must be a powerful hook visible before "more" truncation (125 chars)', cta:'Include a clear CTA (comment, save, share, link in bio)', extras:'Use emojis strategically to break text and add personality. Consider carousel slides text if applicable.'},
+            it: {maxLen:'2200 caratteri', format:'caption con a capo per leggibilità', hashtags:'10-15 hashtag pertinenti (mix popolari + nicchia) in un blocco separato alla fine', hook:'La prima riga deve essere un hook potente visibile prima del "altro" (125 caratteri)', cta:'Includi una CTA chiara (commenta, salva, condividi, link in bio)', extras:'Usa emoji in modo strategico per spezzare il testo e dare personalità. Considera testi per eventuali slide carosello.'}
+        },
+        tiktok: {
+            en: {maxLen:'4000 characters', format:'short, punchy caption', hashtags:'3-5 trending + niche hashtags', hook:'First 2 words must stop the scroll', cta:'CTA: follow, comment, duet, stitch', extras:'Include a provocative question or controversial take. Consider text overlay script for the video.'},
+            it: {maxLen:'4000 caratteri', format:'caption breve e d\'impatto', hashtags:'3-5 hashtag trending + nicchia', hook:'Le prime 2 parole devono bloccare lo scroll', cta:'CTA: segui, commenta, duetta, stitch', extras:'Includi una domanda provocatoria o un\'opinione controcorrente. Considera script per testo in sovraimpressione nel video.'}
+        },
+        linkedin: {
+            en: {maxLen:'3000 characters', format:'professional post with line breaks every 1-2 sentences. Short paragraphs.', hashtags:'3-5 professional hashtags at the end', hook:'First 2 lines must compel clicking "see more" — use a bold statement, surprising data, or personal story opening', cta:'End with a discussion question or clear professional CTA', extras:'Include concrete data, numbers, or results. Personal anecdotes perform well. Avoid clickbait, be authentic.'},
+            it: {maxLen:'3000 caratteri', format:'post professionale con a capo ogni 1-2 frasi. Paragrafi brevi.', hashtags:'3-5 hashtag professionali alla fine', hook:'Le prime 2 righe devono spingere a cliccare "vedi altro" — usa affermazione audace, dato sorprendente o apertura con storia personale', cta:'Chiudi con una domanda di discussione o CTA professionale chiara', extras:'Includi dati concreti, numeri o risultati. Aneddoti personali funzionano bene. Evita clickbait, sii autentico.'}
+        },
+        facebook: {
+            en: {maxLen:'63206 characters (optimal: 40-80 words)', format:'conversational, warm, relatable', hashtags:'1-3 hashtags maximum (not critical)', hook:'First sentence must spark curiosity or emotion', cta:'Ask a question to boost comments, or direct to link', extras:'Emotional storytelling performs best. Consider adding a poll question. Tag relevant pages.'},
+            it: {maxLen:'63206 caratteri (ottimale: 40-80 parole)', format:'conversazionale, caldo, in cui identificarsi', hashtags:'1-3 hashtag massimo (non critici)', hook:'Prima frase deve accendere curiosità o emozione', cta:'Fai una domanda per stimolare commenti, o indirizza al link', extras:'Lo storytelling emozionale funziona meglio. Considera una domanda sondaggio. Tagga pagine pertinenti.'}
+        },
+        web: {
+            en: {maxLen:'unlimited', format:'headline (H1) + subheadline + body + CTA', hashtags:'N/A — focus on SEO keywords', hook:'Headline must communicate the core value proposition in under 8 words', cta:'Primary CTA button text (action-oriented, max 5 words) + secondary CTA', extras:'Write with SEO in mind: include primary keyword in headline. Use power words (free, proven, instant, exclusive). Consider A/B testing variants.'},
+            it: {maxLen:'illimitato', format:'titolo (H1) + sottotitolo + corpo + CTA', hashtags:'N/A — focus su parole chiave SEO', hook:'Il titolo deve comunicare la proposta di valore in massimo 8 parole', cta:'Testo CTA principale (orientato all\'azione, max 5 parole) + CTA secondaria', extras:'Scrivi in ottica SEO: includi keyword principale nel titolo. Usa parole potenti (gratis, garantito, immediato, esclusivo). Considera varianti A/B.'}
+        }
+    };
+    
+    const toneDesc = {
+        professional: {en:'Professional, authoritative, trust-building. Use data and clear structure. Formal but accessible.', it:'Professionale, autorevole, che genera fiducia. Usa dati e struttura chiara. Formale ma accessibile.'},
+        friendly: {en:'Warm, friendly, conversational. Like talking to a knowledgeable friend. Use "you" frequently. Relatable.', it:'Caldo, amichevole, conversazionale. Come parlare con un amico esperto. Usa il "tu". Vicino al lettore.'},
+        bold: {en:'Bold, direct, provocative. Short punchy sentences. Challenge assumptions. Create urgency. No fluff.', it:'Audace, diretto, provocatorio. Frasi brevi e d\'impatto. Sfida le convinzioni. Crea urgenza. Zero fronzoli.'},
+        storytelling: {en:'Narrative, emotional, story-driven. Start with a scene or personal moment. Build tension, then deliver insight/lesson.', it:'Narrativo, emozionale, basato su storie. Inizia con una scena o momento personale. Costruisci tensione, poi consegna insight/lezione.'}
+    };
+    
+    const goalContent = {
+        sales: {en:'Drive purchases/sign-ups. Emphasize value, overcome objections, create scarcity/urgency. Include price anchor or offer if applicable.', it:'Spingere acquisti/iscrizioni. Enfatizza il valore, supera le obiezioni, crea scarsità/urgenza. Includi àncora di prezzo o offerta se applicabile.'},
+        awareness: {en:'Make the brand memorable. Share values, mission, behind-the-scenes, or educational content that positions as authority.', it:'Rendere il brand memorabile. Condividi valori, missione, dietro le quinte o contenuti educativi che posizionano come autorità.'},
+        engagement: {en:'Maximize interactions. Ask questions, create debate, use "this or that", share relatable truths, invite opinions.', it:'Massimizzare le interazioni. Fai domande, crea dibattito, usa "questo o quello", condividi verità in cui identificarsi, invita opinioni.'},
+        leads: {en:'Capture contacts. Tease valuable content/resource, use lead magnet language, clear CTA to opt-in or DM.', it:'Catturare contatti. Anticipa contenuto/risorsa di valore, usa linguaggio da lead magnet, CTA chiara verso opt-in o DM.'},
+        traffic: {en:'Drive clicks to website. Create curiosity gap, promise value behind the link, use "discover/learn/read" CTAs.', it:'Generare click al sito. Crea curiosity gap, prometti valore dietro il link, usa CTA "scopri/leggi/approfondisci".'}
+    };
+    
+    // Visual cues to reference in text
+    const visualCues = [];
+    if (a.palette.length > 0) {
+        const dominantColor = describeColor(a.palette[0], lang);
+        visualCues.push(lang==='en' ? `The visual uses a ${dominantColor} dominant palette` : `Il visual usa una palette dominante ${dominantColor}`);
+    }
+    if (a.harmonyType !== 'Mista') {
+        visualCues.push(lang==='en' ? `${a.harmonyType.toLowerCase()} color harmony for visual cohesion` : `armonia ${a.harmonyType.toLowerCase()} per coesione visiva`);
+    }
+    
+    const rules = platRules[platform][lang];
+    const targetLine = target ? (lang==='en' ? `Target audience: ${target}.` : `Target: ${target}.`) : '';
+    
+    if (lang === 'en') {
+        let p = `Write the complete text/caption for a ${pName(platform,'en')} post.\n\n`;
+        p += `TONE OF VOICE: ${toneDesc[tone].en}\n\n`;
+        p += `OBJECTIVE: ${goalContent[goal].en}\n`;
+        if (targetLine) p += targetLine + '\n';
+        p += `\nPLATFORM RULES (${pName(platform,'en')}):\n`;
+        p += `- Max length: ${rules.maxLen}\n`;
+        p += `- Format: ${rules.format}\n`;
+        p += `- Hook: ${rules.hook}\n`;
+        p += `- CTA: ${rules.cta}\n`;
+        p += `- Hashtags: ${rules.hashtags}\n`;
+        p += `- Extra: ${rules.extras}\n`;
+        p += `\nVISUAL CONTEXT (the text accompanies this image):\n`;
+        p += `- ${visualCues.join('\n- ')}\n`;
+        p += `- Image conveys: ${a.overallScore >= 70 ? 'strong visual impact' : 'moderate visual presence'}, ${a.entropy <= 5 ? 'clean and focused' : 'rich and detailed'} composition\n`;
+        p += `\nSTRUCTURE TO FOLLOW:\n`;
+        p += `1. HOOK — First line: attention-grabbing opener (${rules.hook})\n`;
+        p += `2. BODY — Core message: ${goal === 'sales' ? 'value proposition + proof + offer' : goal === 'engagement' ? 'relatable insight + personal take + question' : goal === 'leads' ? 'problem + teaser of solution + lead magnet' : goal === 'traffic' ? 'curiosity gap + preview of value + link prompt' : 'brand story/value + educational insight + takeaway'}\n`;
+        p += `3. CTA — Clear call to action: ${rules.cta}\n`;
+        p += `4. HASHTAGS — ${rules.hashtags}\n`;
+        p += `\nIMPORTANT: Write the COMPLETE, READY-TO-PUBLISH text. Not instructions — the actual caption/text. Apply spacing and formatting for ${pName(platform,'en')}.`;
+        return p;
+    } else {
+        let p = `Scrivi il testo/caption completo per un post ${pName(platform,'it')}.\n\n`;
+        p += `TONO DI VOCE: ${toneDesc[tone].it}\n\n`;
+        p += `OBIETTIVO: ${goalContent[goal].it}\n`;
+        if (targetLine) p += targetLine + '\n';
+        p += `\nREGOLE PIATTAFORMA (${pName(platform,'it')}):\n`;
+        p += `- Lunghezza max: ${rules.maxLen}\n`;
+        p += `- Formato: ${rules.format}\n`;
+        p += `- Hook: ${rules.hook}\n`;
+        p += `- CTA: ${rules.cta}\n`;
+        p += `- Hashtag: ${rules.hashtags}\n`;
+        p += `- Extra: ${rules.extras}\n`;
+        p += `\nCONTESTO VISIVO (il testo accompagna questa immagine):\n`;
+        p += `- ${visualCues.join('\n- ')}\n`;
+        p += `- L'immagine trasmette: ${a.overallScore >= 70 ? 'forte impatto visivo' : 'presenza visiva moderata'}, composizione ${a.entropy <= 5 ? 'pulita e focalizzata' : 'ricca e dettagliata'}\n`;
+        p += `\nSTRUTTURA DA SEGUIRE:\n`;
+        p += `1. HOOK — Prima riga: apertura che cattura l'attenzione (${rules.hook})\n`;
+        p += `2. CORPO — Messaggio principale: ${goal === 'sales' ? 'proposta di valore + prova sociale + offerta' : goal === 'engagement' ? 'insight in cui identificarsi + opinione personale + domanda' : goal === 'leads' ? 'problema + anticipazione soluzione + lead magnet' : goal === 'traffic' ? 'curiosity gap + anteprima valore + invito al link' : 'storia/valore del brand + insight educativo + takeaway'}\n`;
+        p += `3. CTA — Call to action chiara: ${rules.cta}\n`;
+        p += `4. HASHTAG — ${rules.hashtags}\n`;
+        p += `\nIMPORTANTE: Scrivi il testo COMPLETO, PRONTO DA PUBBLICARE. Non istruzioni — la caption/testo effettivo. Applica spaziatura e formattazione per ${pName(platform,'it')}.`;
+        return p;
+    }
+}
+
+// ==================== COMBINED PROMPT ====================
+function generateCombinedPrompt(a, platform, goal, target, style, tone, lang) {
+    const imgPrompt = generateImagePrompt(a, platform, goal, target, style, lang);
+    const txtPrompt = generateContentPrompt(a, platform, goal, target, tone, lang);
+    
+    if (lang === 'en') {
+        return `I need to create a complete ${pName(platform,'en')} post (image + text). Please execute both tasks below.\n\n` +
+            `═══════════════════════════════════════\n` +
+            `PART 1: IMAGE GENERATION\n` +
+            `═══════════════════════════════════════\n\n` +
+            imgPrompt + '\n\n' +
+            `═══════════════════════════════════════\n` +
+            `PART 2: TEXT / CAPTION\n` +
+            `═══════════════════════════════════════\n\n` +
+            txtPrompt + '\n\n' +
+            `═══════════════════════════════════════\n\n` +
+            `IMPORTANT: The image and text must be cohesive — same message, same emotional tone, visual and verbal elements reinforce each other. Generate both the image AND the complete, ready-to-publish caption.`;
+    } else {
+        return `Devo creare un post ${pName(platform,'it')} completo (immagine + testo). Esegui entrambi i task seguenti.\n\n` +
+            `═══════════════════════════════════════\n` +
+            `PARTE 1: GENERAZIONE IMMAGINE\n` +
+            `═══════════════════════════════════════\n\n` +
+            imgPrompt + '\n\n' +
+            `═══════════════════════════════════════\n` +
+            `PARTE 2: TESTO / CAPTION\n` +
+            `═══════════════════════════════════════\n\n` +
+            txtPrompt + '\n\n' +
+            `═══════════════════════════════════════\n\n` +
+            `IMPORTANTE: Immagine e testo devono essere coerenti — stesso messaggio, stesso tono emotivo, elementi visivi e verbali si rafforzano a vicenda. Genera sia l'immagine CHE la caption completa, pronta per la pubblicazione.`;
+    }
+}
+
+// ==================== HELPER FUNCTIONS ====================
+function recToImageFix(r, lang, platform) {
+    const map = {
+        'Contrasto': {en:'high contrast between text/CTA and background (WCAG AAA 7:1+)', it:'alto contrasto tra testo/CTA e sfondo (WCAG AAA 7:1+)'},
+        'Flusso': {en:'clear visual hierarchy guiding eye to main CTA', it:'gerarchia visiva chiara che guida l\'occhio alla CTA'},
+        'Complessità': {en:'clean composition with max 5-6 visual elements', it:'composizione pulita con max 5-6 elementi visivi'},
+        'Semplicità': {en:'clean composition with max 5-6 visual elements', it:'composizione pulita con max 5-6 elementi visivi'},
+        'Spazio': {en:'generous negative space (30-40%)', it:'ampio spazio negativo (30-40%)'},
+        'Proporzioni': {en:`optimized for ${platformFormats(platform,'en')}`, it:`ottimizzato per ${platformFormats(platform,'it')}`},
+        'Formato': {en:`optimized for ${platformFormats(platform,'en')}`, it:`ottimizzato per ${platformFormats(platform,'it')}`},
+        'Safe': {en:'all key elements within platform safe zones', it:'elementi chiave dentro le safe zones'},
+        'Palette': {en:'harmonious color palette', it:'palette colori armoniosa'},
+        'Armonia': {en:'harmonious color scheme', it:'schema cromatico armonioso'},
+        'Luminosità': {en:'balanced brightness for mobile', it:'luminosità bilanciata per mobile'},
+        'CTA': {en:'prominent CTA with contrasting color', it:'CTA prominente con colore contrastante'},
+        'Curiosità': {en:'curiosity-triggering visual element', it:'elemento visivo che stimola curiosità'}
+    };
+    for (const [key, val] of Object.entries(map)) {
+        if (r.title.includes(key)) return val[lang];
+    }
+    return lang==='en' ? 'optimized visual composition' : 'composizione visiva ottimizzata';
+}
+
+function harmonyTranslate(type, lang) {
+    if (lang === 'en') {
+        const map = {Monocromatica:'monochromatic',Analoga:'analogous',Complementare:'complementary',Triadica:'triadic',Mista:'mixed'};
+        return map[type] || type;
+    }
+    return type;
+}
+
+function describeColor(c, lang) {
+    const h = rgbToHsl(c.r, c.g, c.b)[0];
+    const s = rgbToHsl(c.r, c.g, c.b)[1];
+    const l = rgbToHsl(c.r, c.g, c.b)[2];
+    if (s < 10) return l > 70 ? (lang==='en'?'light/white':'chiara/bianca') : l < 30 ? (lang==='en'?'dark/black':'scura/nera') : (lang==='en'?'neutral gray':'grigio neutro');
+    const hueNames = {
+        en: [{max:15,name:'red'},{max:45,name:'orange'},{max:65,name:'yellow'},{max:150,name:'green'},{max:210,name:'cyan'},{max:260,name:'blue'},{max:300,name:'purple'},{max:340,name:'pink'},{max:360,name:'red'}],
+        it: [{max:15,name:'rossa'},{max:45,name:'arancione'},{max:65,name:'gialla'},{max:150,name:'verde'},{max:210,name:'ciano'},{max:260,name:'blu'},{max:300,name:'viola'},{max:340,name:'rosa'},{max:360,name:'rossa'}]
+    };
+    for (const entry of hueNames[lang]) {
+        if (h <= entry.max) return entry.name;
+    }
+    return lang==='en' ? 'colorful' : 'colorata';
+}
+
+function platformFormats(platform, lang) {
+    const f = {
+        instagram:{en:'4:5 vertical (1080×1350px)',it:'4:5 verticale (1080×1350px)'},
+        tiktok:{en:'9:16 vertical (1080×1920px)',it:'9:16 verticale (1080×1920px)'},
+        linkedin:{en:'1.91:1 landscape (1200×628px)',it:'1.91:1 orizzontale (1200×628px)'},
+        facebook:{en:'1:1 square (1080×1080px)',it:'1:1 quadrato (1080×1080px)'},
+        web:{en:'16:9 widescreen (1920×1080px)',it:'16:9 widescreen (1920×1080px)'}
+    };
+    return f[platform][lang];
+}
+
+function pName(platform, lang) {
+    const n = {instagram:{en:'Instagram',it:'Instagram'},tiktok:{en:'TikTok/Reels',it:'TikTok/Reels'},linkedin:{en:'LinkedIn',it:'LinkedIn'},facebook:{en:'Facebook',it:'Facebook'},web:{en:'Web/Landing Page',it:'Web/Landing Page'}};
+    return n[platform][lang];
+}
+// Keep old name for DOCX compat
+function platformName(p,l) { return pName(p,l); }
+
+// ==================== COPY FUNCTIONS ====================
+function copyPrompt(which) {
+    const elMap = {image:'promptTextImage', content:'promptTextContent', combined:'promptTextCombined'};
+    const text = $(elMap[which]).textContent;
+    copyToClipboard(text, 'Prompt copiato!');
+}
+
+function copyPromptForChatGPT(which) {
+    const elMap = {image:'promptTextImage', content:'promptTextContent'};
+    const base = $(elMap[which]).textContent;
+    let wrapper;
+    if (which === 'image') {
+        wrapper = promptLang === 'en'
+            ? `Generate an image using DALL-E based on this detailed prompt:\n\n---\n${base}\n---\n\nFollow all composition, color, and technical requirements strictly.`
+            : `Genera un'immagine con DALL-E basandoti su questo prompt dettagliato:\n\n---\n${base}\n---\n\nSegui rigorosamente tutti i requisiti di composizione, colore e tecnici.`;
+    } else {
+        wrapper = promptLang === 'en'
+            ? `Write a social media post based on this detailed brief:\n\n---\n${base}\n---\n\nDeliver the COMPLETE, ready-to-publish text — not a summary of the instructions.`
+            : `Scrivi un post social basandoti su questo brief dettagliato:\n\n---\n${base}\n---\n\nConsegna il testo COMPLETO, pronto da pubblicare — non un riassunto delle istruzioni.`;
+    }
+    copyToClipboard(wrapper, `Prompt ${which === 'image' ? 'immagine' : 'testo'} per ChatGPT copiato!`);
+}
+
+function copyPromptForMidjourney() {
+    const a = state.analysis;
+    const topColors = a.palette.slice(0, 3).map(c => rgbToHex(c.r,c.g,c.b)).join(', ');
+    const styleMap = {photo:'professional photography, photorealistic, studio lighting',graphic:'modern graphic design, flat design, bold typography',illustration:'digital illustration, artistic, hand-drawn',minimal:'minimalist design, white space, clean lines, elegant'};
+    const goalMap = {sales:'prominent CTA, urgency, conversion-focused',awareness:'brand awareness, memorable, emotional impact',engagement:'engaging, curiosity-triggering, shareable',leads:'lead generation, clear value proposition',traffic:'attention-grabbing, click-worthy'};
+    const dims = {instagram:'--ar 4:5',tiktok:'--ar 9:16',linkedin:'--ar 191:100',facebook:'--ar 1:1',web:'--ar 16:9'};
+    const targetShort = state.target ? `, targeting ${state.target}` : '';
+    const mj = `${pName(state.platform,'en')} social media post, ${styleMap[promptStyle]}, ${goalMap[state.goal]}${targetShort}, color palette ${topColors}, high contrast, visual hierarchy, negative space, professional ${dims[state.platform]} --v 6 --q 2`;
+    copyToClipboard(mj, 'Prompt Midjourney copiato!');
+}
+
+function copyToClipboard(text, successMsg) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showCopyFeedback(successMsg)).catch(() => fallbackCopy(text, successMsg));
+    } else {
+        fallbackCopy(text, successMsg);
+    }
+}
+
+function fallbackCopy(text, successMsg) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showCopyFeedback(successMsg); }
+    catch(e) { showCopyFeedback('Errore — seleziona e copia manualmente'); }
+    document.body.removeChild(ta);
+}
+
+function showCopyFeedback(msg) {
+    const existing = document.querySelector('.swa-copy-toast');
+    if (existing) existing.remove();
+    const toast = document.createElement('div');
+    toast.className = 'swa-copy-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#06b6d4,#0891b2);color:#fff;padding:12px 24px;border-radius:14px;font-weight:700;font-size:0.9rem;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.3);animation:swa-fadeIn 0.3s ease';
+    toast.innerHTML = `<i class="fas fa-check-circle" style="margin-right:8px"></i>${msg}`;
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; setTimeout(() => toast.remove(), 300); }, 2500);
+}
+
 // ==================== EXPOSE PUBLIC API ====================
-window.SWA = { downloadDocx };
+window.SWA = { downloadDocx, copyPrompt, copyPromptForChatGPT, copyPromptForMidjourney, setPromptLang, switchPromptTab };
 
 })();
 </script>
