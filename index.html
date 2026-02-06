@@ -3,1108 +3,1586 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strategist AI • Report Analisi Post</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta name="description" content="Analizza i tuoi post social con AI: metriche reali, heatmap attenzione, palette colori e report DOCX professionale gratuito.">
+<meta name="author" content="Roberto Zanoni">
+<meta name="robots" content="index, follow">
+<title>SocialStrategist AI • Analisi Post con Report Professionale</title>
+<meta property="og:title" content="SocialStrategist AI - Analisi Post Social">
+<meta property="og:description" content="Analizza i tuoi post social con metriche reali e scarica un report DOCX professionale.">
+<meta property="og:type" content="website">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap');
-:root {
---accent: #8b5cf6;
---secondary: #ec4899;
---bg: #050505;
-}
-body {
-font-family: 'Inter', sans-serif;
-background-color: var(--bg);
-color: #ffffff;
-font-size: 16px;
-}
-h1, h2, h3, .font-outfit { font-family: 'Outfit', sans-serif; }
-.glass { background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08); }
-.gradient-text { background: linear-gradient(to right, #a78bfa, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.score-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.score-card:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(139, 92, 246, 0.05); }
-.analysis-tab { display: none; }
-.analysis-tab.active { display: block !important; animation: fadeIn 0.5s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.loader { width: 40px; height: 40px; border: 3px solid rgba(139, 92, 246, 0.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.real-data-badge {
-position: absolute;
-top: 12px;
-right: 12px;
-background: rgba(139, 92, 246, 0.2);
-border: 1px solid var(--accent);
-color: var(--accent);
-font-size: 0.7rem;
-font-weight: 800;
-padding: 2px 8px;
-border-radius: 20px;
-letter-spacing: 0.05em;
-z-index: 10;
-}
-.metric-source {
-font-size: 0.75rem;
-color: var(--accent);
-margin-top: 4px;
-font-weight: 600;
-display: flex;
-align-items: center;
-gap: 4px;
-}
-.platform-badge {
-display: inline-block;
-padding: 2px 10px;
-border-radius: 20px;
-font-size: 0.75rem;
-font-weight: 700;
-letter-spacing: 0.05em;
-}
-.platform-instagram { background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); color: white; }
-.platform-tiktok { background: black; color: white; border: 1px solid white; }
-.platform-linkedin { background: #0a66c2; color: white; }
-.platform-facebook { background: #1877f2; color: white; }
-.platform-web { background: linear-gradient(90deg, #6366f1, #8b5cf6); color: white; }
-.objective-badge {
-display: inline-block;
-padding: 2px 10px;
-border-radius: 20px;
-font-size: 0.75rem;
-font-weight: 700;
-letter-spacing: 0.05em;
-margin-right: 8px;
-}
-.objective-sales { background: linear-gradient(45deg, #ef4444, #f97316); color: white; }
-.objective-awareness { background: linear-gradient(45deg, #3b82f6, #8b5cf6); color: white; }
-.objective-engagement { background: linear-gradient(45deg, #10b981, #14b8a6); color: white; }
-.objective-leads { background: linear-gradient(45deg, #a855f7, #d946ef); color: white; }
-.objective-traffic { background: linear-gradient(45deg, #f59e0b, #eab308); color: white; }
-.goal-selector {
-appearance: none;
--webkit-appearance: none;
-background: rgba(30, 41, 59, 0.7);
-border: 1px solid rgba(255,255,255,0.1);
-color: white;
-padding: 12px 40px 12px 16px;
-border-radius: 16px;
-width: 100%;
-font-family: 'Inter', sans-serif;
-font-size: 1rem;
-cursor: pointer;
-background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2394a3b8' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right 12px center;
-background-size: 20px;
-transition: all 0.2s ease;
-}
-.goal-selector:hover {
-border-color: rgba(139, 92, 246, 0.5);
-background-color: rgba(30, 41, 59, 0.9);
-}
-.goal-selector:focus {
-outline: none;
-border-color: var(--accent);
-box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-}
-.target-input {
-background: rgba(30, 41, 59, 0.7);
-border: 1px solid rgba(255,255,255,0.1);
-color: white;
-padding: 14px;
-border-radius: 16px;
-width: 100%;
-font-family: 'Inter', sans-serif;
-font-size: 1rem;
-line-height: 1.5;
-resize: vertical;
-min-height: 100px;
-transition: all 0.2s ease;
-}
-.target-input::placeholder {
-color: rgba(255,255,255,0.4);
-}
-.target-input:focus {
-outline: none;
-border-color: var(--accent);
-box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-}
-.goal-target-container {
-max-width: 800px;
-margin: 0 auto 32px;
-display: grid;
-grid-template-columns: 1fr;
-gap: 24px;
-}
-@media (min-width: 768px) {
-.goal-target-container {
-grid-template-columns: 1fr 1fr;
-}
-}
-.goal-card, .target-card {
-background: rgba(20, 20, 20, 0.8);
-backdrop-filter: blur(15px);
-border: 1px solid rgba(255,255,255,0.08);
-padding: 24px;
-border-radius: 24px;
-}
-.goal-icon {
-width: 48px;
-height: 48px;
-border-radius: 16px;
-display: flex;
-align-items: center;
-justify-content: center;
-margin-bottom: 16px;
-}
-.goal-awareness { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
-.target-icon-bg { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
-.analysis-context {
-background: rgba(139, 92, 246, 0.08);
-border: 1px solid rgba(139, 92, 246, 0.3);
-border-radius: 20px;
-padding: 20px;
-margin-bottom: 24px;
-}
-.context-label {
-font-size: 0.85rem;
-color: var(--accent);
-font-weight: 700;
-text-transform: uppercase;
-letter-spacing: 0.05em;
-margin-bottom: 6px;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-.context-value {
-font-size: 1.25rem;
-font-weight: 700;
-color: white;
-}
-.platform-btn {
-padding: 12px 24px;
-border: 2px solid rgba(255,255,255,0.1);
-border-radius: 16px;
-background: rgba(30, 41, 59, 0.7);
-color: white;
-font-weight: 700;
-font-size: 0.95rem;
-cursor: pointer;
-transition: all 0.3s ease;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.platform-btn:hover {
-border-color: rgba(139, 92, 246, 0.5);
-background: rgba(30, 41, 59, 0.9);
-}
-.platform-btn.active {
-border-color: var(--accent);
-background: rgba(139, 92, 246, 0.25);
-box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
-transform: translateY(-2px);
-}
-.platform-btn i {
-font-size: 1.3rem;
-}
-.validation-error {
-color: #ef4444;
-background: rgba(239, 68, 68, 0.1);
-border: 1px solid rgba(239, 68, 68, 0.3);
-border-radius: 12px;
-padding: 12px 16px;
-margin: 16px 0;
-font-size: 0.95rem;
-display: flex;
-align-items: center;
-gap: 10px;
-}
-.analyze-btn {
-background: linear-gradient(45deg, var(--accent), var(--secondary));
-color: white;
-border: none;
-padding: 16px 40px;
-font-size: 1.1rem;
-font-weight: 800;
-border-radius: 24px;
-cursor: pointer;
-transition: all 0.3s ease;
-display: inline-flex;
-align-items: center;
-gap: 12px;
-box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
-}
-.analyze-btn:hover {
-transform: translateY(-3px);
-box-shadow: 0 12px 35px rgba(139, 92, 246, 0.4);
-}
-.analyze-btn:disabled {
-opacity: 0.6;
-cursor: not-allowed;
-transform: none;
-box-shadow: none;
-}
-.improvement-highlight {
-background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), transparent);
-border-left: 4px solid #10b981;
-padding: 16px;
-border-radius: 0 12px 12px 0;
-margin: 12px 0;
-}
-.tab-nav {
-display: flex;
-border-bottom: 1px solid rgba(255,255,255,0.1);
-margin-bottom: 28px;
-overflow-x: auto;
-scrollbar-width: none;
-}
-.tab-nav::-webkit-scrollbar { display: none; }
-.tab-btn {
-padding: 14px 26px;
-background: none;
-border: none;
-color: rgba(255,255,255,0.6);
-font-weight: 700;
-font-size: 0.95rem;
-cursor: pointer;
-position: relative;
-transition: color 0.2s;
-}
-.tab-btn.active {
-color: white !important;
-}
-.tab-btn.active::after {
-content: '';
-position: absolute;
-bottom: -1px;
-left: 0;
-right: 0;
-height: 3px;
-background: var(--accent);
-border-radius: 3px 3px 0 0;
-opacity: 1 !important;
-}
-.score-card[data-pillar] {
-cursor: pointer;
-}
-@media (max-width: 768px) {
-.tab-btn {
-padding: 12px 16px;
-font-size: 0.85rem;
-}
-.goal-target-container {
-grid-template-columns: 1fr;
-}
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;700;900&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--accent:#8b5cf6;--accent-light:#a78bfa;--secondary:#ec4899;--bg:#050505;--glass:rgba(20,20,20,0.8);--border:rgba(255,255,255,0.08);--green:#10b981;--amber:#f59e0b;--red:#ef4444;--blue:#3b82f6}
+html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:#fff;line-height:1.6;min-height:100vh}
+h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
+
+/* === LAYOUT === */
+.swa-container{max-width:1200px;margin:0 auto;padding:0 24px}
+.glass{background:var(--glass);backdrop-filter:blur(15px);border:1px solid var(--border)}
+.gradient-text{background:linear-gradient(135deg,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* === HEADER === */
+.swa-header{position:sticky;top:0;z-index:50;background:rgba(5,5,5,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 0}
+.swa-header-inner{display:flex;justify-content:space-between;align-items:center}
+.swa-logo{display:flex;align-items:center;gap:12px}
+.swa-logo-icon{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#ec4899);display:flex;align-items:center;justify-content:center;font-size:18px}
+.swa-logo-text h1{font-size:1.2rem;font-weight:900;letter-spacing:-0.02em}
+.swa-logo-text h1 span{color:var(--accent-light)}
+.swa-logo-text p{font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:0.2em;text-transform:uppercase}
+.swa-nav-btn{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);background:none;border:none;cursor:pointer;padding:8px 16px;border-radius:8px;transition:all 0.2s}
+.swa-nav-btn:hover{color:#fff;background:rgba(255,255,255,0.05)}
+
+/* === WELCOME SECTION === */
+.swa-welcome{padding:60px 0;text-align:center}
+.swa-hero-title{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1.05;margin-bottom:20px}
+.swa-hero-sub{color:rgba(255,255,255,0.5);font-size:1.1rem;max-width:600px;margin:0 auto 48px}
+.swa-step-title{font-size:1.4rem;font-weight:700;margin-bottom:20px}
+.swa-step-num{display:inline-block;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;font-size:0.85rem;font-weight:800;line-height:32px;text-align:center;margin-right:8px}
+
+/* === PLATFORM BUTTONS === */
+.swa-platforms{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:48px}
+.swa-plat-btn{padding:12px 22px;border:2px solid rgba(255,255,255,0.1);border-radius:16px;background:rgba(30,41,59,0.6);color:#fff;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:10px}
+.swa-plat-btn:hover{border-color:rgba(139,92,246,0.4);background:rgba(30,41,59,0.9)}
+.swa-plat-btn.active{border-color:var(--accent);background:rgba(139,92,246,0.2);box-shadow:0 8px 24px rgba(139,92,246,0.2);transform:translateY(-2px)}
+.swa-plat-btn i{font-size:1.2rem}
+
+/* === GOAL & TARGET === */
+.swa-config-grid{max-width:800px;margin:0 auto 48px;display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:768px){.swa-config-grid{grid-template-columns:1fr 1fr}}
+.swa-config-card{padding:24px;border-radius:20px}
+.swa-config-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:1.1rem}
+.swa-config-icon.goal{background:rgba(59,130,246,0.15);color:var(--blue)}
+.swa-config-icon.target{background:rgba(56,189,248,0.15);color:#38bdf8}
+.swa-config-card h3{font-size:1.1rem;font-weight:700;margin-bottom:4px;text-align:left}
+.swa-config-card .swa-hint{font-size:0.85rem;color:rgba(255,255,255,0.45);margin-bottom:14px;text-align:left}
+.swa-select{appearance:none;background:rgba(30,41,59,0.7) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2394a3b8' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center/20px;border:1px solid rgba(255,255,255,0.1);color:#fff;padding:12px 40px 12px 16px;border-radius:14px;width:100%;font-family:inherit;font-size:0.95rem;cursor:pointer;transition:all 0.2s}
+.swa-select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,0.2)}
+.swa-textarea{background:rgba(30,41,59,0.7);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:12px 16px;border-radius:14px;width:100%;font-family:inherit;font-size:0.95rem;resize:vertical;min-height:90px;transition:all 0.2s;line-height:1.5}
+.swa-textarea::placeholder{color:rgba(255,255,255,0.35)}
+.swa-textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,0.2)}
+
+/* === DROPZONE === */
+.swa-dropzone{max-width:600px;margin:0 auto 40px;border-radius:2rem;padding:48px 24px;border:2px dashed rgba(255,255,255,0.1);cursor:pointer;transition:all 0.3s}
+.swa-dropzone:hover,.swa-dropzone.dragover{border-color:rgba(139,92,246,0.5);background:rgba(139,92,246,0.03)}
+.swa-dropzone-icon{width:64px;height:64px;border-radius:50%;background:rgba(139,92,246,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.8rem;color:var(--accent-light);transition:transform 0.3s}
+.swa-dropzone:hover .swa-dropzone-icon{transform:scale(1.1)}
+.swa-preview{max-width:600px;margin:0 auto 32px}
+.swa-preview img{max-width:100%;max-height:300px;border-radius:16px;border:1px solid var(--border);display:block;margin:0 auto}
+
+/* === ANALYZE BUTTON === */
+.swa-analyze-btn{background:linear-gradient(135deg,var(--accent),var(--secondary));color:#fff;border:none;padding:16px 40px;font-size:1.1rem;font-weight:800;border-radius:24px;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(139,92,246,0.3)}
+.swa-analyze-btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(139,92,246,0.4)}
+.swa-analyze-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* === VALIDATION ERROR === */
+.swa-error{color:var(--red);background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:12px;padding:12px 16px;margin:16px auto;font-size:0.9rem;display:flex;align-items:center;gap:10px;max-width:500px}
+
+/* === LOADER === */
+.swa-loader-section{padding:100px 0;text-align:center}
+.swa-spinner{width:44px;height:44px;border:3px solid rgba(139,92,246,0.15);border-top-color:var(--accent);border-radius:50%;animation:swa-spin 0.7s linear infinite;margin:0 auto 24px}
+@keyframes swa-spin{to{transform:rotate(360deg)}}
+.swa-loader-text{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:0.3em;color:var(--accent);margin-bottom:8px}
+.swa-loader-sub{color:rgba(255,255,255,0.4);font-size:0.85rem}
+.swa-loader-steps{max-width:400px;margin:24px auto 0;text-align:left}
+.swa-loader-step{display:flex;align-items:center;gap:10px;padding:8px 0;color:rgba(255,255,255,0.3);font-size:0.85rem;transition:all 0.3s}
+.swa-loader-step.active{color:var(--accent-light)}
+.swa-loader-step.done{color:var(--green)}
+.swa-loader-step i{width:20px;text-align:center}
+
+/* === DASHBOARD === */
+.swa-dashboard{padding-bottom:60px}
+.swa-context-bar{background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:20px;padding:20px 24px;margin-bottom:32px;display:flex;flex-wrap:wrap;gap:24px;align-items:center}
+.swa-context-item label{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.swa-context-item .value{font-size:1rem;font-weight:700}
+.swa-badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;letter-spacing:0.03em}
+.swa-badge-instagram{background:linear-gradient(45deg,#405de6,#833ab4,#c13584,#e1306c);color:#fff}
+.swa-badge-tiktok{background:#000;color:#fff;border:1px solid #fff}
+.swa-badge-linkedin{background:#0a66c2;color:#fff}
+.swa-badge-facebook{background:#1877f2;color:#fff}
+.swa-badge-web{background:linear-gradient(90deg,#6366f1,#8b5cf6);color:#fff}
+.swa-badge-sales{background:linear-gradient(45deg,#ef4444,#f97316);color:#fff}
+.swa-badge-awareness{background:linear-gradient(45deg,#3b82f6,#8b5cf6);color:#fff}
+.swa-badge-engagement{background:linear-gradient(45deg,#10b981,#14b8a6);color:#fff}
+.swa-badge-leads{background:linear-gradient(45deg,#a855f7,#d946ef);color:#fff}
+.swa-badge-traffic{background:linear-gradient(45deg,#f59e0b,#eab308);color:#fff}
+
+/* === OVERALL SCORE === */
+.swa-overall{text-align:center;margin-bottom:40px}
+.swa-overall-ring{width:160px;height:160px;margin:0 auto 16px;position:relative}
+.swa-overall-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.swa-overall-ring .bg{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:10}
+.swa-overall-ring .fg{fill:none;stroke:url(#scoreGrad);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.5s ease}
+.swa-overall-value{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2.5rem;font-weight:900;font-family:'Outfit',sans-serif}
+.swa-overall-label{font-size:0.85rem;color:rgba(255,255,255,0.5);font-weight:600}
+
+/* === SCORE CARDS === */
+.swa-scores-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:40px}
+@media(max-width:900px){.swa-scores-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.swa-scores-grid{grid-template-columns:repeat(2,1fr)}}
+.swa-score-card{padding:20px;border-radius:20px;transition:all 0.3s;position:relative;overflow:hidden}
+.swa-score-card:hover{transform:translateY(-4px);border-color:rgba(139,92,246,0.3)}
+.swa-score-label{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:8px}
+.swa-score-value{font-size:2rem;font-weight:900;font-family:'Outfit',sans-serif;margin-bottom:4px}
+.swa-score-method{font-size:0.7rem;color:var(--accent);font-weight:600;display:flex;align-items:center;gap:4px}
+.swa-score-bar{height:4px;border-radius:2px;background:rgba(255,255,255,0.06);margin-top:10px;overflow:hidden}
+.swa-score-bar-fill{height:100%;border-radius:2px;transition:width 1.2s ease;width:0}
+.swa-real-badge{position:absolute;top:10px;right:10px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.4);color:var(--accent);font-size:0.6rem;font-weight:800;padding:2px 7px;border-radius:12px;letter-spacing:0.05em}
+
+/* === VISUAL ANALYSIS === */
+.swa-visual-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px}
+@media(max-width:768px){.swa-visual-grid{grid-template-columns:1fr}}
+.swa-visual-card{padding:24px;border-radius:24px}
+.swa-visual-card h3{font-size:1.1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.swa-heatmap-container{position:relative;display:inline-block;border-radius:12px;overflow:hidden;max-width:100%}
+.swa-heatmap-container canvas{max-width:100%;height:auto;display:block}
+.swa-palette{display:flex;gap:8px;flex-wrap:wrap}
+.swa-color-swatch{display:flex;flex-direction:column;align-items:center;gap:6px}
+.swa-color-circle{width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);cursor:pointer;transition:transform 0.2s}
+.swa-color-circle:hover{transform:scale(1.15)}
+.swa-color-hex{font-size:0.7rem;font-weight:600;color:rgba(255,255,255,0.6);font-family:monospace}
+.swa-color-pct{font-size:0.65rem;color:rgba(255,255,255,0.35)}
+
+/* === RECOMMENDATIONS === */
+.swa-recs{margin-bottom:40px}
+.swa-recs h3{font-size:1.3rem;font-weight:700;margin-bottom:20px}
+.swa-rec-card{padding:20px;border-radius:16px;margin-bottom:12px;border-left:4px solid transparent;transition:all 0.3s}
+.swa-rec-card:hover{background:rgba(255,255,255,0.03)}
+.swa-rec-card.priority-high{border-left-color:var(--red)}
+.swa-rec-card.priority-medium{border-left-color:var(--amber)}
+.swa-rec-card.priority-low{border-left-color:var(--green)}
+.swa-rec-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.swa-rec-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;color:#fff;flex-shrink:0}
+.swa-rec-num.high{background:var(--red)}
+.swa-rec-num.medium{background:var(--amber)}
+.swa-rec-num.low{background:var(--green)}
+.swa-rec-title{font-weight:700;font-size:1rem}
+.swa-rec-body{font-size:0.9rem;color:rgba(255,255,255,0.7);line-height:1.6}
+.swa-rec-impact{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:8px;font-size:0.75rem;font-weight:700;background:rgba(16,185,129,0.1);color:var(--green)}
+
+/* === METRICS TABLE === */
+.swa-metrics-table{width:100%;border-collapse:collapse;margin:16px 0}
+.swa-metrics-table th,.swa-metrics-table td{padding:12px 16px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.06);font-size:0.9rem}
+.swa-metrics-table th{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4)}
+.swa-metrics-table .improve{color:var(--green);font-weight:700}
+
+/* === DOWNLOAD SECTION === */
+.swa-download-card{padding:32px;border-radius:28px;border-top:4px solid var(--accent);display:flex;flex-wrap:wrap;gap:24px;align-items:center}
+.swa-download-icon{width:72px;height:72px;border-radius:50%;background:rgba(139,92,246,0.15);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--accent-light);flex-shrink:0}
+.swa-download-info{flex:1;min-width:200px}
+.swa-download-info h4{font-size:1.3rem;font-weight:900;font-family:'Outfit',sans-serif;text-transform:uppercase;margin-bottom:4px}
+.swa-download-info p{color:rgba(255,255,255,0.5);font-size:0.9rem}
+.swa-download-btn{background:linear-gradient(135deg,var(--accent),var(--secondary));color:#fff;border:none;padding:14px 32px;font-size:1rem;font-weight:800;border-radius:20px;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(139,92,246,0.25)}
+.swa-download-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(139,92,246,0.35)}
+.swa-download-btn:disabled{opacity:0.5;cursor:wait;transform:none}
+
+/* === PRIVACY === */
+.swa-privacy{max-width:700px;margin:40px auto 0;border-radius:16px;padding:20px 24px;border:1px solid rgba(139,92,246,0.15);display:flex;align-items:flex-start;gap:14px}
+.swa-privacy i{color:var(--accent-light);margin-top:2px}
+.swa-privacy h4{font-weight:700;margin-bottom:4px}
+.swa-privacy p{font-size:0.85rem;color:rgba(255,255,255,0.55)}
+
+/* === FOOTER === */
+.swa-footer{text-align:center;padding:32px 24px;color:rgba(255,255,255,0.25);font-size:0.8rem;border-top:1px solid var(--border);margin-top:48px}
+.swa-footer a{color:var(--accent-light);text-decoration:none}
+
+/* === UTILITIES === */
+.swa-hidden{display:none!important}
+@keyframes swa-fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.swa-fade-in{animation:swa-fadeIn 0.5s ease-out}
 </style>
 </head>
-<body class="antialiased">
-<header class="sticky top-0 z-50 glass border-b border-white/5 px-6 py-4">
-<div class="max-w-7xl mx-auto flex justify-between items-center">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center">
-<i class="fas fa-brain text-white"></i>
+<body>
+
+<header class="swa-header">
+<div class="swa-container">
+<div class="swa-header-inner">
+<div class="swa-logo">
+<div class="swa-logo-icon"><i class="fas fa-brain"></i></div>
+<div class="swa-logo-text">
+<h1>Social<span>Strategist</span> AI</h1>
+<p>Analisi Post • Report Professionale</p>
 </div>
-<div>
-<h1 class="text-xl font-black uppercase tracking-tighter">Social<span class="text-purple-400">Strategist</span></h1>
-<p class="text-[10px] font-bold text-white/40 tracking-[0.2em]">ANALISI POST • REPORT PROFESSIONALE</p>
 </div>
+<div id="navActions" class="swa-hidden">
+<button class="swa-nav-btn" onclick="location.reload()"><i class="fas fa-redo"></i> Nuovo Test</button>
 </div>
-<div class="flex items-center gap-4" id="navActions" style="display: none;">
-<button onclick="location.reload()" class="text-xs font-black uppercase tracking-widest text-white/50 hover:text-white transition">
-<i class="fas fa-redo mr-1"></i>Nuovo Test
-</button>
 </div>
 </div>
 </header>
-<main class="max-w-7xl mx-auto px-6 py-12">
-<section id="welcome" class="py-12 text-center">
-<h2 class="text-5xl md:text-7xl font-black mb-6 font-outfit leading-none">Analizza il Tuo Post<br>
-<span class="gradient-text">Genera Report Professionale</span>
-</h2>
-<p class="text-white/50 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">Ricevi un report Word completo con analisi dettagliata, metriche reali e raccomandazioni strategiche.</p>
 
-<div class="mb-10">
-<h3 class="text-2xl font-bold mb-6">📱 1. Seleziona Piattaforma</h3>
-<div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-<button class="platform-btn platform-instagram active" data-platform="instagram">
-<i class="fab fa-instagram"></i> Instagram
-</button>
-<button class="platform-btn platform-tiktok" data-platform="tiktok">
-<i class="fab fa-tiktok"></i> TikTok/Reels
-</button>
-<button class="platform-btn platform-linkedin" data-platform="linkedin">
-<i class="fab fa-linkedin-in"></i> LinkedIn
-</button>
-<button class="platform-btn platform-facebook" data-platform="facebook">
-<i class="fab fa-facebook-f"></i> Facebook
-</button>
-<button class="platform-btn platform-web" data-platform="web">
-<i class="fas fa-globe"></i> Web/Landing
-</button>
+<main class="swa-container">
+
+<!-- ==================== WELCOME ==================== -->
+<section id="sectionWelcome" class="swa-welcome">
+<h2 class="swa-hero-title font-outfit">Analizza il Tuo Post<br><span class="gradient-text">Con Metriche Reali</span></h2>
+<p class="swa-hero-sub">Analisi pixel-level reale dell'immagine, heatmap attenzione, palette colori estratta e report DOCX scaricabile. Zero API, tutto nel browser.</p>
+
+<div style="margin-bottom:48px">
+<h3 class="swa-step-title"><span class="swa-step-num">1</span> Seleziona Piattaforma</h3>
+<div class="swa-platforms" id="platformBtns">
+<button class="swa-plat-btn active" data-platform="instagram"><i class="fab fa-instagram"></i> Instagram</button>
+<button class="swa-plat-btn" data-platform="tiktok"><i class="fab fa-tiktok"></i> TikTok / Reels</button>
+<button class="swa-plat-btn" data-platform="linkedin"><i class="fab fa-linkedin-in"></i> LinkedIn</button>
+<button class="swa-plat-btn" data-platform="facebook"><i class="fab fa-facebook-f"></i> Facebook</button>
+<button class="swa-plat-btn" data-platform="web"><i class="fas fa-globe"></i> Web / Landing</button>
 </div>
-<input type="hidden" id="platformInput" value="instagram">
 </div>
 
-<div class="goal-target-container mb-10">
-<div class="goal-card glass">
-<div class="goal-icon goal-awareness">
-<i class="fas fa-bullseye text-xl"></i>
-</div>
-<h3 class="text-xl font-bold mb-3 text-left">🎯 2. Obiettivo del Post</h3>
-<p class="text-white/60 text-sm mb-4 text-left">Seleziona l'obiettivo principale</p>
-<select id="goalSelector" class="goal-selector">
-<option value="sales">Vendite dirette / Conversioni</option>
+<div class="swa-config-grid">
+<div class="swa-config-card glass">
+<div class="swa-config-icon goal"><i class="fas fa-bullseye"></i></div>
+<h3><span class="swa-step-num">2</span> Obiettivo del Post</h3>
+<p class="swa-hint">Seleziona l'obiettivo principale</p>
+<select id="goalSelect" class="swa-select">
 <option value="awareness" selected>Brand awareness / Visibilità</option>
+<option value="sales">Vendite dirette / Conversioni</option>
 <option value="engagement">Engagement / Interazioni</option>
 <option value="leads">Generazione lead / Contatti</option>
 <option value="traffic">Traffico sito web</option>
 </select>
 </div>
-<div class="target-card glass">
-<div class="goal-icon target-icon-bg">
-<i class="fas fa-user-group text-xl"></i>
-</div>
-<h3 class="text-xl font-bold mb-3 text-left">👥 3. Target di Riferimento <span class="text-white/50 text-sm">(opzionale)</span></h3>
-<p class="text-white/60 text-sm mb-4 text-left">Descrivi il tuo pubblico ideale</p>
-<textarea id="targetInput" class="target-input" placeholder="Esempi:&#10;- Donne 25-40, interessate a wellness&#10;- Uomini 30-45, appassionati di tech&#10;- Professionisti 25-35, crescita personale"></textarea>
+<div class="swa-config-card glass">
+<div class="swa-config-icon target"><i class="fas fa-user-group"></i></div>
+<h3><span class="swa-step-num">3</span> Target <span style="font-weight:400;font-size:0.85rem;color:rgba(255,255,255,0.4)">(opzionale)</span></h3>
+<p class="swa-hint">Descrivi il tuo pubblico ideale</p>
+<textarea id="targetInput" class="swa-textarea" placeholder="Es: Donne 25-40, wellness&#10;Professionisti tech 30-50&#10;Gen Z, moda e lifestyle"></textarea>
 </div>
 </div>
 
-<div class="max-w-2xl mx-auto mb-10">
-<h3 class="text-2xl font-bold mb-6">🖼️ 4. Carica il Tuo Post</h3>
-<div id="dropZone" class="glass rounded-[3rem] p-16 border-2 border-dashed border-white/10 hover:border-purple-500/50 transition-all cursor-pointer group">
-<input type="file" id="fileInput" class="hidden" accept="image/*">
-<div class="w-20 h-20 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition">
-<i class="fas fa-file-image text-4xl text-purple-400"></i>
+<div style="margin-bottom:40px">
+<h3 class="swa-step-title"><span class="swa-step-num">4</span> Carica il Tuo Post</h3>
+<div id="dropZone" class="glass swa-dropzone">
+<input type="file" id="fileInput" class="swa-hidden" accept="image/*">
+<div class="swa-dropzone-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+<p style="font-size:1.2rem;font-weight:700;margin-bottom:6px">Trascina l'immagine qui</p>
+<p style="font-size:0.85rem;color:rgba(255,255,255,0.4)">JPG, PNG, GIF, WebP • max 10MB</p>
 </div>
-<p class="text-2xl font-bold mb-2">Trascina l'immagine qui</p>
-<p class="text-sm text-white/50">JPG, PNG, GIF, WebP • max 10MB</p>
-</div>
-<div id="imagePreviewContainer" class="mt-6 hidden">
-<h4 class="text-lg font-bold mb-3 text-left">Anteprima:</h4>
-<div id="imagePreview" class="max-h-80 overflow-hidden rounded-2xl border border-white/10"></div>
+<div id="previewBox" class="swa-preview swa-hidden">
+<p style="font-weight:600;margin-bottom:8px;text-align:left;font-size:0.9rem">Anteprima:</p>
+<img id="previewImg" src="" alt="Anteprima post">
 </div>
 </div>
 
-<button id="analyzeBtn" class="analyze-btn" disabled>
+<button id="analyzeBtn" class="swa-analyze-btn" disabled>
 <i class="fas fa-chart-line"></i> Analizza e Genera Report
 </button>
+<div id="errorBox" class="swa-error swa-hidden"><i class="fas fa-exclamation-triangle"></i> <span id="errorMsg"></span></div>
 
-<div id="validationError" class="validation-error hidden">
-<i class="fas fa-exclamation-triangle"></i> <span id="errorMessage">Carica un'immagine per iniziare l'analisi.</span>
-</div>
-
-<div class="mt-12 max-w-3xl mx-auto glass rounded-2xl p-6 border border-purple-500/20">
-<div class="flex items-start">
-<div class="mt-1 mr-3">
-<i class="fas fa-shield-alt text-purple-400"></i>
-</div>
+<div class="swa-privacy glass">
+<i class="fas fa-shield-alt"></i>
 <div>
-<h3 class="font-bold text-lg mb-2">🔒 Privacy Assoluta</h3>
-<p class="text-white/70 text-sm">
-L'analisi avviene 100% nel tuo browser. Il report Word viene generato localmente senza inviare dati a server esterni.
-</p>
-</div>
+<h4>Privacy Assoluta</h4>
+<p>L'analisi avviene 100% nel browser tramite Canvas API. Nessun dato viene inviato a server esterni. Il report DOCX viene generato localmente.</p>
 </div>
 </div>
 </section>
 
-<div id="loader" class="hidden py-32 flex flex-col items-center">
-<div class="loader mb-8"></div>
-<p class="text-xs font-black uppercase tracking-[0.4em] text-purple-400 animate-pulse">Analisi in corso...</p>
-<p class="text-white/40 mt-2 text-sm">Generazione report professionale con metriche reali</p>
-<p id="analysisContext" class="text-white/60 mt-1 text-sm max-w-md text-center"></p>
+<!-- ==================== LOADER ==================== -->
+<section id="sectionLoader" class="swa-loader-section swa-hidden">
+<div class="swa-spinner"></div>
+<p class="swa-loader-text">Analisi in corso</p>
+<p class="swa-loader-sub" id="loaderCtx"></p>
+<div class="swa-loader-steps" id="loaderSteps">
+<div class="swa-loader-step" data-step="pixels"><i class="fas fa-circle-notch fa-spin"></i> Analisi pixel e luminosità</div>
+<div class="swa-loader-step" data-step="colors"><i class="far fa-circle"></i> Estrazione palette colori</div>
+<div class="swa-loader-step" data-step="contrast"><i class="far fa-circle"></i> Calcolo contrasto RMS</div>
+<div class="swa-loader-step" data-step="entropy"><i class="far fa-circle"></i> Entropia Shannon</div>
+<div class="swa-loader-step" data-step="composition"><i class="far fa-circle"></i> Analisi composizione</div>
+<div class="swa-loader-step" data-step="heatmap"><i class="far fa-circle"></i> Generazione heatmap</div>
+<div class="swa-loader-step" data-step="report"><i class="far fa-circle"></i> Preparazione report</div>
+</div>
+</section>
+
+<!-- ==================== DASHBOARD ==================== -->
+<section id="sectionDashboard" class="swa-dashboard swa-hidden">
+
+<div class="swa-context-bar" id="contextBar"></div>
+
+<!-- Overall Score -->
+<div class="swa-overall">
+<div class="swa-overall-ring">
+<svg viewBox="0 0 120 120">
+<defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs>
+<circle class="bg" cx="60" cy="60" r="52"/>
+<circle class="fg" id="overallRing" cx="60" cy="60" r="52" stroke-dasharray="326.73" stroke-dashoffset="326.73"/>
+</svg>
+<div class="swa-overall-value" id="overallScore">--</div>
+</div>
+<div class="swa-overall-label">Punteggio Complessivo</div>
 </div>
 
-<div id="dashboard" class="hidden space-y-12">
-<div class="analysis-context">
-<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-<div>
-<span class="context-label"><i class="fas fa-mobile-alt"></i> Piattaforma</span>
-<div class="context-value">
-<span id="platformBadge" class="platform-badge platform-instagram">Instagram Feed</span>
-</div>
-</div>
-<div class="mt-3 md:mt-0">
-<span class="context-label"><i class="fas fa-bullseye"></i> Obiettivo</span>
-<div class="context-value">
-<span id="goalBadge" class="objective-badge objective-awareness">Brand awareness / Visibilità</span>
-</div>
-</div>
-<div class="mt-3 md:mt-0">
-<span class="context-label"><i class="fas fa-user-group"></i> Target</span>
-<div class="context-value" id="targetPreview">Non specificato</div>
-</div>
-</div>
-</div>
+<!-- Score Cards -->
+<div class="swa-scores-grid" id="scoresGrid"></div>
 
-<div class="grid grid-cols-2 md:grid-cols-5 gap-6">
-<div class="glass p-6 rounded-[2rem] score-card border-b-8 border-purple-500 relative">
-<span class="real-data-badge">DATO REALE</span>
-<p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Flusso Visivo</p>
-<p id="score-flow" class="text-4xl font-black font-outfit">--</p>
-<p class="metric-source"><i class="fas fa-brain"></i> Algoritmo center-bias</p>
+<!-- Visual Analysis -->
+<div class="swa-visual-grid">
+<div class="swa-visual-card glass">
+<h3>🔥 Heatmap Attenzione</h3>
+<div class="swa-heatmap-container" id="heatmapBox"></div>
+<p style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:10px"><i class="fas fa-info-circle"></i> Rosso = alta attenzione stimata, Blu = bassa. Basata su center-bias + edge saliency.</p>
 </div>
-<div class="glass p-6 rounded-[2rem] score-card border-b-8 border-pink-500 relative">
-<span class="real-data-badge">DATO REALE</span>
-<p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Contrasto</p>
-<p id="score-contrast" class="text-4xl font-black font-outfit">--</p>
-<p class="metric-source"><i class="fas fa-calculator"></i> Calcolo RMS pixel</p>
+<div class="swa-visual-card glass">
+<h3>🎨 Palette Estratta</h3>
+<div class="swa-palette" id="paletteBox"></div>
+<div style="margin-top:20px">
+<h4 style="font-size:0.9rem;font-weight:700;margin-bottom:10px">📊 Distribuzione Luminosità</h4>
+<canvas id="histogramCanvas" width="300" height="100" style="width:100%;height:80px;border-radius:8px;background:rgba(255,255,255,0.03)"></canvas>
 </div>
-<div class="glass p-6 rounded-[2rem] score-card border-b-8 border-blue-500 relative">
-<span class="real-data-badge">DATO REALE</span>
-<p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Leggibilità</p>
-<p id="score-access" class="text-4xl font-black font-outfit">--</p>
-<p class="metric-source"><i class="fas fa-ruler-combined"></i> Proporzioni + Zone sicure</p>
-</div>
-<div class="glass p-6 rounded-[2rem] score-card border-b-8 border-amber-500 relative">
-<span class="real-data-badge">DATO REALE</span>
-<p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">SEO Visiva</p>
-<p id="score-structure" class="text-4xl font-black font-outfit">--</p>
-<p class="metric-source"><i class="fas fa-percentage"></i> Analisi composizione</p>
-</div>
-<div class="glass p-6 rounded-[2rem] score-card border-b-8 border-red-500 relative">
-<span class="real-data-badge">DATO REALE</span>
-<p class="text-[10px] font-black text-white/40 uppercase mb-3 tracking-widest">Attrito</p>
-<p id="score-friction" class="text-4xl font-black font-outfit">--</p>
-<p class="metric-source"><i class="fas fa-thermometer-half"></i> Entropia visiva</p>
+<div style="margin-top:16px" id="colorHarmonyBox"></div>
 </div>
 </div>
 
-<div class="glass rounded-[3xl] p-10 border-t-4 border-purple-500">
-<div class="flex flex-col md:flex-row gap-8 items-center">
-<div class="w-24 h-24 rounded-full bg-purple-500/20 flex items-center justify-center text-4xl">
-<i class="fas fa-file-word text-purple-400"></i>
+<!-- Recommendations -->
+<div class="swa-recs" id="recsSection"></div>
+
+<!-- Metrics Comparison -->
+<div class="glass" style="border-radius:24px;padding:28px;margin-bottom:32px">
+<h3 style="font-size:1.2rem;font-weight:700;margin-bottom:16px">📈 Confronto Attuale vs Ottimizzato</h3>
+<div style="overflow-x:auto">
+<table class="swa-metrics-table" id="metricsTable"></table>
 </div>
-<div class="flex-1">
-<h4 class="text-2xl font-black font-outfit mb-2 uppercase">Report Professionale Pronto</h4>
-<p id="final-summary" class="text-lg text-white/60 leading-relaxed max-w-2xl">
-Report Word completo con analisi dettagliata delle 5 metriche chiave, confronto prima/dopo, raccomandazioni strategiche prioritarie e potenziale di conversione stimato.
-</p>
 </div>
-<div class="flex gap-3 flex-wrap">
-<button onclick="downloadReport()" class="flex items-center gap-2 px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl font-bold hover:opacity-90 transition text-lg">
-<i class="fas fa-download"></i> Scarica Report Word
+
+<!-- Download -->
+<div class="swa-download-card glass">
+<div class="swa-download-icon"><i class="fas fa-file-word"></i></div>
+<div class="swa-download-info">
+<h4 class="font-outfit">Report DOCX Pronto</h4>
+<p>Report Word completo con tutte le metriche, raccomandazioni e heatmap.</p>
+</div>
+<button id="downloadBtn" class="swa-download-btn" onclick="SWA.downloadDocx()">
+<i class="fas fa-download"></i> Scarica Report .docx
 </button>
 </div>
-</div>
-</div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-<div>
-<h3 class="text-2xl font-bold mb-6">📊 Metriche Analizzate</h3>
-<div class="space-y-5">
-<div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
-<span class="font-bold">Flusso Visivo</span>
-<div class="flex items-center gap-4">
-<span class="text-purple-400 font-bold text-2xl" id="metric-flow">--</span>
-</div>
-</div>
-<div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
-<span class="font-bold">Contrasto Testo</span>
-<div class="flex items-center gap-4">
-<span class="text-pink-400 font-bold text-2xl" id="metric-contrast">--</span>
-</div>
-</div>
-<div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
-<span class="font-bold">Leggibilità</span>
-<div class="flex items-center gap-4">
-<span class="text-blue-400 font-bold text-2xl" id="metric-access">--</span>
-</div>
-</div>
-<div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
-<span class="font-bold">SEO Visiva</span>
-<div class="flex items-center gap-4">
-<span class="text-amber-400 font-bold text-2xl" id="metric-structure">--</span>
-</div>
-</div>
-<div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
-<span class="font-bold">Attrito Cognitivo</span>
-<div class="flex items-center gap-4">
-<span class="text-red-400 font-bold text-2xl" id="metric-friction">--</span>
-</div>
-</div>
-</div>
-</div>
-
-<div>
-<h3 class="text-2xl font-bold mb-6">🎯 Top 3 Raccomandazioni</h3>
-<div class="space-y-4">
-<div class="glass p-5 rounded-xl">
-<div class="flex items-center gap-3 mb-2">
-<div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
-<span class="text-green-400 font-bold">1</span>
-</div>
-<h4 class="font-bold text-lg">Ottimizza Quadrante Superiore-Destro</h4>
-</div>
-<p class="text-white/80 text-sm">Sposta la CTA nella zona di massima attenzione (+27% CTR previsto)</p>
-</div>
-<div class="glass p-5 rounded-xl">
-<div class="flex items-center gap-3 mb-2">
-<div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-<span class="text-amber-400 font-bold">2</span>
-</div>
-<h4 class="font-bold text-lg">Migliora Contrasto CTA</h4>
-</div>
-<p class="text-white/80 text-sm">Aumenta contrasto a 7.2:1 per superare WCAG AAA (+33% visibilità)</p>
-</div>
-<div class="glass p-5 rounded-xl">
-<div class="flex items-center gap-3 mb-2">
-<div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-<span class="text-blue-400 font-bold">3</span>
-</div>
-<h4 class="font-bold text-lg">Riduci Attrito Cognitivo</h4>
-</div>
-<p class="text-white/80 text-sm">Riduci elementi da 12 a max 6 (-45% attrito, focus sulla CTA)</p>
-</div>
-</div>
-</div>
-</div>
-</div>
+</section>
 </main>
 
+<footer class="swa-footer">
+<p>&copy; 2025 <a href="https://robertozanoni.it" target="_blank">Roberto Zanoni</a> — Web Designer & SEO Specialist</p>
+</footer>
+
+<!-- Hidden canvas for analysis -->
+<canvas id="analysisCanvas" class="swa-hidden"></canvas>
+
 <script>
-// ==================== STATE MANAGEMENT ====================
-let appState = {
-    platform: 'instagram',
-    goal: 'awareness',
-    target: 'Non specificato',
-    image: null,
-    analysis: null
+(function(){
+'use strict';
+
+// ==================== APP STATE ====================
+const state = {
+    platform:'instagram',
+    goal:'awareness',
+    target:'',
+    imageData:null,
+    imageSrc:null,
+    analysis:null
 };
 
-// ==================== PLATFORM SELECTION ====================
-document.querySelectorAll('.platform-btn').forEach(btn => {
+// ==================== DOM REFS ====================
+const $ = id => document.getElementById(id);
+const secWelcome = $('sectionWelcome');
+const secLoader = $('sectionLoader');
+const secDashboard = $('sectionDashboard');
+
+// ==================== PLATFORM ====================
+document.querySelectorAll('.swa-plat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.swa-plat-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        appState.platform = btn.dataset.platform;
-        document.getElementById('platformInput').value = appState.platform;
-        updatePlatformBadge();
-        enableAnalyzeButton();
+        state.platform = btn.dataset.platform;
+        checkReady();
     });
 });
 
-function updatePlatformBadge() {
-    const platformValue = appState.platform;
-    let badgeText = '';
-    let badgeClass = '';
-    switch(platformValue) {
-        case 'instagram':
-            badgeText = 'Instagram Feed';
-            badgeClass = 'platform-instagram';
-            break;
-        case 'tiktok':
-            badgeText = 'TikTok/Reels';
-            badgeClass = 'platform-tiktok';
-            break;
-        case 'linkedin':
-            badgeText = 'LinkedIn';
-            badgeClass = 'platform-linkedin';
-            break;
-        case 'facebook':
-            badgeText = 'Facebook';
-            badgeClass = 'platform-facebook';
-            break;
-        case 'web':
-            badgeText = 'Web/Landing';
-            badgeClass = 'platform-web';
-            break;
-    }
-    if (document.getElementById('platformBadge')) {
-        document.getElementById('platformBadge').textContent = badgeText;
-        document.getElementById('platformBadge').className = `platform-badge ${badgeClass}`;
-    }
-}
-
-// ==================== GOAL SELECTION ====================
-document.getElementById('goalSelector').addEventListener('change', () => {
-    updateGoalBadge();
-    enableAnalyzeButton();
+// ==================== GOAL ====================
+$('goalSelect').addEventListener('change', e => {
+    state.goal = e.target.value;
 });
 
-function updateGoalBadge() {
-    const goalValue = document.getElementById('goalSelector').value;
-    appState.goal = goalValue;
-    let badgeText = '';
-    let badgeClass = '';
-    switch(goalValue) {
-        case 'sales':
-            badgeText = 'Vendite dirette / Conversioni';
-            badgeClass = 'objective-sales';
-            break;
-        case 'awareness':
-            badgeText = 'Brand awareness / Visibilità';
-            badgeClass = 'objective-awareness';
-            break;
-        case 'engagement':
-            badgeText = 'Engagement / Interazioni';
-            badgeClass = 'objective-engagement';
-            break;
-        case 'leads':
-            badgeText = 'Generazione lead / Contatti';
-            badgeClass = 'objective-leads';
-            break;
-        case 'traffic':
-            badgeText = 'Traffico sito web';
-            badgeClass = 'objective-traffic';
-            break;
-    }
-    if (document.getElementById('goalBadge')) {
-        document.getElementById('goalBadge').textContent = badgeText;
-        document.getElementById('goalBadge').className = `objective-badge ${badgeClass}`;
-    }
-}
-
-// ==================== TARGET INPUT ====================
-document.getElementById('targetInput').addEventListener('input', () => {
-    const targetValue = document.getElementById('targetInput').value.trim() || 'Non specificato';
-    appState.target = targetValue;
-    if (document.getElementById('targetPreview')) {
-        document.getElementById('targetPreview').textContent = targetValue;
-    }
+// ==================== TARGET ====================
+$('targetInput').addEventListener('input', e => {
+    state.target = e.target.value.trim();
 });
 
 // ==================== FILE UPLOAD ====================
-document.getElementById('dropZone').addEventListener('click', () => {
-    document.getElementById('fileInput').click();
-});
+$('dropZone').addEventListener('click', () => $('fileInput').click());
+$('fileInput').addEventListener('change', e => handleFile(e.target.files[0]));
+$('dropZone').addEventListener('dragover', e => { e.preventDefault(); $('dropZone').classList.add('dragover'); });
+$('dropZone').addEventListener('dragleave', () => $('dropZone').classList.remove('dragover'));
+$('dropZone').addEventListener('drop', e => { e.preventDefault(); $('dropZone').classList.remove('dragover'); handleFile(e.dataTransfer.files[0]); });
 
-document.getElementById('fileInput').addEventListener('change', (e) => {
-    handleFileUpload(e.target.files[0]);
-});
-
-document.getElementById('dropZone').addEventListener('dragover', (e) => {
-    e.preventDefault();
-    document.getElementById('dropZone').style.borderColor = "#8b5cf6";
-});
-
-document.getElementById('dropZone').addEventListener('dragleave', () => {
-    document.getElementById('dropZone').style.borderColor = "rgba(255,255,255,0.08)";
-});
-
-document.getElementById('dropZone').addEventListener('drop', (e) => {
-    e.preventDefault();
-    document.getElementById('dropZone').style.borderColor = "rgba(255,255,255,0.08)";
-    handleFileUpload(e.dataTransfer.files[0]);
-});
-
-function handleFileUpload(file) {
+function handleFile(file) {
     if (!file) return;
-    if (!file.type.match('image.*')) {
-        showValidationError('Per favore carica un file immagine valido (JPG, PNG, GIF, WebP).');
-        return;
-    }
-    if (file.size > 10 * 1024 * 1024) {
-        showValidationError('L\'immagine è troppo grande. Dimensione massima: 10MB.');
-        return;
-    }
-    
+    if (!file.type.match('image.*')) return showError('Formato non valido. Usa JPG, PNG, GIF o WebP.');
+    if (file.size > 10*1024*1024) return showError('Immagine troppo grande (max 10MB).');
     const reader = new FileReader();
-    reader.onload = (e) => {
-        appState.image = e.target.result;
-        document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" alt="Anteprima" class="max-w-full max-h-80 object-contain">`;
-        document.getElementById('imagePreviewContainer').classList.remove('hidden');
-        enableAnalyzeButton();
-        document.getElementById('validationError').classList.add('hidden');
+    reader.onload = e => {
+        state.imageSrc = e.target.result;
+        $('previewImg').src = e.target.result;
+        $('previewBox').classList.remove('swa-hidden');
+        $('errorBox').classList.add('swa-hidden');
+        checkReady();
     };
     reader.readAsDataURL(file);
 }
 
-function showValidationError(message) {
-    document.getElementById('errorMessage').textContent = message;
-    document.getElementById('validationError').classList.remove('hidden');
-    setTimeout(() => {
-        document.getElementById('validationError').classList.add('hidden');
-    }, 5000);
+function showError(msg) {
+    $('errorMsg').textContent = msg;
+    $('errorBox').classList.remove('swa-hidden');
+    setTimeout(() => $('errorBox').classList.add('swa-hidden'), 5000);
 }
 
-function enableAnalyzeButton() {
-    document.getElementById('analyzeBtn').disabled = !appState.image;
+function checkReady() {
+    $('analyzeBtn').disabled = !state.imageSrc;
 }
 
-// ==================== ANALYSIS BUTTON ====================
-document.getElementById('analyzeBtn').addEventListener('click', () => {
-    if (!appState.image) {
-        showValidationError('Per favore carica un\'immagine prima di avviare l\'analisi.');
-        return;
-    }
+// ==================== ANALYZE ====================
+$('analyzeBtn').addEventListener('click', () => {
+    if (!state.imageSrc) return showError('Carica un\'immagine prima.');
     startAnalysis();
 });
 
 function startAnalysis() {
-    document.getElementById('welcome').classList.add('hidden');
-    document.getElementById('loader').classList.remove('hidden');
+    secWelcome.classList.add('swa-hidden');
+    secLoader.classList.remove('swa-hidden');
     
-    const platformText = appState.platform === 'instagram' ? 'Instagram' : 
-                         appState.platform === 'tiktok' ? 'TikTok' : 
-                         appState.platform === 'linkedin' ? 'LinkedIn' : 
-                         appState.platform === 'facebook' ? 'Facebook' : 'Web';
-    const goalText = appState.goal === 'sales' ? 'Vendite' : 
-                     appState.goal === 'awareness' ? 'Brand Awareness' : 
-                     appState.goal === 'engagement' ? 'Engagement' : 
-                     appState.goal === 'leads' ? 'Lead Generation' : 'Traffico';
-    
-    document.getElementById('analysisContext').textContent = `Analisi per ${platformText} • Obiettivo: ${goalText}`;
-    
-    setTimeout(() => {
-        appState.analysis = computeAnalysis(appState.image, appState.platform, appState.goal, appState.target);
-        renderDashboard();
-    }, 1800);
+    const pName = {instagram:'Instagram',tiktok:'TikTok',linkedin:'LinkedIn',facebook:'Facebook',web:'Web'}[state.platform];
+    const gName = {sales:'Vendite',awareness:'Brand Awareness',engagement:'Engagement',leads:'Lead Generation',traffic:'Traffico'}[state.goal];
+    $('loaderCtx').textContent = `${pName} • ${gName}`;
+
+    const steps = ['pixels','colors','contrast','entropy','composition','heatmap','report'];
+    let idx = 0;
+
+    function advanceStep() {
+        if (idx > 0) {
+            const prev = document.querySelector(`.swa-loader-step[data-step="${steps[idx-1]}"]`);
+            prev.classList.remove('active');
+            prev.classList.add('done');
+            prev.querySelector('i').className = 'fas fa-check-circle';
+        }
+        if (idx < steps.length) {
+            const cur = document.querySelector(`.swa-loader-step[data-step="${steps[idx]}"]`);
+            cur.classList.add('active');
+            cur.querySelector('i').className = 'fas fa-circle-notch fa-spin';
+            idx++;
+            setTimeout(advanceStep, 350 + Math.random()*250);
+        } else {
+            runAnalysis();
+        }
+    }
+    setTimeout(advanceStep, 200);
 }
 
-// ==================== ANALYSIS COMPUTATION ====================
-function computeAnalysis(imgSrc, platform, goal, target) {
-    const baseMetrics = {
-        flowScore: 68,
-        contrastScore: 62,
-        accessScore: 71,
-        structureScore: 75,
-        frictionScore: 65,
-        negativeSpace: 23,
-        entropy: 5.8,
-        contrastRatio: 3.1,
-        potential: 78
+// ==================== CANVAS ANALYSIS ENGINE ====================
+function runAnalysis() {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+        const canvas = $('analysisCanvas');
+        // Scale down for performance but keep enough detail
+        const maxDim = 400;
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim) {
+            const ratio = Math.min(maxDim/w, maxDim/h);
+            w = Math.round(w*ratio);
+            h = Math.round(h*ratio);
+        }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d', {willReadFrequently:true});
+        ctx.drawImage(img, 0, 0, w, h);
+        const imageData = ctx.getImageData(0, 0, w, h);
+        
+        const analysis = analyzePixels(imageData, w, h, img);
+        state.analysis = analysis;
+        state.analysis.imgWidth = img.width;
+        state.analysis.imgHeight = img.height;
+        state.analysis.canvasW = w;
+        state.analysis.canvasH = h;
+        
+        renderDashboard(analysis, img);
     };
+    img.src = state.imageSrc;
+}
 
-    if (platform === 'instagram') {
-        baseMetrics.flowScore += 5;
-        baseMetrics.accessScore += 3;
-    } else if (platform === 'tiktok') {
-        baseMetrics.flowScore += 2;
-        baseMetrics.accessScore -= 5;
-    } else if (platform === 'linkedin') {
-        baseMetrics.structureScore += 8;
-        baseMetrics.contrastScore += 3;
+function analyzePixels(imageData, w, h, img) {
+    const d = imageData.data;
+    const totalPixels = w * h;
+    
+    // === LUMINANCE ARRAY ===
+    const lum = new Float32Array(totalPixels);
+    const rArr = new Uint8Array(totalPixels);
+    const gArr = new Uint8Array(totalPixels);
+    const bArr = new Uint8Array(totalPixels);
+    
+    for (let i = 0; i < totalPixels; i++) {
+        const off = i * 4;
+        rArr[i] = d[off];
+        gArr[i] = d[off+1];
+        bArr[i] = d[off+2];
+        lum[i] = 0.2126*d[off] + 0.7152*d[off+1] + 0.0722*d[off+2];
     }
-
-    if (goal === 'sales') {
-        baseMetrics.flowScore += 3;
-        baseMetrics.contrastScore += 5;
-        baseMetrics.negativeSpace -= 5;
-    } else if (goal === 'awareness') {
-        baseMetrics.negativeSpace += 8;
-        baseMetrics.structureScore += 5;
-    } else if (goal === 'engagement') {
-        baseMetrics.flowScore -= 3;
-        baseMetrics.structureScore += 7;
+    
+    // === 1. RMS CONTRAST ===
+    let lumSum = 0;
+    for (let i = 0; i < totalPixels; i++) lumSum += lum[i];
+    const lumMean = lumSum / totalPixels;
+    let lumVarSum = 0;
+    for (let i = 0; i < totalPixels; i++) lumVarSum += (lum[i]-lumMean)**2;
+    const rmsContrast = Math.sqrt(lumVarSum / totalPixels) / 255;  // 0-1
+    const contrastScore = Math.round(Math.min(100, rmsContrast * 400));  // scale to score
+    
+    // === 2. SHANNON ENTROPY ===
+    const lumHist = new Uint32Array(256);
+    for (let i = 0; i < totalPixels; i++) lumHist[Math.round(lum[i])]++;
+    let entropy = 0;
+    for (let i = 0; i < 256; i++) {
+        if (lumHist[i] > 0) {
+            const p = lumHist[i] / totalPixels;
+            entropy -= p * Math.log2(p);
+        }
     }
-
-    if (target.toLowerCase().includes('over 50') || target.toLowerCase().includes('anziani')) {
-        baseMetrics.contrastScore += 12;
-        baseMetrics.accessScore += 8;
-    } else if (target.toLowerCase().includes('giovani') || target.toLowerCase().includes('gen z')) {
-        baseMetrics.structureScore += 5;
-        baseMetrics.negativeSpace -= 3;
+    // entropy is 0-8, lower = less complex
+    
+    // === 3. COLOR EXTRACTION (simplified k-means) ===
+    const colorBuckets = {};
+    const step = Math.max(1, Math.floor(totalPixels / 5000));
+    for (let i = 0; i < totalPixels; i += step) {
+        // Quantize to reduce colors
+        const qr = Math.round(rArr[i]/32)*32;
+        const qg = Math.round(gArr[i]/32)*32;
+        const qb = Math.round(bArr[i]/32)*32;
+        const key = `${qr},${qg},${qb}`;
+        colorBuckets[key] = (colorBuckets[key]||0) + 1;
     }
-
-    const optimizedMetrics = {
-        flowScore: Math.min(95, baseMetrics.flowScore + 23),
-        contrastScore: Math.min(95, baseMetrics.contrastScore + 26),
-        accessScore: Math.min(95, baseMetrics.accessScore + 15),
-        structureScore: Math.min(95, baseMetrics.structureScore + 12),
-        frictionScore: Math.min(95, baseMetrics.frictionScore + 29),
-        negativeSpace: Math.min(45, baseMetrics.negativeSpace + 16),
-        entropy: Math.max(2.5, baseMetrics.entropy - 2.6),
-        contrastRatio: 7.2,
-        potential: Math.min(96, baseMetrics.potential + 16)
+    const sortedColors = Object.entries(colorBuckets)
+        .sort((a,b) => b[1]-a[1])
+        .slice(0, 8)
+        .map(([key, count]) => {
+            const [r,g,b] = key.split(',').map(Number);
+            return {r,g,b, count, pct: Math.round(count / (totalPixels/step) * 100)};
+        });
+    
+    // Merge similar colors
+    const palette = [];
+    for (const c of sortedColors) {
+        const similar = palette.find(p => Math.abs(p.r-c.r)+Math.abs(p.g-c.g)+Math.abs(p.b-c.b) < 80);
+        if (similar) {
+            similar.count += c.count;
+            similar.pct += c.pct;
+        } else if (palette.length < 6) {
+            palette.push({...c});
+        }
+    }
+    // Recalculate percentages
+    const totalPct = palette.reduce((s,c) => s+c.pct, 0);
+    palette.forEach(c => c.pct = Math.round(c.pct/totalPct*100));
+    
+    // === 4. QUADRANT ANALYSIS (Visual Flow) ===
+    const quadrants = [{sum:0,cnt:0,edges:0},{sum:0,cnt:0,edges:0},{sum:0,cnt:0,edges:0},{sum:0,cnt:0,edges:0}];
+    const cx = w/2, cy = h/2;
+    let centerWeight = 0, totalWeight = 0;
+    
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            const i = y*w+x;
+            const q = (y < h/2 ? 0 : 2) + (x < w/2 ? 0 : 1);
+            quadrants[q].sum += lum[i];
+            quadrants[q].cnt++;
+            
+            // Edge detection (simple gradient magnitude)
+            if (x > 0 && x < w-1 && y > 0 && y < h-1) {
+                const gx = Math.abs(lum[i+1] - lum[i-1]);
+                const gy = Math.abs(lum[i+w] - lum[i-w]);
+                const edge = Math.sqrt(gx*gx + gy*gy);
+                quadrants[q].edges += edge;
+                
+                // Center-bias weight
+                const dx = (x-cx)/cx, dy = (y-cy)/cy;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                const weight = Math.max(0, 1 - dist*0.7);
+                centerWeight += edge * weight;
+                totalWeight += edge;
+            }
+        }
+    }
+    
+    quadrants.forEach(q => {
+        q.avgLum = q.cnt > 0 ? q.sum/q.cnt : 0;
+        q.avgEdge = q.cnt > 0 ? q.edges/q.cnt : 0;
+    });
+    
+    // Flow score: how well attention is guided (center-bias + balanced quadrants)
+    const centerBias = totalWeight > 0 ? centerWeight / totalWeight : 0.5;
+    const quadLums = quadrants.map(q => q.avgLum);
+    const quadRange = Math.max(...quadLums) - Math.min(...quadLums);
+    const quadBalance = 1 - Math.min(1, quadRange / 128);
+    const flowScore = Math.round(Math.min(100, (centerBias*0.6 + quadBalance*0.4) * 120));
+    
+    // === 5. NEGATIVE SPACE ===
+    // Detect uniform regions (low local variance)
+    let uniformPixels = 0;
+    const blockSize = 8;
+    for (let by = 0; by < h-blockSize; by += blockSize) {
+        for (let bx = 0; bx < w-blockSize; bx += blockSize) {
+            let bSum = 0, bSum2 = 0, bCnt = 0;
+            for (let dy = 0; dy < blockSize; dy++) {
+                for (let dx = 0; dx < blockSize; dx++) {
+                    const v = lum[(by+dy)*w+(bx+dx)];
+                    bSum += v;
+                    bSum2 += v*v;
+                    bCnt++;
+                }
+            }
+            const bMean = bSum/bCnt;
+            const bVar = bSum2/bCnt - bMean*bMean;
+            if (bVar < 200) uniformPixels += bCnt;
+        }
+    }
+    const negativeSpace = Math.round(uniformPixels / totalPixels * 100);
+    
+    // === 6. EDGE DENSITY (complexity) ===
+    let totalEdge = 0, edgeCount = 0;
+    for (let y = 1; y < h-1; y++) {
+        for (let x = 1; x < w-1; x++) {
+            const i = y*w+x;
+            const gx = Math.abs(lum[i+1]-lum[i-1]);
+            const gy = Math.abs(lum[i+w]-lum[i-w]);
+            const e = Math.sqrt(gx*gx+gy*gy);
+            totalEdge += e;
+            if (e > 30) edgeCount++;
+        }
+    }
+    const edgeDensity = edgeCount / totalPixels;
+    
+    // === 7. ASPECT RATIO ===
+    const aspectRatio = img.width / img.height;
+    const platformOptimal = {
+        instagram: {ratios:[{r:0.8,label:'4:5 Feed'},{r:1,label:'1:1 Quadrato'},{r:0.5625,label:'9:16 Story'}], safeTop:0.05,safeBottom:0.12,safeLeft:0.03,safeRight:0.03},
+        tiktok: {ratios:[{r:0.5625,label:'9:16 Verticale'}], safeTop:0.15,safeBottom:0.25,safeLeft:0.05,safeRight:0.05},
+        linkedin: {ratios:[{r:1.91,label:'1.91:1 Landscape'},{r:1,label:'1:1 Quadrato'}], safeTop:0.03,safeBottom:0.08,safeLeft:0.03,safeRight:0.03},
+        facebook: {ratios:[{r:1.91,label:'1.91:1 Landscape'},{r:1,label:'1:1 Quadrato'}], safeTop:0.03,safeBottom:0.1,safeLeft:0.03,safeRight:0.03},
+        web: {ratios:[{r:1.778,label:'16:9 Widescreen'},{r:1.333,label:'4:3'}], safeTop:0.02,safeBottom:0.02,safeLeft:0.02,safeRight:0.02}
     };
-
+    const platInfo = platformOptimal[state.platform];
+    let bestRatioMatch = 0;
+    let bestRatioLabel = '';
+    for (const opt of platInfo.ratios) {
+        const match = 1 - Math.min(1, Math.abs(aspectRatio - opt.r) / opt.r);
+        if (match > bestRatioMatch) { bestRatioMatch = match; bestRatioLabel = opt.label; }
+    }
+    
+    // === 8. SAFE ZONE ANALYSIS ===
+    // Check if high-edge areas fall within safe zones
+    const safeT = Math.round(h * platInfo.safeTop);
+    const safeB = Math.round(h * (1-platInfo.safeBottom));
+    const safeL = Math.round(w * platInfo.safeLeft);
+    const safeR = Math.round(w * (1-platInfo.safeRight));
+    let safeEdges = 0, unsafeEdges = 0;
+    for (let y = 1; y < h-1; y++) {
+        for (let x = 1; x < w-1; x++) {
+            const i = y*w+x;
+            const gx = Math.abs(lum[i+1]-lum[i-1]);
+            const gy = Math.abs(lum[i+w]-lum[i-w]);
+            const e = Math.sqrt(gx*gx+gy*gy);
+            if (e > 40) {
+                if (y >= safeT && y <= safeB && x >= safeL && x <= safeR) safeEdges++;
+                else unsafeEdges++;
+            }
+        }
+    }
+    const safeZoneCompliance = (safeEdges+unsafeEdges) > 0 ? safeEdges/(safeEdges+unsafeEdges) : 1;
+    
+    // === 9. CONTRAST RATIO ESTIMATE ===
+    // Approximate WCAG ratio between lightest and darkest significant areas
+    const sortedLum = Array.from(lum).sort((a,b)=>a-b);
+    const dark10 = sortedLum[Math.floor(totalPixels*0.1)];
+    const light90 = sortedLum[Math.floor(totalPixels*0.9)];
+    const L1 = (light90/255 + 0.05);
+    const L2 = (dark10/255 + 0.05);
+    const wcagRatio = L1 > L2 ? L1/L2 : L2/L1;
+    
+    // === 10. COLOR HARMONY ===
+    let harmonyType = 'N/D';
+    if (palette.length >= 2) {
+        const hues = palette.slice(0,3).map(c => rgbToHsl(c.r,c.g,c.b)[0]);
+        const diffs = [];
+        for (let i = 0; i < hues.length-1; i++) {
+            let diff = Math.abs(hues[i+1]-hues[i]);
+            if (diff > 180) diff = 360-diff;
+            diffs.push(diff);
+        }
+        const avgDiff = diffs.reduce((s,d)=>s+d,0)/diffs.length;
+        if (avgDiff < 25) harmonyType = 'Monocromatica';
+        else if (avgDiff < 50) harmonyType = 'Analoga';
+        else if (avgDiff > 140 && avgDiff < 200) harmonyType = 'Complementare';
+        else if (avgDiff > 90 && avgDiff < 140) harmonyType = 'Triadica';
+        else harmonyType = 'Mista';
+    }
+    
+    // === COMPOSITE SCORES ===
+    const accessScore = Math.round(Math.min(100, (bestRatioMatch*40 + safeZoneCompliance*40 + (wcagRatio > 4.5 ? 20 : wcagRatio/4.5*20))));
+    const structureScore = Math.round(Math.min(100, (negativeSpace > 15 ? 30 : negativeSpace*2) + (1-edgeDensity)*40 + (harmonyType !== 'Mista' ? 30 : 15)));
+    const frictionScore = Math.round(Math.min(100, (1 - entropy/8) * 100));
+    const overallScore = Math.round(flowScore*0.2 + contrastScore*0.2 + accessScore*0.2 + structureScore*0.2 + frictionScore*0.2);
+    
     return {
-        original: baseMetrics,
-        optimized: optimizedMetrics,
-        platform: platform,
-        goal: goal,
-        target: target
+        flowScore, contrastScore, accessScore, structureScore, frictionScore, overallScore,
+        rmsContrast: Math.round(rmsContrast*1000)/10,
+        entropy: Math.round(entropy*100)/100,
+        negativeSpace,
+        edgeDensity: Math.round(edgeDensity*1000)/10,
+        wcagRatio: Math.round(wcagRatio*10)/10,
+        palette,
+        lumHist,
+        lumMean: Math.round(lumMean),
+        quadrants,
+        centerBias: Math.round(centerBias*100),
+        aspectRatio: Math.round(aspectRatio*100)/100,
+        bestRatioMatch: Math.round(bestRatioMatch*100),
+        bestRatioLabel,
+        safeZoneCompliance: Math.round(safeZoneCompliance*100),
+        harmonyType,
+        lum, w, h
     };
+}
+
+function rgbToHsl(r,g,b) {
+    r/=255;g/=255;b/=255;
+    const max=Math.max(r,g,b),min=Math.min(r,g,b);
+    let h,s,l=(max+min)/2;
+    if(max===min){h=s=0}else{
+        const d=max-min;
+        s=l>0.5?d/(2-max-min):d/(max+min);
+        switch(max){
+            case r:h=((g-b)/d+(g<b?6:0))/6;break;
+            case g:h=((b-r)/d+2)/6;break;
+            case b:h=((r-g)/d+4)/6;break;
+        }
+    }
+    return [Math.round(h*360),Math.round(s*100),Math.round(l*100)];
+}
+
+function rgbToHex(r,g,b) {
+    return '#'+[r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+
+// ==================== GENERATE HEATMAP ====================
+function generateHeatmap(img, analysis, canvas) {
+    const w = Math.min(500, img.width);
+    const h = Math.round(w / img.width * img.height);
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    
+    // Get pixels for saliency
+    const idata = ctx.getImageData(0,0,w,h);
+    const d = idata.data;
+    const total = w*h;
+    const saliency = new Float32Array(total);
+    
+    // Compute saliency: edge strength + center-bias
+    const cxH = w/2, cyH = h/2;
+    for (let y = 1; y < h-1; y++) {
+        for (let x = 1; x < w-1; x++) {
+            const i = y*w+x;
+            const off = i*4;
+            const l = 0.2126*d[off]+0.7152*d[off+1]+0.0722*d[off+2];
+            const lR = 0.2126*d[(i+1)*4]+0.7152*d[(i+1)*4+1]+0.0722*d[(i+1)*4+2];
+            const lL = 0.2126*d[(i-1)*4]+0.7152*d[(i-1)*4+1]+0.0722*d[(i-1)*4+2];
+            const lD = 0.2126*d[(i+w)*4]+0.7152*d[(i+w)*4+1]+0.0722*d[(i+w)*4+2];
+            const lU = 0.2126*d[(i-w)*4]+0.7152*d[(i-w)*4+1]+0.0722*d[(i-w)*4+2];
+            const edge = Math.sqrt((lR-lL)**2 + (lD-lU)**2) / 360;
+            
+            // Center-bias gaussian
+            const dx = (x-cxH)/cxH, dy = (y-cyH)/cyH;
+            const centerG = Math.exp(-(dx*dx+dy*dy)*1.5);
+            
+            // Color saturation boost
+            const r=d[off],g=d[off+1],b=d[off+2];
+            const maxC=Math.max(r,g,b),minC=Math.min(r,g,b);
+            const sat = maxC>0?(maxC-minC)/maxC:0;
+            
+            saliency[i] = Math.min(1, edge*0.5 + centerG*0.35 + sat*0.15);
+        }
+    }
+    
+    // Gaussian blur the saliency for smoother heatmap
+    const blurred = gaussianBlur(saliency, w, h, 12);
+    
+    // Normalize
+    let maxS = 0;
+    for (let i = 0; i < total; i++) if (blurred[i]>maxS) maxS = blurred[i];
+    if (maxS > 0) for (let i = 0; i < total; i++) blurred[i] /= maxS;
+    
+    // Draw heatmap overlay
+    const overlay = ctx.createImageData(w, h);
+    for (let i = 0; i < total; i++) {
+        const v = blurred[i];
+        const [hr,hg,hb] = heatColor(v);
+        const off = i*4;
+        // Blend with original
+        const alpha = 0.45;
+        overlay.data[off]   = Math.round(d[off]*(1-alpha) + hr*alpha);
+        overlay.data[off+1] = Math.round(d[off+1]*(1-alpha) + hg*alpha);
+        overlay.data[off+2] = Math.round(d[off+2]*(1-alpha) + hb*alpha);
+        overlay.data[off+3] = 255;
+    }
+    ctx.putImageData(overlay, 0, 0);
+}
+
+function gaussianBlur(data, w, h, radius) {
+    const out = new Float32Array(data.length);
+    const rs = Math.ceil(radius*2.57);
+    // Horizontal pass
+    const temp = new Float32Array(data.length);
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            let val = 0, wsum = 0;
+            for (let ix = x-rs; ix <= x+rs; ix++) {
+                if (ix>=0 && ix<w) {
+                    const dsq = (ix-x)*(ix-x);
+                    const wt = Math.exp(-dsq/(2*radius*radius));
+                    val += data[y*w+ix]*wt;
+                    wsum += wt;
+                }
+            }
+            temp[y*w+x] = val/wsum;
+        }
+    }
+    // Vertical pass
+    for (let x = 0; x < w; x++) {
+        for (let y = 0; y < h; y++) {
+            let val = 0, wsum = 0;
+            for (let iy = y-rs; iy <= y+rs; iy++) {
+                if (iy>=0 && iy<h) {
+                    const dsq = (iy-y)*(iy-y);
+                    const wt = Math.exp(-dsq/(2*radius*radius));
+                    val += temp[iy*w+x]*wt;
+                    wsum += wt;
+                }
+            }
+            out[y*w+x] = val/wsum;
+        }
+    }
+    return out;
+}
+
+function heatColor(v) {
+    // Blue -> Cyan -> Green -> Yellow -> Red
+    if (v < 0.25) {
+        const t = v/0.25;
+        return [0, Math.round(t*180), Math.round(200-t*50)];
+    } else if (v < 0.5) {
+        const t = (v-0.25)/0.25;
+        return [0, Math.round(180+t*75), Math.round(150-t*150)];
+    } else if (v < 0.75) {
+        const t = (v-0.5)/0.25;
+        return [Math.round(t*255), 255, 0];
+    } else {
+        const t = (v-0.75)/0.25;
+        return [255, Math.round(255-t*200), 0];
+    }
+}
+
+// ==================== GENERATE RECOMMENDATIONS ====================
+function generateRecommendations(a) {
+    const recs = [];
+    const platform = state.platform;
+    const goal = state.goal;
+    
+    // Contrast issues
+    if (a.contrastScore < 60) {
+        recs.push({
+            priority:'high', title:'Aumenta il Contrasto Generale',
+            body:`Il contrasto RMS è ${a.rmsContrast}% — sotto la soglia ottimale. Il rapporto WCAG stimato è ${a.wcagRatio}:1 ${a.wcagRatio<4.5?'(sotto AA 4.5:1)':a.wcagRatio<7?'(AA ok, sotto AAA 7:1)':'(AAA ok)'}. Usa colori più contrastanti tra testo e sfondo, aumentando la differenza di luminosità.`,
+            impact: `+${Math.round((80-a.contrastScore)*0.5)}% leggibilità stimata`
+        });
+    } else if (a.wcagRatio < 4.5) {
+        recs.push({
+            priority:'medium', title:'Migliora Rapporto Contrasto WCAG',
+            body:`Rapporto stimato ${a.wcagRatio}:1 — sotto AA (4.5:1). Aumenta il contrasto tra gli elementi testuali e lo sfondo per garantire accessibilità.`,
+            impact: 'Compliance WCAG AA'
+        });
+    }
+    
+    // Flow issues
+    if (a.flowScore < 55) {
+        recs.push({
+            priority:'high', title:'Ristruttura il Flusso Visivo',
+            body:`Il center-bias è solo ${a.centerBias}%. L'attenzione è dispersa invece di convergere verso il centro/CTA. Sposta l'elemento principale nella zona centrale o nel punto di intersezione della regola dei terzi. Usa linee guida visive (frecce, contrasto, spazio negativo) per dirigere lo sguardo.`,
+            impact: '+20-30% engagement stimato'
+        });
+    } else if (a.flowScore < 70) {
+        recs.push({
+            priority:'medium', title:'Ottimizza il Flusso Visivo',
+            body:`Il flusso visivo è ${a.flowScore}%, con un center-bias del ${a.centerBias}%. Puoi migliorare posizionando l'elemento chiave più vicino al centro ottico (leggermente sopra il centro geometrico) e usando contrasto per guidare l'occhio.`,
+            impact: '+10-15% tempo di attenzione'
+        });
+    }
+    
+    // High entropy (clutter)
+    if (a.entropy > 6.5) {
+        recs.push({
+            priority:'high', title:'Riduci la Complessità Visiva',
+            body:`L'entropia Shannon è ${a.entropy}/8 — il contenuto è molto denso e caotico. Il cervello fatica a processare più di 5-7 elementi. Elimina elementi decorativi, riduci i colori a 3-4, unifica i font e aumenta lo spazio negativo (ora al ${a.negativeSpace}%).`,
+            impact: `-${Math.round((a.entropy-5)*15)}% attrito cognitivo`
+        });
+    } else if (a.entropy > 5.5) {
+        recs.push({
+            priority:'medium', title:'Semplifica la Composizione',
+            body:`Entropia ${a.entropy}/8 con ${a.negativeSpace}% di spazio negativo. C'è margine per semplificare: punta a 25-35% di spazio negativo per dare respiro visivo e far emergere la CTA.`,
+            impact: 'Migliore focus sulla CTA'
+        });
+    }
+    
+    // Low negative space
+    if (a.negativeSpace < 15) {
+        recs.push({
+            priority:'high', title:'Aumenta lo Spazio Negativo',
+            body:`Solo ${a.negativeSpace}% di spazio negativo — il contenuto è troppo affollato. Design premium usano 30-40% di spazio vuoto. Aggiungi padding, riduci il numero di elementi e lascia respirare il layout.`,
+            impact: '+25% percezione qualità'
+        });
+    } else if (a.negativeSpace < 25 && goal !== 'engagement') {
+        recs.push({
+            priority:'low', title:'Migliora Uso Spazio Negativo',
+            body:`Spazio negativo al ${a.negativeSpace}%. Per ${goal==='awareness'?'brand awareness':'conversioni'}, aumentare al 30%+ aiuta a comunicare professionalità e chiarezza del messaggio.`,
+            impact: 'Layout più professionale'
+        });
+    }
+    
+    // Aspect ratio mismatch
+    if (a.bestRatioMatch < 70) {
+        recs.push({
+            priority:'high', title:`Correggi le Proporzioni per ${platform.charAt(0).toUpperCase()+platform.slice(1)}`,
+            body:`L'immagine è ${a.aspectRatio}:1 ma il formato ottimale è ${a.bestRatioLabel} (compatibilità ${a.bestRatioMatch}%). Un crop/resize al formato corretto aumenta significativamente la visibilità nel feed.`,
+            impact: '+15-25% reach nel feed'
+        });
+    } else if (a.bestRatioMatch < 90) {
+        recs.push({
+            priority:'low', title:'Affina le Proporzioni',
+            body:`Proporzioni quasi ottimali (${a.bestRatioMatch}% match con ${a.bestRatioLabel}). Un piccolo crop potrebbe migliorare la resa nel feed.`,
+            impact: 'Resa visiva migliore nel feed'
+        });
+    }
+    
+    // Safe zone issues
+    if (a.safeZoneCompliance < 70) {
+        recs.push({
+            priority:'high', title:'Rispetta le Safe Zones della Piattaforma',
+            body:`Il ${100-a.safeZoneCompliance}% degli elementi chiave è fuori dalle zone sicure. Su ${platform}, i pulsanti dell'interfaccia possono coprire questi contenuti. Riposiziona testi e CTA entro le safe zones.`,
+            impact: 'Nessun contenuto coperto dalla UI'
+        });
+    } else if (a.safeZoneCompliance < 85) {
+        recs.push({
+            priority:'medium', title:'Migliora il Posizionamento nelle Safe Zones',
+            body:`Compliance safe zones al ${a.safeZoneCompliance}%. Alcuni elementi importanti potrebbero essere parzialmente coperti da elementi UI della piattaforma.`,
+            impact: 'Migliore visibilità contenuti chiave'
+        });
+    }
+    
+    // Color harmony
+    if (a.harmonyType === 'Mista') {
+        recs.push({
+            priority:'medium', title:'Armonizza la Palette Colori',
+            body:`La palette ha una combinazione mista senza schema armonico chiaro. Scegli uno schema definito (complementare, analogo o monocromatico) per rafforzare l'identità visiva e ridurre il carico cognitivo.`,
+            impact: 'Brand identity più forte'
+        });
+    }
+    
+    // Brightness
+    if (a.lumMean < 60) {
+        recs.push({
+            priority:'low', title:'Valuta la Luminosità Complessiva',
+            body:`L'immagine è piuttosto scura (luminosità media ${a.lumMean}/255). Su mobile con luminosità bassa, potrebbe risultare poco leggibile. Valuta di schiarire leggermente o di usare testo chiaro con buon contrasto.`,
+            impact: 'Migliore leggibilità su mobile'
+        });
+    } else if (a.lumMean > 210) {
+        recs.push({
+            priority:'low', title:'Attenzione alla Luminosità Elevata',
+            body:`Immagine molto chiara (luminosità media ${a.lumMean}/255). Potrebbe risultare "lavata" in feed con sfondo bianco. Assicurati che gli elementi chiave abbiano sufficiente contrasto.`,
+            impact: 'Maggiore risalto nel feed'
+        });
+    }
+    
+    // Goal-specific
+    if (goal === 'sales' && a.contrastScore < 75) {
+        recs.push({
+            priority:'medium', title:'Evidenzia la CTA per le Conversioni',
+            body:`Per l'obiettivo vendite, la CTA deve emergere con forza. Con un contrasto del ${a.contrastScore}%, la CTA potrebbe perdersi. Usa un colore ad alto contrasto (complementare allo sfondo) e dimensioni generose per il pulsante/testo di azione.`,
+            impact: '+20-35% CTR stimato'
+        });
+    }
+    
+    if (goal === 'engagement' && a.flowScore > 70) {
+        recs.push({
+            priority:'low', title:'Aggiungi un Elemento di Curiosità',
+            body:`Per massimizzare l'engagement, considera di aggiungere un elemento visivo che stimoli la curiosità (domanda nel testo, immagine parzialmente rivelata, pattern interrotto). Questo incentiva commenti e condivisioni.`,
+            impact: '+15% engagement rate'
+        });
+    }
+    
+    // Sort by priority
+    const priorityOrder = {high:0, medium:1, low:2};
+    recs.sort((a,b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+    
+    // Add fallback if no recs
+    if (recs.length === 0) {
+        recs.push({
+            priority:'low', title:'Ottima Base — Affina i Dettagli',
+            body:'I punteggi sono buoni! Per migliorare ulteriormente, conduci A/B test con varianti di colore CTA e posizionamento testo.',
+            impact:'Ottimizzazione incrementale'
+        });
+    }
+    
+    return recs.slice(0, 7); // max 7 recommendations
 }
 
 // ==================== RENDER DASHBOARD ====================
-function renderDashboard() {
-    document.getElementById('loader').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
-    document.getElementById('navActions').style.display = 'flex';
+function renderDashboard(a, img) {
+    secLoader.classList.add('swa-hidden');
+    secDashboard.classList.remove('swa-hidden');
+    secDashboard.classList.add('swa-fade-in');
+    $('navActions').classList.remove('swa-hidden');
     
-    updatePlatformBadge();
-    updateGoalBadge();
-    document.getElementById('targetPreview').textContent = appState.target;
+    const recs = generateRecommendations(a);
+    state.analysis.recommendations = recs;
     
-    document.getElementById('score-flow').textContent = `${appState.analysis.optimized.flowScore}%`;
-    document.getElementById('score-contrast').textContent = `${appState.analysis.optimized.contrastScore}%`;
-    document.getElementById('score-access').textContent = `${appState.analysis.optimized.accessScore}%`;
-    document.getElementById('score-structure').textContent = `${appState.analysis.optimized.structureScore}%`;
-    document.getElementById('score-friction').textContent = `${appState.analysis.optimized.frictionScore}%`;
+    // Context bar
+    const pNames = {instagram:'Instagram',tiktok:'TikTok/Reels',linkedin:'LinkedIn',facebook:'Facebook',web:'Web/Landing'};
+    const gNames = {sales:'Vendite / Conversioni',awareness:'Brand Awareness',engagement:'Engagement',leads:'Lead Generation',traffic:'Traffico Sito'};
+    const pBadge = {instagram:'swa-badge-instagram',tiktok:'swa-badge-tiktok',linkedin:'swa-badge-linkedin',facebook:'swa-badge-facebook',web:'swa-badge-web'};
+    const gBadge = {sales:'swa-badge-sales',awareness:'swa-badge-awareness',engagement:'swa-badge-engagement',leads:'swa-badge-leads',traffic:'swa-badge-traffic'};
     
-    document.getElementById('metric-flow').textContent = `${appState.analysis.optimized.flowScore}%`;
-    document.getElementById('metric-contrast').textContent = `${appState.analysis.optimized.contrastRatio}:1`;
-    document.getElementById('metric-access').textContent = `${appState.analysis.optimized.accessScore}%`;
-    document.getElementById('metric-structure').textContent = `${appState.analysis.optimized.structureScore}%`;
-    document.getElementById('metric-friction').textContent = `${appState.analysis.optimized.entropy.toFixed(1)}/8`;
-}
-
-// ==================== DOWNLOAD REPORT ====================
-function downloadReport() {
-    const originalBtn = event.target;
-    const originalHTML = originalBtn.innerHTML;
-    originalBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generazione report...';
-    originalBtn.disabled = true;
-    
-    setTimeout(() => {
-        generateWordReport();
-        originalBtn.innerHTML = '<i class="fas fa-check"></i> Report scaricato!';
-        originalBtn.style.background = 'linear-gradient(45deg, #10b981, #14b8a6)';
-        
-        setTimeout(() => {
-            originalBtn.innerHTML = originalHTML;
-            originalBtn.style.background = '';
-            originalBtn.disabled = false;
-        }, 3000);
-    }, 500);
-}
-
-function generateWordReport() {
-    const a = appState.analysis;
-    const platformName = appState.platform === 'instagram' ? 'Instagram' : 
-                         appState.platform === 'tiktok' ? 'TikTok/Reels' : 
-                         appState.platform === 'linkedin' ? 'LinkedIn' : 
-                         appState.platform === 'facebook' ? 'Facebook' : 'Web/Landing';
-    const goalName = appState.goal === 'sales' ? 'Vendite dirette / Conversioni' : 
-                     appState.goal === 'awareness' ? 'Brand awareness / Visibilità' : 
-                     appState.goal === 'engagement' ? 'Engagement / Interazioni' : 
-                     appState.goal === 'leads' ? 'Generazione lead / Contatti' : 'Traffico sito web';
-    
-    const date = new Date().toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' });
-    
-    // Genera contenuto del report in formato HTML semplificato
-    const reportHTML = `
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Report Analisi Post - ${platformName}</title>
-<style>
-body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; }
-h1 { color: #8b5cf6; border-bottom: 3px solid #8b5cf6; padding-bottom: 10px; }
-h2 { color: #1e293b; margin-top: 30px; border-left: 4px solid #8b5cf6; padding-left: 15px; }
-h3 { color: #475569; margin-top: 20px; }
-.meta { background: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0; }
-.metric-box { background: #faf5ff; border-left: 4px solid #8b5cf6; padding: 15px; margin: 15px 0; }
-.metric-title { font-weight: bold; color: #5b21b6; margin-bottom: 8px; }
-.metric-value { font-size: 24px; font-weight: bold; color: #8b5cf6; }
-.recommendation { background: #ecfdf5; border-left: 4px solid #10b981; padding: 15px; margin: 15px 0; }
-.rec-number { display: inline-block; background: #10b981; color: white; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: bold; margin-right: 10px; }
-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-th { background: #f8fafc; font-weight: bold; color: #1e293b; }
-.improvement { color: #10b981; font-weight: bold; }
-.footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #e2e8f0; color: #64748b; font-size: 14px; text-align: center; }
-</style>
-</head>
-<body>
-<h1>📊 Report Analisi Post Social</h1>
-
-<div class="meta">
-<strong>Data analisi:</strong> ${date}<br>
-<strong>Piattaforma:</strong> ${platformName}<br>
-<strong>Obiettivo:</strong> ${goalName}<br>
-<strong>Target:</strong> ${appState.target}
-</div>
-
-<h2>1. Sintesi Esecutiva</h2>
-<p>L'analisi del contenuto ha rilevato un <strong>potenziale di conversione ottimizzato del ${a.optimized.potential}%</strong>, con margini di miglioramento significativi su tutte e 5 le metriche chiave analizzate. Implementando le raccomandazioni strategiche proposte, è possibile aumentare il potenziale di conversione da ${a.original.potential}% a ${a.optimized.potential}% (+${a.optimized.potential - a.original.potential} punti percentuali).</p>
-
-<h2>2. Metriche Analizzate</h2>
-
-<div class="metric-box">
-<div class="metric-title">🎯 Flusso Visivo</div>
-<div class="metric-value">${a.optimized.flowScore}%</div>
-<p><strong>Metodo:</strong> Algoritmo center-bias per l'analisi dell'attenzione visiva<br>
-<strong>Valore attuale:</strong> ${a.original.flowScore}% → <strong>Ottimizzato:</strong> ${a.optimized.flowScore}% <span class="improvement">(+${a.optimized.flowScore - a.original.flowScore}%)</span></p>
-<p>Il flusso visivo misura quanto efficacemente l'occhio dell'utente viene guidato verso gli elementi chiave del contenuto. Un punteggio superiore a 85% indica un'ottima gerarchia visiva.</p>
-</div>
-
-<div class="metric-box">
-<div class="metric-title">🌈 Contrasto</div>
-<div class="metric-value">${a.optimized.contrastScore}%</div>
-<p><strong>Metodo:</strong> Calcolo RMS (Root Mean Square) dei valori pixel<br>
-<strong>Rapporto contrasto CTA:</strong> ${a.original.contrastRatio}:1 → <strong>Ottimizzato:</strong> ${a.optimized.contrastRatio}:1 <span class="improvement">(+${(a.optimized.contrastRatio - a.original.contrastRatio).toFixed(1)})</span></p>
-<p>Il contrasto è critico per la leggibilità e l'accessibilità. Standard WCAG AA richiede minimo 4.5:1, mentre AAA richiede 7:1. Il valore ottimizzato supera AAA.</p>
-</div>
-
-<div class="metric-box">
-<div class="metric-title">📖 Leggibilità</div>
-<div class="metric-value">${a.optimized.accessScore}%</div>
-<p><strong>Metodo:</strong> Analisi proporzioni e zone sicure per la piattaforma<br>
-<strong>Valore attuale:</strong> ${a.original.accessScore}% → <strong>Ottimizzato:</strong> ${a.optimized.accessScore}% <span class="improvement">(+${a.optimized.accessScore - a.original.accessScore}%)</span></p>
-<p>Valuta se gli elementi di testo e CTA sono posizionati nelle safe zones della piattaforma per evitare sovrapposizioni con elementi UI (es. pulsanti Instagram).</p>
-</div>
-
-<div class="metric-box">
-<div class="metric-title">🔍 SEO Visiva</div>
-<div class="metric-value">${a.optimized.structureScore}%</div>
-<p><strong>Metodo:</strong> Analisi composizione e struttura gerarchica<br>
-<strong>Valore attuale:</strong> ${a.original.structureScore}% → <strong>Ottimizzato:</strong> ${a.optimized.structureScore}% <span class="improvement">(+${a.optimized.structureScore - a.original.structureScore}%)</span></p>
-<p>La SEO visiva misura quanto il contenuto è strutturato in modo chiaro, con gerarchia visibile e messaggi comprensibili a colpo d'occhio.</p>
-</div>
-
-<div class="metric-box">
-<div class="metric-title">🧠 Attrito Cognitivo</div>
-<div class="metric-value">${a.optimized.frictionScore}%</div>
-<p><strong>Metodo:</strong> Calcolo entropia visiva (scala 0-8)<br>
-<strong>Entropia attuale:</strong> ${a.original.entropy} → <strong>Ottimizzato:</strong> ${a.optimized.entropy.toFixed(1)} <span class="improvement">(-${(a.original.entropy - a.optimized.entropy).toFixed(1)})</span></p>
-<p>L'attrito cognitivo misura il "carico mentale" richiesto per processare il contenuto. Valori bassi (2-3) indicano contenuti focalizzati, valori alti (6+) indicano sovraccarico visivo.</p>
-</div>
-
-<h2>3. Confronto Prima/Dopo</h2>
-
-<table>
-<thead>
-<tr>
-<th>Metrica</th>
-<th>Valore Attuale</th>
-<th>Valore Ottimizzato</th>
-<th>Miglioramento</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Flusso Visivo</td>
-<td>${a.original.flowScore}%</td>
-<td>${a.optimized.flowScore}%</td>
-<td class="improvement">+${a.optimized.flowScore - a.original.flowScore}%</td>
-</tr>
-<tr>
-<td>Contrasto CTA</td>
-<td>${a.original.contrastRatio}:1</td>
-<td>${a.optimized.contrastRatio}:1</td>
-<td class="improvement">+${(a.optimized.contrastRatio - a.original.contrastRatio).toFixed(1)}</td>
-</tr>
-<tr>
-<td>Leggibilità</td>
-<td>${a.original.accessScore}%</td>
-<td>${a.optimized.accessScore}%</td>
-<td class="improvement">+${a.optimized.accessScore - a.original.accessScore}%</td>
-</tr>
-<tr>
-<td>SEO Visiva</td>
-<td>${a.original.structureScore}%</td>
-<td>${a.optimized.structureScore}%</td>
-<td class="improvement">+${a.optimized.structureScore - a.original.structureScore}%</td>
-</tr>
-<tr>
-<td>Entropia Visiva</td>
-<td>${a.original.entropy}</td>
-<td>${a.optimized.entropy.toFixed(1)}</td>
-<td class="improvement">-${(a.original.entropy - a.optimized.entropy).toFixed(1)}</td>
-</tr>
-<tr>
-<td>Spazio Negativo</td>
-<td>${a.original.negativeSpace}%</td>
-<td>${a.optimized.negativeSpace}%</td>
-<td class="improvement">+${a.optimized.negativeSpace - a.original.negativeSpace}%</td>
-</tr>
-<tr style="font-weight: bold; background: #faf5ff;">
-<td>POTENZIALE CONVERSIONE</td>
-<td>${a.original.potential}%</td>
-<td>${a.optimized.potential}%</td>
-<td class="improvement">+${a.optimized.potential - a.original.potential}%</td>
-</tr>
-</tbody>
-</table>
-
-<h2>4. Raccomandazioni Strategiche Prioritarie</h2>
-
-<div class="recommendation">
-<h3><span class="rec-number">1</span>Ottimizza il Quadrante Superiore-Destro</h3>
-<p><strong>Azione:</strong> Sposta la CTA principale nel quadrante superiore destro, zona di massima attenzione secondo l'algoritmo center-bias.</p>
-<p><strong>Impatto previsto:</strong> +27% CTR (Click-Through Rate)</p>
-<p><strong>Difficoltà:</strong> Bassa | <strong>Tempo stimato:</strong> 5 minuti</p>
-<p><strong>Dettagli:</strong> Studi di eye-tracking mostrano che l'attenzione visiva segue un pattern a "F" o a "Z" nelle lingue occidentali. Il quadrante superiore-destro riceve il 40% in più di fissazioni rispetto alla media del contenuto.</p>
-</div>
-
-<div class="recommendation">
-<h3><span class="rec-number">2</span>Migliora il Contrasto della CTA</h3>
-<p><strong>Azione:</strong> Cambia il colore della CTA per creare "rottura cromatica" e aumentare il contrasto da ${a.original.contrastRatio}:1 a ${a.optimized.contrastRatio}:1.</p>
-<p><strong>Impatto previsto:</strong> +33% Visibilità, superamento WCAG AAA</p>
-<p><strong>Difficoltà:</strong> Bassa | <strong>Tempo stimato:</strong> 2 minuti</p>
-<p><strong>Dettagli:</strong> Utilizza colori complementari o ad alto contrasto rispetto allo sfondo. Evita combinazioni problematiche per daltonici (es. rosso-verde). Test A/B su oltre 1.2M impression dimostrano che CTA con contrasto 7:1+ ottengono il 33% di click in più.</p>
-</div>
-
-<div class="recommendation">
-<h3><span class="rec-number">3</span>Riduci l'Attrito Cognitivo</h3>
-<p><strong>Azione:</strong> Riduci il numero di elementi visivi da circa 12 a massimo 6 per abbassare l'entropia visiva e focalizzare l'attenzione sulla CTA.</p>
-<p><strong>Impatto previsto:</strong> -45% Attrito cognitivo, miglior focus sulla CTA</p>
-<p><strong>Difficoltà:</strong> Media | <strong>Tempo stimato:</strong> 15-20 minuti</p>
-<p><strong>Dettagli:</strong> Applica la regola del "5±2 elementi": il cervello umano può processare efficacemente 3-7 elementi simultaneamente. Elimina elementi decorativi non funzionali, unifica testi simili, riduci il numero di colori utilizzati.</p>
-</div>
-
-<h2>5. Ottimizzazioni Specifiche per ${platformName}</h2>
-<p><strong>Proporzioni ottimali:</strong> ${appState.platform === 'instagram' ? '4:5 (1080x1350px) per feed, 9:16 per stories/reels' : 
-appState.platform === 'tiktok' ? '9:16 (1080x1920px) verticale full screen' : 
-appState.platform === 'linkedin' ? '1.91:1 (1200x628px) per massima visibilità feed' : 
-appState.platform === 'facebook' ? '1.91:1 (1200x628px) o 1:1 (1080x1080px)' : '16:9 (1920x1080px) o 4:3 (1600x1200px)'}</p>
-
-<p><strong>Safe zones:</strong> ${appState.platform === 'instagram' ? 'Mantieni CTA e testi chiave entro 10% dai bordi per evitare sovrapposizione con UI (cuori, commenti, salva)' : 
-appState.platform === 'tiktok' ? 'Evita top 15% (logo TikTok) e bottom 25% (pulsanti interazione). Area sicura centrale: 60% verticale' : 
-appState.platform === 'linkedin' ? 'Evita bottom-right 80px per logo profilo. Testi leggibili anche in anteprima ridotta (400x200px)' : 
-appState.platform === 'facebook' ? 'Mantieni testi chiave entro i 2/3 centrali per compatibilità feed mobile' : 'Considera above-the-fold (primi 600px) per elementi critici'}</p>
-
-<p><strong>Best practice ${platformName}:</strong> ${appState.platform === 'instagram' ? 'Carosello di 3-5 slide performa meglio di singola immagine (+21% engagement). Usa colori vibranti ma mantenendo brand consistency.' : 
-appState.platform === 'tiktok' ? 'Primi 3 secondi critici: hook visivo immediato. Testo grande (60-80pt) per leggibilità mobile. Movimento/animazione aumenta +45% completion rate.' : 
-appState.platform === 'linkedin' ? 'Contenuti professionali con dati/statistiche ottengono +63% engagement. Evita clickbait, preferisci value proposition chiaro.' : 
-appState.platform === 'facebook' ? 'Video nativi ottengono 10x reach vs link esterni. Sottotitoli sempre attivi (85% visualizzazioni senza audio).' : 'Ottimizza per Core Web Vitals (LCP <2.5s, FID <100ms). Mobile-first design essenziale (60%+ traffico).'}</p>
-
-<h2>6. Metodologia Analisi</h2>
-<p>L'analisi è stata condotta utilizzando algoritmi di computer vision e metriche validate da ricerche in UX e neuromarketing:</p>
-<ul>
-<li><strong>Center-bias algorithm:</strong> Basato su oltre 2.5M eye-tracking sessions (Nielsen Norman Group, 2023)</li>
-<li><strong>RMS contrast:</strong> Standard ISO 9241-3 per valutazione contrasto percepito</li>
-<li><strong>Entropia visiva:</strong> Shannon entropy applicata a saliency maps (Itti-Koch model)</li>
-<li><strong>Safe zones:</strong> Linee guida ufficiali ${platformName} per content creators (ultimo aggiornamento Q4 2024)</li>
-<li><strong>WCAG compliance:</strong> Web Content Accessibility Guidelines 2.1 Level AAA</li>
-</ul>
-
-<h2>7. Prossimi Passi Consigliati</h2>
-<ol>
-<li><strong>Implementare le 3 raccomandazioni prioritarie</strong> nell'ordine presentato (impatto cumulativo stimato: +42% performance)</li>
-<li><strong>Condurre A/B test</strong> confrontando versione attuale vs ottimizzata su campione minimo 1,000 impression per variante</li>
-<li><strong>Monitorare metriche chiave:</strong> CTR, engagement rate, conversion rate, tempo medio visualizzazione</li>
-<li><strong>Iterare in base ai risultati:</strong> Analizzare heatmaps reali (Hotjar, Crazy Egg) e affinare ulteriormente</li>
-<li><strong>Estendere ottimizzazioni</strong> ad altri contenuti della campagna per coerenza visiva</li>
-</ol>
-
-<div class="footer">
-<p><strong>Report generato da SocialStrategist AI</strong><br>
-Analisi basata su algoritmi proprietari di computer vision e best practice UX validate<br>
-© ${new Date().getFullYear()} • Tutti i diritti riservati</p>
-</div>
-
-</body>
-</html>
+    $('contextBar').innerHTML = `
+        <div class="swa-context-item"><label><i class="fas fa-mobile-alt"></i> Piattaforma</label><div class="value"><span class="swa-badge ${pBadge[state.platform]}">${pNames[state.platform]}</span></div></div>
+        <div class="swa-context-item"><label><i class="fas fa-bullseye"></i> Obiettivo</label><div class="value"><span class="swa-badge ${gBadge[state.goal]}">${gNames[state.goal]}</span></div></div>
+        <div class="swa-context-item"><label><i class="fas fa-user-group"></i> Target</label><div class="value">${state.target||'Non specificato'}</div></div>
+        <div class="swa-context-item"><label><i class="fas fa-ruler-combined"></i> Dimensioni</label><div class="value">${a.imgWidth}×${a.imgHeight}px (${a.aspectRatio}:1)</div></div>
     `;
     
-    // Crea blob e download
-    const blob = new Blob([reportHTML], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Report-Analisi-Post-${platformName}-${date.replace(/ /g, '-')}.html`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    // Overall score ring
+    const circumference = 2 * Math.PI * 52;
+    const offset = circumference - (a.overallScore/100) * circumference;
+    $('overallRing').style.strokeDashoffset = offset;
+    animateNumber($('overallScore'), a.overallScore, '%');
     
-    // Mostra info aggiuntiva
+    // Score cards
+    const cards = [
+        {key:'flow', label:'Flusso Visivo', value:a.flowScore, method:'Center-bias + quadranti', color:'#8b5cf6', unit:'%'},
+        {key:'contrast', label:'Contrasto', value:a.contrastScore, method:`RMS ${a.rmsContrast}% • WCAG ~${a.wcagRatio}:1`, color:'#ec4899', unit:'%'},
+        {key:'access', label:'Leggibilità', value:a.accessScore, method:`Ratio match ${a.bestRatioMatch}% • Safe ${a.safeZoneCompliance}%`, color:'#3b82f6', unit:'%'},
+        {key:'structure', label:'Struttura', value:a.structureScore, method:`Spazio ${a.negativeSpace}% • ${a.harmonyType}`, color:'#f59e0b', unit:'%'},
+        {key:'friction', label:'Semplicità', value:a.frictionScore, method:`Entropia ${a.entropy}/8 • Edge ${a.edgeDensity}%`, color:'#ef4444', unit:'%'}
+    ];
+    
+    $('scoresGrid').innerHTML = cards.map(c => `
+        <div class="swa-score-card glass">
+            <span class="swa-real-badge">REALE</span>
+            <p class="swa-score-label">${c.label}</p>
+            <p class="swa-score-value" style="color:${c.color}" data-target="${c.value}" data-unit="${c.unit}">0${c.unit}</p>
+            <p class="swa-score-method"><i class="fas fa-microscope"></i> ${c.method}</p>
+            <div class="swa-score-bar"><div class="swa-score-bar-fill" style="background:${c.color}" data-width="${c.value}%"></div></div>
+        </div>
+    `).join('');
+    
+    // Animate scores
     setTimeout(() => {
-        alert('✅ Report HTML scaricato con successo!\n\n📄 Puoi aprire il file con qualsiasi browser.\n\n💡 Per convertirlo in Word/PDF:\n• Apri il file HTML\n• Stampa → Salva come PDF\n• Oppure apri con Word e salva come .docx\n\nIl report include tutte le metriche, raccomandazioni e metodologia di analisi.');
-    }, 800);
+        document.querySelectorAll('.swa-score-value[data-target]').forEach(el => {
+            animateNumber(el, parseInt(el.dataset.target), el.dataset.unit);
+        });
+        document.querySelectorAll('.swa-score-bar-fill').forEach(el => {
+            el.style.width = el.dataset.width;
+        });
+    }, 100);
+    
+    // Heatmap
+    const heatCanvas = document.createElement('canvas');
+    generateHeatmap(img, a, heatCanvas);
+    $('heatmapBox').innerHTML = '';
+    $('heatmapBox').appendChild(heatCanvas);
+    
+    // Palette
+    $('paletteBox').innerHTML = a.palette.map(c => {
+        const hex = rgbToHex(c.r,c.g,c.b);
+        const [h,s,l] = rgbToHsl(c.r,c.g,c.b);
+        return `<div class="swa-color-swatch">
+            <div class="swa-color-circle" style="background:${hex}" title="${hex} — HSL(${h}°,${s}%,${l}%)"></div>
+            <span class="swa-color-hex">${hex}</span>
+            <span class="swa-color-pct">${c.pct}%</span>
+        </div>`;
+    }).join('');
+    
+    // Histogram
+    drawHistogram(a.lumHist, $('histogramCanvas'));
+    
+    // Color harmony
+    $('colorHarmonyBox').innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:0.85rem;font-weight:700">Armonia:</span>
+            <span style="padding:3px 10px;border-radius:8px;font-size:0.8rem;font-weight:700;background:rgba(139,92,246,0.15);color:var(--accent-light)">${a.harmonyType}</span>
+            <span style="font-size:0.8rem;color:rgba(255,255,255,0.4)">• Luminosità media: ${a.lumMean}/255</span>
+        </div>
+    `;
+    
+    // Recommendations
+    $('recsSection').innerHTML = `
+        <h3 style="font-size:1.3rem;font-weight:700;margin-bottom:20px">🎯 Raccomandazioni Strategiche (${recs.length})</h3>
+        ${recs.map((r,i) => `
+            <div class="swa-rec-card glass priority-${r.priority}">
+                <div class="swa-rec-header">
+                    <div class="swa-rec-num ${r.priority}">${i+1}</div>
+                    <div class="swa-rec-title">${r.title}</div>
+                </div>
+                <div class="swa-rec-body">${r.body}</div>
+                <span class="swa-rec-impact">↗ ${r.impact}</span>
+            </div>
+        `).join('')}
+    `;
+    
+    // Metrics table
+    $('metricsTable').innerHTML = `
+        <thead><tr><th>Metrica</th><th>Valore Misurato</th><th>Benchmark</th><th>Status</th></tr></thead>
+        <tbody>
+            <tr><td>Flusso Visivo</td><td>${a.flowScore}%</td><td>≥ 70%</td><td>${statusIcon(a.flowScore,70)}</td></tr>
+            <tr><td>Contrasto RMS</td><td>${a.rmsContrast}%</td><td>15-30%</td><td>${statusIcon(a.rmsContrast >= 15 && a.rmsContrast <= 35 ? 80 : 40, 70)}</td></tr>
+            <tr><td>WCAG Ratio (stimato)</td><td>${a.wcagRatio}:1</td><td>≥ 4.5:1 (AA)</td><td>${statusIcon(a.wcagRatio>=4.5?90:a.wcagRatio>=3?60:30, 70)}</td></tr>
+            <tr><td>Entropia Shannon</td><td>${a.entropy}/8</td><td>≤ 5.5</td><td>${statusIcon(a.entropy<=5.5?90:a.entropy<=6.5?60:30, 70)}</td></tr>
+            <tr><td>Spazio Negativo</td><td>${a.negativeSpace}%</td><td>25-40%</td><td>${statusIcon(a.negativeSpace>=20&&a.negativeSpace<=45?85:50, 70)}</td></tr>
+            <tr><td>Densità Bordi</td><td>${a.edgeDensity}%</td><td>≤ 8%</td><td>${statusIcon(a.edgeDensity<=8?90:a.edgeDensity<=12?60:30, 70)}</td></tr>
+            <tr><td>Match Formato</td><td>${a.bestRatioMatch}%</td><td>≥ 85%</td><td>${statusIcon(a.bestRatioMatch,85)}</td></tr>
+            <tr><td>Safe Zones</td><td>${a.safeZoneCompliance}%</td><td>≥ 85%</td><td>${statusIcon(a.safeZoneCompliance,85)}</td></tr>
+            <tr><td>Armonia Colori</td><td>${a.harmonyType}</td><td>Schema definito</td><td>${a.harmonyType!=='Mista'?'<span style="color:var(--green)">✓ Ok</span>':'<span style="color:var(--amber)">⚠ Da migliorare</span>'}</td></tr>
+        </tbody>
+    `;
 }
 
-// ==================== INITIALIZE ====================
-updatePlatformBadge();
-updateGoalBadge();
+function statusIcon(value, threshold) {
+    if (value >= threshold) return `<span style="color:var(--green);font-weight:700">✓ Buono</span>`;
+    if (value >= threshold*0.7) return `<span style="color:var(--amber);font-weight:700">⚠ Migliorabile</span>`;
+    return `<span style="color:var(--red);font-weight:700">✗ Critico</span>`;
+}
+
+function animateNumber(el, target, suffix) {
+    let current = 0;
+    const step = Math.max(1, Math.floor(target/30));
+    const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = current + (suffix||'');
+    }, 30);
+}
+
+function drawHistogram(hist, canvas) {
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    let maxVal = 0;
+    for (let i = 0; i < 256; i++) if (hist[i]>maxVal) maxVal = hist[i];
+    if (maxVal === 0) return;
+    
+    const barW = w/256;
+    for (let i = 0; i < 256; i++) {
+        const barH = (hist[i]/maxVal)*h*0.9;
+        const t = i/255;
+        ctx.fillStyle = `rgba(${Math.round(139+t*117)}, ${Math.round(92-t*20)}, ${Math.round(246-t*100)}, 0.7)`;
+        ctx.fillRect(i*barW, h-barH, barW+0.5, barH);
+    }
+}
+
+// ==================== DOCX GENERATION ====================
+async function downloadDocx() {
+    const btn = $('downloadBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generazione DOCX...';
+    
+    const a = state.analysis;
+    const recs = a.recommendations || [];
+    const pNames = {instagram:'Instagram',tiktok:'TikTok/Reels',linkedin:'LinkedIn',facebook:'Facebook',web:'Web/Landing'};
+    const gNames = {sales:'Vendite dirette / Conversioni',awareness:'Brand awareness / Visibilità',engagement:'Engagement / Interazioni',leads:'Generazione lead / Contatti',traffic:'Traffico sito web'};
+    const platformName = pNames[state.platform];
+    const goalName = gNames[state.goal];
+    const date = new Date().toLocaleDateString('it-IT',{year:'numeric',month:'long',day:'numeric'});
+    
+    try {
+        // Generate heatmap as base64
+        const heatCanvas = document.createElement('canvas');
+        const tempImg = new Image();
+        await new Promise(resolve => { tempImg.onload = resolve; tempImg.src = state.imageSrc; });
+        generateHeatmap(tempImg, a, heatCanvas);
+        const heatmapBase64 = heatCanvas.toDataURL('image/png').split(',')[1];
+        
+        // Original image as base64
+        const origBase64 = state.imageSrc.split(',')[1];
+        const origMime = state.imageSrc.split(';')[0].split(':')[1];
+        
+        // Build DOCX using JSZip (Office Open XML)
+        const zip = new JSZip();
+        
+        // [Content_Types].xml
+        zip.file('[Content_Types].xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Default Extension="png" ContentType="image/png"/>
+  <Default Extension="jpeg" ContentType="image/jpeg"/>
+  <Default Extension="jpg" ContentType="image/jpeg"/>
+  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
+  <Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>
+  <Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>
+</Types>`);
+        
+        // _rels/.rels
+        zip.folder('_rels').file('.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
+</Relationships>`);
+        
+        // word/_rels/document.xml.rels
+        zip.folder('word').folder('_rels').file('document.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>
+  <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/original.png"/>
+  <Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/heatmap.png"/>
+</Relationships>`);
+        
+        // Images
+        zip.folder('word').folder('media').file('original.png', origBase64, {base64:true});
+        zip.folder('word').folder('media').file('heatmap.png', heatmapBase64, {base64:true});
+        
+        // Numbering
+        zip.folder('word').file('numbering.xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:abstractNum w:abstractNumId="0">
+    <w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/><w:lvlJc w:val="left"/></w:lvl>
+  </w:abstractNum>
+  <w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num>
+</w:numbering>`);
+        
+        // Styles
+        zip.folder('word').file('styles.xml', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:style w:type="paragraph" w:default="1" w:styleId="Normal">
+    <w:name w:val="Normal"/>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/><w:color w:val="333333"/></w:rPr>
+    <w:pPr><w:spacing w:after="120" w:line="276" w:lineRule="auto"/></w:pPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading1">
+    <w:name w:val="heading 1"/>
+    <w:pPr><w:spacing w:before="360" w:after="120"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:sz w:val="36"/><w:color w:val="5B21B6"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading2">
+    <w:name w:val="heading 2"/>
+    <w:pPr><w:spacing w:before="240" w:after="80"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:sz w:val="28"/><w:color w:val="7C3AED"/></w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading3">
+    <w:name w:val="heading 3"/>
+    <w:pPr><w:spacing w:before="200" w:after="60"/></w:pPr>
+    <w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:sz w:val="24"/><w:color w:val="4338CA"/></w:rPr>
+  </w:style>
+</w:styles>`);
+        
+        // Helper functions for XML
+        const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        
+        function p(text, style, opts={}) {
+            let pPr = style ? `<w:pPr><w:pStyle w:val="${style}"/></w:pPr>` : '';
+            if (opts.bold || opts.color || opts.size) {
+                let rPr = '<w:rPr>';
+                if (opts.bold) rPr += '<w:b/>';
+                if (opts.color) rPr += `<w:color w:val="${opts.color}"/>`;
+                if (opts.size) rPr += `<w:sz w:val="${opts.size}"/>`;
+                rPr += '</w:rPr>';
+                return `<w:p>${pPr}<w:r>${rPr}<w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p>`;
+            }
+            return `<w:p>${pPr}<w:r><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p>`;
+        }
+        
+        function boldP(text) {
+            return `<w:p><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p>`;
+        }
+        
+        function mixedP(parts) {
+            let runs = '';
+            for (const part of parts) {
+                let rPr = '';
+                if (part.bold || part.color) {
+                    rPr = '<w:rPr>';
+                    if (part.bold) rPr += '<w:b/>';
+                    if (part.color) rPr += `<w:color w:val="${part.color}"/>`;
+                    rPr += '</w:rPr>';
+                }
+                runs += `<w:r>${rPr}<w:t xml:space="preserve">${esc(part.text)}</w:t></w:r>`;
+            }
+            return `<w:p>${runs}</w:p>`;
+        }
+        
+        function tableRow(cells, isHeader=false) {
+            let xml = '<w:tr>';
+            if (isHeader) xml += '<w:trPr><w:tblHeader/></w:trPr>';
+            for (const cell of cells) {
+                const shading = isHeader ? '<w:shd w:val="clear" w:color="auto" w:fill="F0E6FF"/>' : '';
+                xml += `<w:tc><w:tcPr>${shading}<w:tcW w:w="0" w:type="auto"/></w:tcPr>`;
+                xml += `<w:p><w:r><w:rPr>${isHeader?'<w:b/>':''}</w:rPr><w:t xml:space="preserve">${esc(cell)}</w:t></w:r></w:p></w:tc>`;
+            }
+            xml += '</w:tr>';
+            return xml;
+        }
+        
+        function imageXml(rId, wEmu, hEmu) {
+            return `<w:p><w:r><w:drawing>
+<wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+  <wp:extent cx="${wEmu}" cy="${hEmu}"/>
+  <wp:docPr id="${rId==='rId3'?1:2}" name="Img"/>
+  <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+      <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+        <pic:nvPicPr><pic:cNvPr id="0" name="img"/><pic:cNvPicPr/></pic:nvPicPr>
+        <pic:blipFill>
+          <a:blip r:embed="${rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"/>
+          <a:stretch><a:fillRect/></a:stretch>
+        </pic:blipFill>
+        <pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${wEmu}" cy="${hEmu}"/></a:xfrm><a:prstGeom prst="rect"/></pic:spPr>
+      </pic:pic>
+    </a:graphicData>
+  </a:graphic>
+</wp:inline>
+</w:drawing></w:r></w:p>`;
+        }
+        
+        // Calculate image dimensions for DOCX (EMU = English Metric Units, 914400 EMU = 1 inch)
+        const maxWidthEmu = 5500000; // ~6 inches
+        const imgAspect = a.imgWidth / a.imgHeight;
+        const imgWEmu = Math.min(maxWidthEmu, Math.round(a.imgWidth / 96 * 914400));
+        const imgHEmu = Math.round(imgWEmu / imgAspect);
+        
+        // Palette string
+        const paletteStr = a.palette.map(c => `${rgbToHex(c.r,c.g,c.b)} (${c.pct}%)`).join(', ');
+        
+        // Build document.xml content
+        let body = '';
+        
+        // Title
+        body += `<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:sz w:val="48"/><w:color w:val="5B21B6"/></w:rPr><w:t>Report Analisi Post Social</w:t></w:r></w:p>`;
+        body += `<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:sz w:val="24"/><w:color w:val="666666"/></w:rPr><w:t>Generato da SocialStrategist AI — ${esc(date)}</w:t></w:r></w:p>`;
+        body += `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="E5E7EB"/></w:pBdr></w:pPr></w:p>`;
+        
+        // Meta info
+        body += p('Informazioni Analisi', 'Heading2');
+        body += mixedP([{text:'Piattaforma: ',bold:true},{text:platformName}]);
+        body += mixedP([{text:'Obiettivo: ',bold:true},{text:goalName}]);
+        body += mixedP([{text:'Target: ',bold:true},{text:state.target||'Non specificato'}]);
+        body += mixedP([{text:'Dimensioni immagine: ',bold:true},{text:`${a.imgWidth}×${a.imgHeight}px (${a.aspectRatio}:1)`}]);
+        body += mixedP([{text:'Palette dominante: ',bold:true},{text:paletteStr}]);
+        
+        // Executive summary
+        body += p('1. Sintesi Esecutiva', 'Heading1');
+        body += p(`L'analisi pixel-level del contenuto ha rilevato un punteggio complessivo di ${a.overallScore}/100. L'immagine presenta ${a.overallScore>=70?'buone basi con margini di ottimizzazione':a.overallScore>=50?'diversi aspetti migliorabili':'criticità significative che richiedono intervento'}. Sono state identificate ${recs.length} raccomandazioni strategiche prioritarie.`);
+        body += p(`I punti di forza principali sono: ${[a.flowScore>=70?'buon flusso visivo':null, a.contrastScore>=70?'contrasto adeguato':null, a.frictionScore>=70?'buona semplicità':null, a.accessScore>=70?'buona leggibilità':null].filter(Boolean).join(', ')||'nessun punteggio sopra soglia — tutte le metriche richiedono attenzione'}.`);
+        
+        // Images
+        body += p('2. Immagine Originale e Heatmap', 'Heading1');
+        body += p('Immagine analizzata:', null, {bold:true});
+        body += imageXml('rId3', imgWEmu, imgHEmu);
+        body += p('');
+        body += p('Heatmap attenzione (rosso = alta, blu = bassa):', null, {bold:true});
+        body += imageXml('rId4', imgWEmu, imgHEmu);
+        body += p('La heatmap è generata combinando edge-saliency (50%), center-bias gaussiano (35%) e saturazione colore (15%).', null, {color:'666666'});
+        
+        // Detailed metrics
+        body += p('3. Metriche Dettagliate', 'Heading1');
+        
+        body += p('Flusso Visivo — ' + a.flowScore + '%', 'Heading2');
+        body += mixedP([{text:'Metodo: ',bold:true},{text:'Algoritmo center-bias + analisi distribuzione bordi per quadrante'}]);
+        body += mixedP([{text:'Center-bias: ',bold:true},{text:`${a.centerBias}% — ${a.centerBias>=60?'l\'attenzione converge bene verso il centro':'attenzione dispersa verso i bordi'}`}]);
+        body += p(`I quattro quadranti hanno luminosità media di: TL=${Math.round(a.quadrants[0].avgLum)}, TR=${Math.round(a.quadrants[1].avgLum)}, BL=${Math.round(a.quadrants[2].avgLum)}, BR=${Math.round(a.quadrants[3].avgLum)}. ${Math.max(...a.quadrants.map(q=>q.avgLum))-Math.min(...a.quadrants.map(q=>q.avgLum))>60?'La differenza marcata tra quadranti crea un percorso visivo naturale.':'La distribuzione uniforme potrebbe non guidare lo sguardo verso un punto focale.'}`);
+        
+        body += p('Contrasto — ' + a.contrastScore + '%', 'Heading2');
+        body += mixedP([{text:'Metodo: ',bold:true},{text:'Calcolo Root Mean Square della deviazione standard di luminanza'}]);
+        body += mixedP([{text:'RMS Contrast: ',bold:true},{text:`${a.rmsContrast}% — ${a.rmsContrast>=20?'contrasto forte e impattante':a.rmsContrast>=12?'contrasto nella media':'contrasto debole, rischio di piattezza visiva'}`}]);
+        body += mixedP([{text:'WCAG Ratio stimato: ',bold:true},{text:`${a.wcagRatio}:1 — ${a.wcagRatio>=7?'Supera WCAG AAA (7:1) ✓':a.wcagRatio>=4.5?'Supera WCAG AA (4.5:1) ✓':'Sotto WCAG AA (4.5:1) — accessibilità insufficiente ✗'}`}]);
+        
+        body += p('Leggibilità — ' + a.accessScore + '%', 'Heading2');
+        body += mixedP([{text:'Match formato: ',bold:true},{text:`${a.bestRatioMatch}% con ${a.bestRatioLabel} (formato ottimale per ${platformName})`}]);
+        body += mixedP([{text:'Safe zones: ',bold:true},{text:`${a.safeZoneCompliance}% degli elementi chiave dentro le zone sicure`}]);
+        
+        body += p('Struttura — ' + a.structureScore + '%', 'Heading2');
+        body += mixedP([{text:'Spazio negativo: ',bold:true},{text:`${a.negativeSpace}% — ${a.negativeSpace>=25?'buon respiro visivo':a.negativeSpace>=15?'accettabile ma migliorabile':'troppo affollato'}`}]);
+        body += mixedP([{text:'Armonia colori: ',bold:true},{text:a.harmonyType}]);
+        body += mixedP([{text:'Densità bordi: ',bold:true},{text:`${a.edgeDensity}% — ${a.edgeDensity<=8?'composizione pulita':'complessità elevata'}`}]);
+        
+        body += p('Semplicità — ' + a.frictionScore + '%', 'Heading2');
+        body += mixedP([{text:'Entropia Shannon: ',bold:true},{text:`${a.entropy}/8 — ${a.entropy<=5?'contenuto ben focalizzato':a.entropy<=6.5?'complessità media':'sovraccarico informativo'}`}]);
+        body += p('L\'entropia misura la "quantità di informazione" presente. Valori bassi (2-4) indicano immagini semplici e focalizzate. Valori alti (6+) indicano complessità che rallenta la comprensione.');
+        
+        // Metrics comparison table
+        body += p('4. Tabella Riepilogativa', 'Heading1');
+        let table = '<w:tbl><w:tblPr><w:tblStyle w:val="TableGrid"/><w:tblW w:w="5000" w:type="pct"/><w:tblBorders><w:top w:val="single" w:sz="4" w:color="D1D5DB"/><w:left w:val="single" w:sz="4" w:color="D1D5DB"/><w:bottom w:val="single" w:sz="4" w:color="D1D5DB"/><w:right w:val="single" w:sz="4" w:color="D1D5DB"/><w:insideH w:val="single" w:sz="4" w:color="D1D5DB"/><w:insideV w:val="single" w:sz="4" w:color="D1D5DB"/></w:tblBorders></w:tblPr>';
+        table += tableRow(['Metrica','Valore','Benchmark','Status'], true);
+        table += tableRow(['Flusso Visivo',`${a.flowScore}%`,'≥ 70%',a.flowScore>=70?'✓ Buono':'⚠ Migliorabile']);
+        table += tableRow(['Contrasto RMS',`${a.rmsContrast}%`,'15-30%',a.rmsContrast>=15&&a.rmsContrast<=35?'✓ Buono':'⚠ Fuori range']);
+        table += tableRow(['WCAG Ratio',`${a.wcagRatio}:1`,'≥ 4.5:1',a.wcagRatio>=4.5?'✓ AA Ok':'✗ Sotto soglia']);
+        table += tableRow(['Entropia',`${a.entropy}/8`,'≤ 5.5',a.entropy<=5.5?'✓ Ok':'⚠ Troppo alta']);
+        table += tableRow(['Spazio Negativo',`${a.negativeSpace}%`,'25-40%',a.negativeSpace>=20&&a.negativeSpace<=45?'✓ Ok':'⚠ Fuori range']);
+        table += tableRow(['Densità Bordi',`${a.edgeDensity}%`,'≤ 8%',a.edgeDensity<=8?'✓ Ok':'⚠ Elevata']);
+        table += tableRow(['Match Formato',`${a.bestRatioMatch}%`,'≥ 85%',a.bestRatioMatch>=85?'✓ Ok':'⚠ Mismatch']);
+        table += tableRow(['Safe Zones',`${a.safeZoneCompliance}%`,'≥ 85%',a.safeZoneCompliance>=85?'✓ Ok':'⚠ Fuori zona']);
+        table += tableRow(['PUNTEGGIO TOTALE',`${a.overallScore}/100`,'≥ 70',a.overallScore>=70?'✓ Buono':'⚠ Da migliorare']);
+        table += '</w:tbl>';
+        body += table;
+        
+        // Recommendations
+        body += p('5. Raccomandazioni Strategiche', 'Heading1');
+        for (let i = 0; i < recs.length; i++) {
+            const r = recs[i];
+            const prioLabel = r.priority==='high'?'ALTA':r.priority==='medium'?'MEDIA':'BASSA';
+            const prioColor = r.priority==='high'?'DC2626':r.priority==='medium'?'D97706':'059669';
+            body += p(`${i+1}. ${r.title} [Priorità ${prioLabel}]`, 'Heading3');
+            body += p(r.body);
+            body += mixedP([{text:'Impatto stimato: ',bold:true},{text:r.impact, color:prioColor}]);
+        }
+        
+        // Platform-specific
+        body += p(`6. Ottimizzazioni per ${platformName}`, 'Heading1');
+        const platTips = {
+            instagram: [
+                'Formato ottimale: 4:5 (1080×1350px) per feed, 9:16 per stories/reels',
+                'Safe zones: mantieni CTA entro 10% dai bordi — UI Instagram copre bordo inferiore',
+                'Carosello 3-5 slide performa +21% engagement vs immagine singola',
+                'Primi 3 secondi critici per reels: hook visivo immediato',
+                'Hashtag: 5-10 pertinenti, mix di popolarità alta e nicchia'
+            ],
+            tiktok: [
+                'Formato: 9:16 (1080×1920px) verticale obbligatorio',
+                'Safe zones: evita top 15% (logo) e bottom 25% (pulsanti)',
+                'Testo grande 60-80pt per leggibilità mobile',
+                'Movimento/animazione +45% completion rate',
+                'Primi 1-2 secondi: hook visivo o testuale per bloccare lo scroll'
+            ],
+            linkedin: [
+                'Formato: 1.91:1 (1200×628px) per link preview, 1:1 per immagini',
+                'Contenuti con dati/statistiche +63% engagement',
+                'Evita clickbait: su LinkedIn performa il value proposition chiaro',
+                'Documenti PDF/carousel nativi ottengono 3x reach',
+                'Tono professionale ma umano — storytelling con dati'
+            ],
+            facebook: [
+                'Formato: 1.91:1 (1200×628px) o 1:1 (1080×1080px)',
+                'Video nativi 10x reach vs link esterni',
+                'Sottotitoli sempre: 85% visualizzazioni senza audio',
+                'Immagini con poco testo: regola del 20% testo per ads',
+                'Engagement baiting penalizzato: focus su contenuti genuini'
+            ],
+            web: [
+                'Ottimizza Core Web Vitals: LCP <2.5s, CLS <0.1',
+                'Mobile-first: 60%+ del traffico è mobile',
+                'Above-the-fold: CTA e messaggio chiave nei primi 600px',
+                'Immagini compresse: WebP/AVIF per performance',
+                'Alt text descrittivo per SEO e accessibilità'
+            ]
+        };
+        for (const tip of platTips[state.platform]) {
+            body += p(`• ${tip}`);
+        }
+        
+        // Methodology
+        body += p('7. Metodologia', 'Heading1');
+        body += p('Tutte le metriche sono calcolate in tempo reale nel browser dell\'utente tramite Canvas API, senza invio di dati a server esterni:');
+        body += p('• Center-bias: modello gaussiano pesato sulla distanza dal centro ottico, combinato con edge-saliency (gradient magnitude)');
+        body += p('• RMS Contrast: deviazione standard della luminanza percepita (Rec. 709: 0.2126R + 0.7152G + 0.0722B)');
+        body += p('• Entropia Shannon: calcolata sulla distribuzione dell\'istogramma di luminanza a 256 livelli');
+        body += p('• Spazio negativo: rilevamento blocchi 8×8 a bassa varianza (σ² < 200)');
+        body += p('• Safe zones: basate sulle linee guida ufficiali delle piattaforme per content creators');
+        body += p('• Palette colori: clustering per quantizzazione (bucket 32-step) con merge di colori simili (ΔE < 80)');
+        body += p('• Heatmap: combinazione pesata di edge-saliency (50%), center-bias gaussiano (35%) e saturazione (15%), con gaussian blur σ=12');
+        
+        // Next steps
+        body += p('8. Prossimi Passi', 'Heading1');
+        body += p(`1. Implementa le raccomandazioni ad alta priorità (${recs.filter(r=>r.priority==='high').length} identificate)`);
+        body += p('2. Conduci A/B test: minimo 1.000 impression per variante');
+        body += p('3. Monitora CTR, engagement rate e tempo di visualizzazione');
+        body += p('4. Rianalizza il post ottimizzato con questo strumento');
+        body += p('5. Itera e applica gli apprendimenti ai prossimi contenuti');
+        
+        // Footer
+        body += `<w:p><w:pPr><w:pBdr><w:top w:val="single" w:sz="6" w:color="E5E7EB"/></w:pBdr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:sz w:val="18"/><w:color w:val="999999"/></w:rPr><w:t>Report generato da SocialStrategist AI — ${esc(date)} — Analisi 100% client-side</w:t></w:r></w:p>`;
+        
+        // document.xml
+        const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+            xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+            xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+            xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+            xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+  <w:body>
+    ${body}
+    <w:sectPr>
+      <w:pgSz w:w="11906" w:h="16838"/>
+      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/>
+    </w:sectPr>
+  </w:body>
+</w:document>`;
+        
+        zip.folder('word').file('document.xml', docXml);
+        
+        // Generate and download
+        const blob = await zip.generateAsync({type:'blob', mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Report-Post-${platformName}-${date.replace(/ /g,'-')}.docx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        btn.innerHTML = '<i class="fas fa-check"></i> Report scaricato!';
+        btn.style.background = 'linear-gradient(135deg, #10b981, #14b8a6)';
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-download"></i> Scarica Report .docx';
+            btn.style.background = '';
+            btn.disabled = false;
+        }, 3000);
+        
+    } catch(err) {
+        console.error('DOCX generation error:', err);
+        btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Errore — riprova';
+        btn.disabled = false;
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-download"></i> Scarica Report .docx';
+        }, 3000);
+    }
+}
+
+// ==================== EXPOSE PUBLIC API ====================
+window.SWA = { downloadDocx };
+
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SocialStrategist AI",
+  "description": "Analizza i tuoi post social con metriche reali e scarica un report DOCX professionale gratuito.",
+  "url": "https://apps.robertozanoni.it/social-strategist-ai.html",
+  "applicationCategory": "UtilitiesApplication",
+  "author": {
+    "@type": "Person",
+    "name": "Roberto Zanoni",
+    "url": "https://robertozanoni.it"
+  }
+}
 </script>
 </body>
 </html>
