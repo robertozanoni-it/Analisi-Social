@@ -212,6 +212,89 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 .swa-prompt-tab i{font-size:0.9rem}
 .swa-prompt-tab-content{display:none}
 .swa-prompt-tab-content.active{display:block;animation:swa-fadeIn 0.4s ease}
+.swa-data-textarea{width:100%;min-height:120px;max-height:300px;background:rgba(168,85,247,0.05);border:2px solid rgba(168,85,247,0.2);border-radius:14px;padding:14px 16px;color:#fff;font-size:0.88rem;font-family:inherit;line-height:1.6;resize:vertical;transition:border-color 0.3s;box-sizing:border-box}
+.swa-data-textarea:focus{outline:none;border-color:#a855f7;box-shadow:0 0 0 3px rgba(168,85,247,0.15)}
+.swa-data-textarea::placeholder{color:rgba(255,255,255,0.25);font-style:italic}
+
+/* === STRUCTURED FIELDS === */
+.swa-fields-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.swa-field-group{display:flex;flex-direction:column;gap:4px}
+.swa-field-group.full{grid-column:1/-1}
+.swa-field-label{font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:6px}
+.swa-field-label i{font-size:0.7rem;color:#a855f7}
+.swa-field-input{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;color:#fff;font-size:0.85rem;font-family:inherit;transition:border-color 0.3s;width:100%;box-sizing:border-box;resize:vertical}
+.swa-field-input:focus{outline:none;border-color:#a855f7;box-shadow:0 0 0 2px rgba(168,85,247,0.1)}
+.swa-field-input::placeholder{color:rgba(255,255,255,0.2);font-style:italic}
+select.swa-field-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='%23888'%3E%3Cpath d='M0 0l6 8 6-8z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+select.swa-field-input option{background:#1e293b;color:#fff}
+@media(max-width:600px){.swa-fields-grid{grid-template-columns:1fr}}
+
+/* === STRATEGIC ANALYSIS === */
+.swa-quick-answers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.swa-qa-card{padding:16px;border-radius:16px;border:2px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02)}
+.swa-qa-q{font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.04em}
+.swa-qa-answer{font-size:0.95rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+.swa-qa-answer .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.swa-qa-opts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.swa-qa-opt{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:rgba(255,255,255,0.4)}
+.swa-qa-opt.active{color:#fff;font-weight:700}
+.swa-qa-opt .box{width:18px;height:18px;border-radius:5px;border:2px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:0.65rem;flex-shrink:0}
+.swa-qa-opt.active .box{background:#6366f1;border-color:#6366f1;color:#fff}
+.swa-strat-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid rgba(255,255,255,0.06)}
+.swa-strat-tab{background:none;border:none;color:rgba(255,255,255,0.4);font-size:0.85rem;font-weight:700;padding:10px 20px;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.3s;font-family:inherit}
+.swa-strat-tab:hover{color:rgba(255,255,255,0.7)}
+.swa-strat-tab.active{color:#a78bfa;border-bottom-color:#6366f1}
+.swa-strat-panel{display:none}
+.swa-strat-panel.active{display:block;animation:swa-fadeIn 0.4s ease}
+
+/* Category headers */
+.swa-strat-cat{padding:10px 16px;border-radius:12px;font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;margin:20px 0 10px;display:flex;align-items:center;gap:10px}
+.swa-strat-cat:first-child{margin-top:0}
+.swa-strat-cat.cat-missing{background:rgba(239,68,68,0.08);color:#f87171;border:1px solid rgba(239,68,68,0.15)}
+.swa-strat-cat.cat-ok{background:rgba(16,185,129,0.08);color:#34d399;border:1px solid rgba(16,185,129,0.15)}
+.swa-strat-cat.cat-warn{background:rgba(251,191,36,0.08);color:#fbbf24;border:1px solid rgba(251,191,36,0.15)}
+.swa-strat-cat.cat-auto{background:rgba(99,102,241,0.08);color:#a78bfa;border:1px solid rgba(99,102,241,0.15)}
+
+/* Rows with status */
+.swa-strat-row{display:flex;gap:12px;padding:12px 14px;border-radius:10px;margin-bottom:4px;transition:background 0.2s}
+.swa-strat-row:hover{background:rgba(255,255,255,0.02)}
+.swa-strat-row .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.swa-strat-row .status-dot.green{background:#22c55e}
+.swa-strat-row .status-dot.orange{background:#f59e0b}
+.swa-strat-row .status-dot.red{background:#ef4444}
+.swa-strat-row .status-dot.blue{background:#6366f1}
+.swa-strat-label{width:190px;flex-shrink:0;font-size:0.82rem;font-weight:700;color:#fff;display:flex;align-items:flex-start;gap:8px;padding-top:2px}
+.swa-strat-label i{font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:2px}
+.swa-strat-value{flex:1;font-size:0.88rem;line-height:1.5;color:#fff}
+.swa-strat-value .val-main{color:#fff;font-weight:600}
+.swa-strat-value .val-tip{display:block;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:3px;line-height:1.4;font-weight:400}
+.swa-strat-value .val-tip.tip-red{color:rgba(239,68,68,0.8)}
+.swa-strat-value .val-tip.tip-orange{color:rgba(251,191,36,0.8)}
+.swa-strat-value .val-tip.tip-green{color:rgba(34,197,94,0.7)}
+.swa-strat-value.nd{color:rgba(255,255,255,0.35);font-style:italic}
+.swa-strat-badge{display:inline-block;padding:3px 10px;border-radius:8px;font-size:0.7rem;font-weight:700;margin-left:6px}
+.swa-strat-badge.badge-green{background:rgba(34,197,94,0.12);color:#4ade80}
+.swa-strat-badge.badge-orange{background:rgba(251,191,36,0.12);color:#fbbf24}
+.swa-strat-badge.badge-red{background:rgba(239,68,68,0.12);color:#f87171}
+.swa-strat-badge.badge-blue{background:rgba(99,102,241,0.12);color:#a78bfa}
+
+.swa-client-card{padding:20px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);margin-bottom:16px}
+.swa-client-title{font-size:0.95rem;font-weight:800;color:#fff;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.swa-client-text{font-size:0.88rem;line-height:1.7;color:rgba(255,255,255,0.75)}
+@media(max-width:700px){.swa-quick-answers{grid-template-columns:1fr}.swa-strat-row{flex-direction:column;gap:4px}.swa-strat-label{width:auto}}
+
+/* === MEDIA RECOMMENDATION === */
+.swa-media-option{display:flex;gap:16px;align-items:flex-start;padding:16px;border-radius:16px;border:2px solid rgba(255,255,255,0.06);margin-bottom:12px;transition:border-color 0.3s}
+.swa-media-option.primary{border-color:rgba(245,158,11,0.4);background:rgba(245,158,11,0.05)}
+.swa-media-option.alt{border-color:rgba(255,255,255,0.08);background:rgba(255,255,255,0.02)}
+.swa-media-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.swa-media-option.primary .swa-media-icon{background:rgba(245,158,11,0.2);color:#fbbf24}
+.swa-media-option.alt .swa-media-icon{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5)}
+.swa-media-label{font-weight:800;font-size:0.95rem;margin-bottom:2px}
+.swa-media-reason{font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.5}
+.swa-media-badge{display:inline-block;padding:2px 10px;border-radius:8px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em}
+.swa-media-badge.rec{background:rgba(245,158,11,0.2);color:#fbbf24}
+.swa-media-badge.alt-badge{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4)}
 
 /* === PRIVACY === */
 .swa-privacy{max-width:700px;margin:40px auto 0;border-radius:16px;padding:20px 24px;border:1px solid rgba(139,92,246,0.15);display:flex;align-items:flex-start;gap:14px}
@@ -227,6 +310,44 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 .swa-hidden{display:none!important}
 @keyframes swa-fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .swa-fade-in{animation:swa-fadeIn 0.5s ease-out}
+
+/* === DASHBOARD FLOATING NAV === */
+.swa-dash-nav{position:fixed;right:20px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:6px}
+.swa-dash-nav a{width:36px;height:36px;border-radius:50%;background:rgba(20,20,20,0.85);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:rgba(255,255,255,0.35);text-decoration:none;transition:all 0.3s;position:relative;backdrop-filter:blur(10px)}
+.swa-dash-nav a:hover{background:rgba(139,92,246,0.2);border-color:rgba(139,92,246,0.5);color:#fff;transform:scale(1.15)}
+.swa-dash-nav a:hover .swa-nav-tip{opacity:1;transform:translateX(-10px)}
+.swa-nav-tip{position:absolute;right:calc(100% + 8px);white-space:nowrap;background:rgba(0,0,0,0.9);border:1px solid rgba(255,255,255,0.1);padding:4px 12px;border-radius:8px;font-size:0.7rem;font-weight:700;color:#fff;opacity:0;transition:all 0.3s;pointer-events:none;transform:translateX(0)}
+@media(max-width:900px){.swa-dash-nav{display:none}}
+
+/* === SCORE VERDICT === */
+.swa-verdict{margin-top:8px;font-size:0.85rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase}
+.swa-verdict.excellent{color:#10b981}
+.swa-verdict.good{color:#22d3ee}
+.swa-verdict.fair{color:#f59e0b}
+.swa-verdict.poor{color:#ef4444}
+
+/* === COLOR PSYCHOLOGY === */
+.swa-psych-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:14px}
+.swa-psych-item{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02)}
+.swa-psych-swatch{width:24px;height:24px;border-radius:8px;margin-bottom:6px;border:1px solid rgba(255,255,255,0.1)}
+.swa-psych-emotion{font-size:0.78rem;font-weight:700;margin-bottom:2px}
+.swa-psych-desc{font-size:0.7rem;color:rgba(255,255,255,0.4);line-height:1.4}
+
+/* === ACTION PLAN === */
+.swa-action-section{border-radius:24px;padding:28px;margin-bottom:32px}
+.swa-action-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.swa-action-grid{grid-template-columns:1fr}}
+.swa-action-card{padding:18px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02)}
+.swa-action-card h4{font-size:0.88rem;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.swa-checklist{list-style:none}
+.swa-checklist li{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:0.82rem;line-height:1.5;color:rgba(255,255,255,0.7)}
+.swa-checklist li .ck{width:18px;height:18px;border-radius:5px;border:2px solid rgba(255,255,255,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.6rem;margin-top:1px}
+.swa-checklist li.done .ck{background:#10b981;border-color:#10b981;color:#fff}
+.swa-checklist li.todo .ck{background:transparent;border-color:rgba(255,255,255,0.2)}
+.swa-time-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:12px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);font-size:0.88rem;font-weight:700;color:#60a5fa;margin:6px 4px 6px 0}
+.swa-hashtag-cloud{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.swa-hashtag{padding:4px 12px;border-radius:20px;font-size:0.78rem;font-weight:600;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:#a78bfa;cursor:pointer;transition:all 0.2s}
+.swa-hashtag:hover{background:rgba(139,92,246,0.2);transform:translateY(-1px)}
 </style>
 </head>
 <body>
@@ -287,6 +408,49 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 </div>
 </div>
 
+<!-- Strategic Fields (pre-analysis) -->
+<div style="margin-bottom:40px">
+<h3 class="swa-step-title" style="cursor:pointer;display:flex;align-items:center;gap:10px" onclick="this.nextElementSibling.classList.toggle('swa-hidden');this.querySelector('.chev').classList.toggle('rotated')">
+<span class="swa-step-num">3</span> Dettagli del Post <span style="font-weight:400;font-size:0.82rem;color:rgba(255,255,255,0.4)">(più compili, più l'analisi è precisa)</span>
+<i class="fas fa-chevron-down chev" style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-left:auto;transition:transform 0.3s"></i>
+</h3>
+<div class="swa-strat-fields-wrap">
+<div class="swa-fields-grid" style="max-width:800px;margin:0 auto">
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-bullseye"></i> Scopo / Argomento</label>
+<input type="text" id="fieldScopo" class="swa-field-input" placeholder="Es: Promuovere l'evento, Informare, Lanciare prodotto...">
+</div>
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-industry"></i> Settore</label>
+<input type="text" id="fieldSettore" class="swa-field-input" placeholder="Es: Ristorazione, Benessere, Formazione, Tech...">
+</div>
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-heading"></i> Brand / Titolo</label>
+<input type="text" id="fieldTitolo1" class="swa-field-input" placeholder="Nome brand o titolo del post / evento">
+</div>
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-tag"></i> Prodotto / Servizio</label>
+<input type="text" id="fieldSottotipo" class="swa-field-input" placeholder="Es: Corso yoga, App fitness, Consulenza HR...">
+</div>
+
+<div class="swa-field-group full">
+<label class="swa-field-label"><i class="fas fa-align-left"></i> Didascalia / Copy del post</label>
+<textarea id="fieldDidascalia" class="swa-field-input" rows="3" placeholder="Caption del post, testo esistente o bozza da riscrivere... (necessario per analizzare CTA e hook)"></textarea>
+</div>
+
+<div class="swa-field-group full">
+<label class="swa-field-label"><i class="fas fa-map-pin"></i> Contesto business</label>
+<textarea id="fieldContesto" class="swa-field-input" rows="2" placeholder="Es: Evento dal vivo a Milano, Lancio prodotto online, Campagna stagionale estiva..."></textarea>
+</div>
+
+</div>
+</div>
+</div>
+
 <div style="margin-bottom:40px">
 <h3 class="swa-step-title"><span class="swa-step-num">4</span> Carica il Tuo Post</h3>
 <div id="dropZone" class="glass swa-dropzone">
@@ -334,6 +498,18 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 <!-- ==================== DASHBOARD ==================== -->
 <section id="sectionDashboard" class="swa-dashboard swa-hidden">
 
+<!-- Floating Navigation -->
+<nav class="swa-dash-nav" id="dashNav">
+<a href="#contextBar"><i class="fas fa-info"></i><span class="swa-nav-tip">Configurazione</span></a>
+<a href="#overallScore"><i class="fas fa-gauge-high"></i><span class="swa-nav-tip">Punteggio</span></a>
+<a href="#heatmapBox"><i class="fas fa-fire"></i><span class="swa-nav-tip">Heatmap</span></a>
+<a href="#recsSection"><i class="fas fa-lightbulb"></i><span class="swa-nav-tip">Raccomandazioni</span></a>
+<a href="#strategicSection"><i class="fas fa-microscope"></i><span class="swa-nav-tip">Analisi Strategica</span></a>
+<a href="#actionPlanSection"><i class="fas fa-clipboard-check"></i><span class="swa-nav-tip">Piano d'Azione</span></a>
+<a href="#promptSection"><i class="fas fa-wand-magic-sparkles"></i><span class="swa-nav-tip">Prompt AI</span></a>
+<a href="#downloadBtn"><i class="fas fa-download"></i><span class="swa-nav-tip">Scarica Report</span></a>
+</nav>
+
 <div class="swa-context-bar" id="contextBar"></div>
 
 <!-- Overall Score -->
@@ -346,7 +522,29 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 </svg>
 <div class="swa-overall-value" id="overallScore">--</div>
 </div>
-<div class="swa-overall-label">Punteggio Complessivo</div>
+<div class="swa-overall-label">Punteggio Visivo</div>
+<div class="swa-verdict" id="verdictBadge"></div>
+</div>
+
+<!-- Content Strategy Score -->
+<div class="swa-strategy-score glass" id="strategyScoreSection" style="border-radius:20px;padding:20px 28px;margin-bottom:32px;display:none">
+<div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center">
+<div style="display:flex;align-items:center;gap:16px;flex:1;min-width:280px">
+<div style="position:relative;width:64px;height:64px;flex-shrink:0">
+<svg viewBox="0 0 120 120" width="64" height="64">
+<circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="10"/>
+<circle id="stratRing" cx="60" cy="60" r="52" fill="none" stroke="url(#stratGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="326.73" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1s ease"/>
+<defs><linearGradient id="stratGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+</svg>
+<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:900" id="stratScoreNum">—</div>
+</div>
+<div>
+<div style="font-size:0.95rem;font-weight:800">Punteggio Strategia Contenuto</div>
+<div style="font-size:0.78rem;color:rgba(255,255,255,0.4)" id="stratScoreDesc">Compila i campi per un punteggio più accurato</div>
+</div>
+</div>
+<div id="stratCompleteness" style="display:flex;gap:4px;flex-wrap:wrap"></div>
+</div>
 </div>
 
 <!-- Score Cards -->
@@ -367,11 +565,65 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 <canvas id="histogramCanvas" width="300" height="100" style="width:100%;height:80px;border-radius:8px;background:rgba(255,255,255,0.03)"></canvas>
 </div>
 <div style="margin-top:16px" id="colorHarmonyBox"></div>
+<div style="margin-top:16px" id="colorPsychBox"></div>
 </div>
 </div>
 
 <!-- Recommendations -->
 <div class="swa-recs" id="recsSection"></div>
+
+<!-- Media Type Recommendation -->
+<div class="glass swa-media-rec" id="mediaRecSection" style="border-radius:24px;padding:28px;margin-bottom:32px;display:none">
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+<div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#f59e0b,#d97706);display:flex;align-items:center;justify-content:center;font-size:1.4rem"><i class="fas fa-photo-film"></i></div>
+<div>
+<h3 style="font-size:1.1rem;font-weight:800;font-family:'Outfit',sans-serif">Tipo Media Consigliato</h3>
+<p style="font-size:0.8rem;color:rgba(255,255,255,0.4)">Basato su obiettivo, piattaforma e analisi visiva</p>
+</div>
+</div>
+<div id="mediaRecContent"></div>
+</div>
+
+<!-- ==================== STRATEGIC ANALYSIS ==================== -->
+<div class="glass swa-strategic" id="strategicSection" style="border-radius:24px;padding:28px;margin-bottom:32px;display:none">
+
+<!-- Header -->
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+<div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:1.4rem"><i class="fas fa-microscope"></i></div>
+<div>
+<h3 style="font-size:1.2rem;font-weight:800;font-family:'Outfit',sans-serif">Analisi Strategica del Post</h3>
+<p style="font-size:0.8rem;color:rgba(255,255,255,0.4)">Report basato sull'analisi visiva + dati compilati. Campi vuoti = deduzione o "non determinabile".</p>
+</div>
+</div>
+
+<!-- 3 Quick Answers -->
+<div class="swa-quick-answers" id="quickAnswers"></div>
+
+<!-- Tabs -->
+<div class="swa-strat-tabs">
+<button class="swa-strat-tab active" onclick="SWA.switchStratTab('tech')"><i class="fas fa-cog"></i> Report Tecnico</button>
+<button class="swa-strat-tab" onclick="SWA.switchStratTab('client')"><i class="fas fa-user-tie"></i> Sintesi Cliente</button>
+</div>
+
+<!-- Technical Report -->
+<div class="swa-strat-panel active" id="stratTech"></div>
+
+<!-- Client Summary -->
+<div class="swa-strat-panel" id="stratClient"></div>
+
+</div>
+
+<!-- ==================== ACTION PLAN ==================== -->
+<div class="glass swa-action-section" id="actionPlanSection" style="display:none">
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
+<div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#10b981,#14b8a6);display:flex;align-items:center;justify-content:center;font-size:1.4rem"><i class="fas fa-clipboard-check"></i></div>
+<div>
+<h3 style="font-size:1.2rem;font-weight:800;font-family:'Outfit',sans-serif">Piano d'Azione Immediato</h3>
+<p style="font-size:0.8rem;color:rgba(255,255,255,0.4)">Cosa fare prima, durante e dopo la pubblicazione</p>
+</div>
+</div>
+<div class="swa-action-grid" id="actionPlanContent"></div>
+</div>
 
 <!-- Metrics Comparison -->
 <div class="glass" style="border-radius:24px;padding:28px;margin-bottom:32px">
@@ -440,22 +692,71 @@ h1,h2,h3,.font-outfit{font-family:'Outfit',sans-serif}
 
 <!-- CONTENT PROMPT TAB -->
 <div class="swa-prompt-tab-content" id="tabContent">
+
 <div style="margin-bottom:16px">
 <p style="font-size:0.85rem;font-weight:700;margin-bottom:10px">Tono di voce:</p>
 <div class="swa-prompt-controls" id="promptToneBtns">
 <button class="swa-prompt-style-btn active" data-tone="professional"><i class="fas fa-briefcase"></i> Professionale</button>
-<button class="swa-prompt-style-btn" data-tone="friendly"><i class="fas fa-face-smile"></i> Amichevole</button>
-<button class="swa-prompt-style-btn" data-tone="bold"><i class="fas fa-bolt"></i> Bold / Diretto</button>
-<button class="swa-prompt-style-btn" data-tone="storytelling"><i class="fas fa-book-open"></i> Storytelling</button>
+<button class="swa-prompt-style-btn" data-tone="friendly"><i class="fas fa-face-smile"></i> Conversazionale</button>
+<button class="swa-prompt-style-btn" data-tone="educational"><i class="fas fa-graduation-cap"></i> Educativo</button>
+<button class="swa-prompt-style-btn" data-tone="inspirational"><i class="fas fa-star"></i> Ispirazionale</button>
 </div>
 </div>
+
+<!-- Structured Fields (remaining) -->
+<div class="swa-fields-grid">
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-crosshairs"></i> Obiettivo specifico</label>
+<input type="text" id="fieldObiettivo" class="swa-field-input" placeholder="Es: Iscrizioni, Visite al sito, 50 commenti...">
+</div>
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-photo-film"></i> Tipo di media</label>
+<select id="fieldTipoMedia" class="swa-field-input">
+<option value="">— Scegli dal suggerimento o manualmente —</option>
+<option value="Immagine singola">📷 Immagine singola</option>
+<option value="Carosello">🔄 Carosello</option>
+<option value="Reel / Video breve">🎬 Reel / Video breve</option>
+<option value="Video lungo">📹 Video lungo</option>
+<option value="Solo testo">📝 Solo testo</option>
+<option value="Story">📱 Story</option>
+<option value="Documento / PDF">📄 Documento / PDF</option>
+</select>
+</div>
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-users"></i> Pubblico dettagliato</label>
+<input type="text" id="fieldPubblico" class="swa-field-input" placeholder="Es: Donne 30-50 area benessere, Professionisti HR...">
+</div>
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-h"></i> Titolo secondario</label>
+<input type="text" id="fieldTitolo2" class="swa-field-input" placeholder="Sottotitolo o slogan (se presente)">
+</div>
+
+<div class="swa-field-group">
+<label class="swa-field-label"><i class="fas fa-quote-left"></i> Titolo di supporto</label>
+<input type="text" id="fieldTitolo3" class="swa-field-input" placeholder="Headline aggiuntiva (se presente)">
+</div>
+
+</div>
+
+<!-- Verbatim data -->
+<div style="margin:20px 0">
+<p style="font-size:0.85rem;font-weight:700;margin-bottom:6px"><i class="fas fa-database" style="margin-right:6px;color:#a855f7"></i>Dati aggiuntivi (VERBATIM)</p>
+<p style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:10px">Informazioni extra: link, prezzi, orari, contatti, note. Il prompt userà SOLO dati presenti — nessuna invenzione.</p>
+<textarea id="contentDataInput" class="swa-data-textarea" placeholder="Es: www.yogabergamo.it — 035 123456&#10;Ingresso €15 — Posti limitati&#10;Sponsor: BioNatura Srl" rows="3"></textarea>
+</div>
+
 <div class="swa-prompt-output" style="border-color:rgba(168,85,247,0.2)">
-<div class="swa-prompt-text" id="promptTextContent">Analisi in corso...</div>
+<div class="swa-prompt-text" id="promptTextContent">Compila i campi sopra e il prompt verrà generato automaticamente...</div>
 </div>
 <div class="swa-prompt-actions">
-<button class="swa-prompt-copy-btn" style="background:linear-gradient(135deg,#a855f7,#7c3aed)" onclick="SWA.copyPrompt('content')"><i class="fas fa-copy"></i> Copia</button>
+<button class="swa-prompt-copy-btn" style="background:linear-gradient(135deg,#a855f7,#7c3aed)" onclick="SWA.copyPrompt('content')"><i class="fas fa-copy"></i> Copia Prompt</button>
 <button class="swa-prompt-copy-btn" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)" onclick="SWA.copyPromptForChatGPT('content')"><i class="fas fa-robot"></i> Per ChatGPT / Claude</button>
 </div>
+<p class="swa-prompt-note" style="margin-top:12px"><i class="fas fa-shield-halved"></i> Vincoli anti-invenzione attivi: l'AI userà SOLO i dati inseriti. Campi vuoti = "non determinabile".</p>
 </div>
 
 <!-- COMBINED PROMPT TAB -->
@@ -1197,6 +1498,9 @@ function renderDashboard(a, img) {
     $('overallRing').style.strokeDashoffset = offset;
     animateNumber($('overallScore'), a.overallScore, '%');
     
+    // Verdict
+    renderVerdict(a.overallScore);
+    
     // Score cards
     const cards = [
         {key:'flow', label:'Flusso Visivo', value:a.flowScore, method:'Center-bias + quadranti', color:'#8b5cf6', unit:'%'},
@@ -1288,12 +1592,831 @@ function renderDashboard(a, img) {
     
     // Render AI prompts
     renderAllPrompts();
+    
+    // Render media recommendation
+    renderMediaRecommendation(a);
+    
+    // Render strategic analysis
+    renderStrategicAnalysis(a);
+    
+    // Render strategy score
+    renderStrategyScore();
+}
+
+// ==================== MEDIA TYPE RECOMMENDATION ====================
+function renderMediaRecommendation(a) {
+    const section = $('mediaRecSection');
+    const content = $('mediaRecContent');
+    const platform = state.platform;
+    const goal = state.goal;
+    
+    // Media matrix: primary + alternative based on goal/platform/analysis
+    const rec = getMediaRecommendation(platform, goal, a);
+    
+    let html = '';
+    // Primary
+    html += `<div class="swa-media-option primary">`;
+    html += `<div class="swa-media-icon"><i class="fas ${rec.primary.icon}"></i></div>`;
+    html += `<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span class="swa-media-label">${rec.primary.label}</span><span class="swa-media-badge rec">Consigliato</span></div>`;
+    html += `<div class="swa-media-reason">${rec.primary.reason}</div></div></div>`;
+    
+    // Alternative
+    if (rec.alt) {
+        html += `<div class="swa-media-option alt">`;
+        html += `<div class="swa-media-icon"><i class="fas ${rec.alt.icon}"></i></div>`;
+        html += `<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span class="swa-media-label">${rec.alt.label}</span><span class="swa-media-badge alt-badge">Alternativa</span></div>`;
+        html += `<div class="swa-media-reason">${rec.alt.reason}</div></div></div>`;
+    }
+    
+    // Ambiguity warning if applicable
+    if (rec.ambiguityRisk) {
+        html += `<div style="margin-top:12px;padding:10px 14px;border-radius:10px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);display:flex;align-items:center;gap:8px">`;
+        html += `<i class="fas fa-triangle-exclamation" style="color:#fbbf24"></i>`;
+        html += `<span style="font-size:0.8rem;color:rgba(255,255,255,0.5)">${rec.ambiguityRisk}</span></div>`;
+    }
+    
+    content.innerHTML = html;
+    section.style.display = 'block';
+    
+    // Auto-fill Tipo Media select if empty
+    const tipoSelect = $('fieldTipoMedia');
+    if (tipoSelect && !tipoSelect.value) {
+        const labelMap = {'Immagine Singola':'Immagine singola','Immagine + Domanda':'Immagine singola','Immagine con Link':'Immagine singola','Carosello':'Carosello','Carosello / Documento':'Carosello','Carosello Teaser':'Carosello','Reel / Video Breve':'Reel / Video breve','Video con CTA':'Reel / Video breve','Video Breve':'Reel / Video breve','Testo con Immagine':'Immagine singola'};
+        const match = labelMap[rec.primary.label];
+        if (match) { for (const opt of tipoSelect.options) { if (opt.value === match) { tipoSelect.value = match; break; } } }
+    }
+}
+
+function getMediaRecommendation(platform, goal, a) {
+    const entropy = a.entropy;
+    const complexity = a.edgeDensity;
+    const score = a.overallScore;
+    
+    // MATRICE VINCOLANTE (from framework)
+    // IMMAGINE → messaggio singolo / annuncio
+    // CAROSELLO → spiegazione / lista / guida
+    // REEL → dimostrazione / processo
+    // VIDEO → formazione / approfondimento
+    // TESTO → opinione / insight
+    
+    let primary, alt, ambiguityRisk;
+    
+    if (goal === 'sales') {
+        primary = {label:'Immagine Singola', icon:'fa-image', reason:'Messaggio singolo e diretto. Per vendita/promozione l\'immagine con CTA chiara è il formato più efficace: impatto immediato, caricamento veloce, massima compatibilità.'};
+        if (platform === 'instagram' || platform === 'tiktok') {
+            alt = {label:'Reel / Video Breve', icon:'fa-film', reason:'Dimostrazione prodotto in azione. I video brevi aumentano il tempo di permanenza e la conversione, specialmente per prodotti fisici.'};
+        } else {
+            alt = {label:'Carosello', icon:'fa-images', reason:'Se il contenuto include più punti di forza, prezzi comparati o step di utilizzo, il carosello permette di approfondire senza perdere l\'utente.'};
+        }
+    } else if (goal === 'awareness') {
+        if (platform === 'tiktok') {
+            primary = {label:'Reel / Video Breve', icon:'fa-film', reason:'Per awareness su TikTok il formato nativo video è imprescindibile. Mostra il brand in azione, racconta una storia breve, crea ricordo.'};
+            alt = {label:'Immagine Singola', icon:'fa-image', reason:'Alternativa per contenuti più statici o citazioni di brand. Meno performante su questa piattaforma ma utile per coerenza visiva.'};
+        } else if (platform === 'linkedin') {
+            primary = {label:'Carosello / Documento', icon:'fa-images', reason:'Su LinkedIn i documenti carosello (PDF) generano il più alto tasso di impressioni. Ideali per posizionamento come autorità di settore.'};
+            alt = {label:'Testo con Immagine', icon:'fa-align-left', reason:'Post di opinione con immagine di supporto. Su LinkedIn i post testuali autentici con insight personali performano molto bene per brand awareness.'};
+        } else {
+            primary = {label:'Immagine Singola', icon:'fa-image', reason:'Immagine forte e riconoscibile per costruire identità visiva. L\'impatto immediato rafforza il ricordo del brand.'};
+            alt = {label:'Video Breve', icon:'fa-film', reason:'Il video permette di raccontare la storia del brand con maggiore profondità emotiva e aumenta il tempo di interazione.'};
+        }
+    } else if (goal === 'engagement') {
+        if (platform === 'tiktok' || platform === 'instagram') {
+            primary = {label:'Reel / Video Breve', icon:'fa-film', reason:'I reel generano il più alto engagement rate. Domande, behind-the-scenes, contenuti relatable in formato video breve massimizzano like, commenti e condivisioni.'};
+            alt = {label:'Carosello', icon:'fa-images', reason:'I caroselli aumentano il tempo di permanenza e i salvataggi. Utili per liste, confronti o contenuti educativi che invitano all\'interazione.'};
+        } else {
+            primary = {label:'Immagine + Domanda', icon:'fa-image', reason:'Immagine d\'impatto con domanda nel testo. Su questa piattaforma le domande dirette nel post generano il massimo engagement nei commenti.'};
+            alt = {label:'Carosello', icon:'fa-images', reason:'Alternativa per contenuti che richiedono più slide (sondaggi visivi, confronti, guide). Aumentano tempo di fruizione e salvataggi.'};
+        }
+    } else if (goal === 'leads') {
+        primary = {label:'Immagine Singola', icon:'fa-image', reason:'Lead generation richiede chiarezza immediata. Immagine con proposta di valore + CTA verso form/DM/link. Meno frizione = più conversioni.'};
+        if (platform === 'linkedin') {
+            alt = {label:'Carosello / Documento', icon:'fa-images', reason:'Su LinkedIn un carosello che anticipa il valore della risorsa (es. "5 insight dal nostro report") è molto efficace per generare lead qualificati.'};
+        } else {
+            alt = {label:'Video con CTA', icon:'fa-film', reason:'Breve video che mostra il problema + teaser della soluzione. La dimostrazione visiva del valore aumenta la qualità del lead.'};
+        }
+    } else if (goal === 'traffic') {
+        primary = {label:'Immagine con Link', icon:'fa-image', reason:'Per generare traffico serve semplicità: immagine che crea curiosità + link chiaro. Formato più diretto per il click-through.'};
+        alt = {label:'Carosello Teaser', icon:'fa-images', reason:'Carosello che anticipa i punti chiave dell\'articolo/pagina senza rivelarli tutti. Crea curiosity gap che spinge al click.'};
+    }
+    
+    // Ambiguity check based on visual analysis
+    if (entropy > 6 && complexity > 12) {
+        ambiguityRisk = 'Rischio ambiguità visiva: alta complessità nell\'immagine. Un osservatore potrebbe non identificare immediatamente il settore/messaggio. Considerare una versione più pulita.';
+    } else if (a.harmonyType === 'Mista' && score < 60) {
+        ambiguityRisk = 'Attenzione: la composizione attuale potrebbe risultare ambigua. Verificare che il contenuto visivo sia coerente con il settore e l\'obiettivo dichiarato.';
+    }
+    
+    return {primary, alt, ambiguityRisk};
 }
 
 function statusIcon(value, threshold) {
     if (value >= threshold) return `<span style="color:var(--green);font-weight:700">✓ Buono</span>`;
     if (value >= threshold*0.7) return `<span style="color:var(--amber);font-weight:700">⚠ Migliorabile</span>`;
     return `<span style="color:var(--red);font-weight:700">✗ Critico</span>`;
+}
+
+// ==================== STRATEGIC ANALYSIS ====================
+function getFieldVal(id) { const el = $(id); return el ? el.value.trim() : ''; }
+
+function calculateStrategyScore() {
+    const fields = [
+        {id:'fieldScopo', weight:12, label:'Scopo'},
+        {id:'fieldObiettivo', weight:12, label:'Obiettivo'},
+        {id:'fieldTipoMedia', weight:8, label:'Media'},
+        {id:'fieldSottotipo', weight:6, label:'Sottotipo'},
+        {id:'fieldSettore', weight:10, label:'Settore'},
+        {id:'fieldPubblico', weight:12, label:'Pubblico'},
+        {id:'fieldTitolo1', weight:10, label:'Titolo'},
+        {id:'fieldTitolo2', weight:4, label:'Titolo 2'},
+        {id:'fieldTitolo3', weight:3, label:'Titolo 3'},
+        {id:'fieldDidascalia', weight:10, label:'Didascalia'},
+        {id:'fieldContesto', weight:8, label:'Contesto'},
+        {id:'contentDataInput', weight:5, label:'Dati'}
+    ];
+    let score = 0, filled = 0, total = fields.length;
+    const details = [];
+    for (const f of fields) {
+        const v = getFieldVal(f.id);
+        const ok = v.length > 0;
+        if (ok) { score += f.weight; filled++; }
+        details.push({label:f.label, ok});
+    }
+    // Bonus for platform+goal selection (always filled from step 1-2)
+    score += 10;
+    return {score: Math.min(100, score), filled, total, details};
+}
+
+function renderStrategyScore() {
+    const sec = $('strategyScoreSection');
+    const ss = calculateStrategyScore();
+    const circ = 2 * Math.PI * 52;
+    const offset = circ - (ss.score/100) * circ;
+    
+    sec.style.display = 'block';
+    setTimeout(() => {
+        $('stratRing').style.strokeDashoffset = offset;
+        $('stratScoreNum').textContent = ss.score + '%';
+    }, 200);
+    
+    const v = ss.score >= 80 ? 'Strategia solida' : ss.score >= 55 ? 'Buona base — completa i campi mancanti' : ss.score >= 30 ? 'Dati parziali — compila per analisi completa' : 'Compila i campi per attivare l\'analisi strategica';
+    $('stratScoreDesc').textContent = v;
+    
+    $('stratCompleteness').innerHTML = ss.details.map(d => 
+        `<span style="padding:3px 8px;border-radius:6px;font-size:0.65rem;font-weight:700;${d.ok?'background:rgba(16,185,129,0.15);color:#34d399':'background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.2)'}">${d.ok?'✓':'○'} ${d.label}</span>`
+    ).join('');
+}
+
+function renderVerdict(score) {
+    const v = getScoreVerdict(score);
+    $('verdictBadge').className = 'swa-verdict ' + v.cls;
+    $('verdictBadge').innerHTML = `${v.emoji} ${v.label}`;
+}
+
+function generateStrategicData(a) {
+    const nd = 'Non determinabile';
+    const F = {
+        scopo: getFieldVal('fieldScopo'),
+        obiettivo: getFieldVal('fieldObiettivo'),
+        tipoMedia: getFieldVal('fieldTipoMedia'),
+        sottotipo: getFieldVal('fieldSottotipo'),
+        settore: getFieldVal('fieldSettore'),
+        pubblico: getFieldVal('fieldPubblico'),
+        titolo1: getFieldVal('fieldTitolo1'),
+        titolo2: getFieldVal('fieldTitolo2'),
+        titolo3: getFieldVal('fieldTitolo3'),
+        didascalia: getFieldVal('fieldDidascalia'),
+        contesto: getFieldVal('fieldContesto'),
+        datiExtra: getFieldVal('contentDataInput')
+    };
+    const platform = state.platform;
+    const goal = state.goal;
+    const target = state.target;
+    
+    const goalMap = {sales:'Vendita / Conversione', awareness:'Brand Awareness', engagement:'Engagement', leads:'Lead Generation', traffic:'Traffico al sito'};
+    const allText = [F.titolo1, F.titolo2, F.titolo3, F.didascalia, F.contesto, F.datiExtra].filter(Boolean).join(' ').toLowerCase();
+    
+    // ── FUNNEL ──
+    let funnel = nd;
+    if (goal === 'awareness') funnel = 'TOFU — Top of Funnel (consapevolezza)';
+    else if (goal === 'engagement' || goal === 'traffic') funnel = 'MOFU — Middle of Funnel (considerazione)';
+    else if (goal === 'sales' || goal === 'leads') funnel = 'BOFU — Bottom of Funnel (decisione)';
+    if (allText.match(/scopri|conosci|novità|presentiamo|annuncio|benvenuto/)) funnel = 'TOFU — Top of Funnel (consapevolezza)';
+    if (allText.match(/iscriviti|prenota|acquista|sconto|offerta|promo|gratis|€|prezzo/)) funnel = 'BOFU — Bottom of Funnel (decisione)';
+    
+    // ── TONE ──
+    let tono = nd;
+    const brightness = a.avgBrightness;
+    const contrast = a.rmsContrast;
+    if (brightness > 170 && contrast < 50) tono = 'Soft, accogliente, rassicurante';
+    else if (contrast > 80) tono = 'Bold, diretto, d\'impatto';
+    else if (brightness > 130 && brightness < 170) tono = 'Professionale, equilibrato';
+    else if (brightness < 100) tono = 'Elegante, sofisticato, premium';
+    else tono = 'Neutro, informativo';
+    
+    // ── ORGANIC VS SPONSORED ──
+    let organicOrSponsored = 'Organico (probabile)';
+    let organicReason = 'Nessun elemento promozionale diretto rilevato.';
+    if (allText.match(/sconto|offerta|promo|€|prezzo|acquista|compra|shop|spedizione|gratis/)) {
+        organicOrSponsored = 'Sponsorizzato (probabile)';
+        organicReason = 'Presenza di elementi promozionali (prezzo, sconto, offerta) che beneficiano di reach a pagamento.';
+    }
+    if (allText.match(/scopri di più|link in bio|clicca|visita/)) {
+        organicOrSponsored = 'Sponsorizzato (probabile)';
+        organicReason = 'CTA con rimando esterno — la sponsorizzazione aumenta il CTR del 2-5x.';
+    }
+    if (goal === 'sales' || goal === 'leads') {
+        organicOrSponsored = 'Sponsorizzato (consigliato)';
+        organicReason = `Per l'obiettivo "${goalMap[goal]}", la sponsorizzazione è quasi sempre necessaria per raggiungere un pubblico mirato.`;
+    }
+    
+    // ── UNIQUE OBJECTIVE ──
+    let uniqueObj = 'Commenti';
+    let uniqueObjReason = '';
+    if (goal === 'leads') { uniqueObj = 'DM / Contatto'; uniqueObjReason = 'Lead generation richiede un\'azione di contatto diretto.'; }
+    else if (goal === 'traffic') { uniqueObj = 'Click / Link'; uniqueObjReason = 'Obiettivo traffico = priorità al click-through.'; }
+    else if (goal === 'sales') { uniqueObj = 'Acquisto / Download'; uniqueObjReason = 'Conversione diretta — CTA deve essere inequivocabile.'; }
+    else if (goal === 'engagement') { uniqueObj = 'Commenti / Salvataggi'; uniqueObjReason = 'L\'engagement premia commenti e salvataggi (boost algoritmico).'; }
+    else if (goal === 'awareness') { uniqueObj = 'Impressioni / Reach'; uniqueObjReason = 'Brand awareness = massimizzare le impressioni.'; }
+    if (allText.match(/download|scarica|pdf|ebook|guida/)) { uniqueObj = 'Download'; uniqueObjReason = 'Risorsa scaricabile presente → obiettivo download.'; }
+    if (allText.match(/commenta|tag|condividi|dimmi|racconta/)) { uniqueObj = 'Commenti'; uniqueObjReason = 'CTA engagement esplicita nel testo.'; }
+    if (allText.match(/scrivici|dm|messaggio|whatsapp|contatt/)) { uniqueObj = 'DM / Contatto'; uniqueObjReason = 'CTA contatto diretto nel testo.'; }
+    
+    // ── DIRECTNESS ──
+    let directness = 'Chiaro ma gentile';
+    let directnessReason = '';
+    if (funnel.includes('TOFU')) { directness = 'Molto soft'; directnessReason = 'Fase iniziale del funnel: il pubblico non è ancora pronto per proposte dirette. Meglio informare e incuriosire.'; }
+    if (funnel.includes('BOFU')) { directness = 'Più deciso'; directnessReason = 'Fase decisionale: il pubblico è pronto. Essere chiari su cosa fare e perché agisce ora.'; }
+    if (goal === 'engagement') { directness = 'Chiaro ma gentile'; directnessReason = 'Per engagement, un tono troppo commerciale scoraggia i commenti. Proponi, non spingere.'; }
+    
+    // ── VALUE PROMISE ──
+    let promessa = nd;
+    if (allText.match(/impara|scopri come|ti insegn|corso|formazione|lezione|master/)) promessa = 'Formazione / apprendimento';
+    if (allText.match(/risparm|sconto|offerta|gratis|omaggio|convenien/)) promessa = 'Vantaggio economico / risparmio';
+    if (allText.match(/trasform|cambia|migliora|risultat|prima.*dopo/)) promessa = 'Trasformazione / miglioramento';
+    if (allText.match(/esclusiv|limit|solo per|riservato|ultimo/)) promessa = 'Esclusività / accesso privilegiato';
+    if (allText.match(/facil|semplice|veloce|immediat|subito/)) promessa = 'Semplicità / velocità';
+    if (allText.match(/garanzi|sicur|certific|qualità|professional/)) promessa = 'Affidabilità / garanzia di qualità';
+    
+    // ── COMMERCIAL MESSAGE ──
+    let messaggio = nd;
+    if (goal === 'sales') messaggio = 'Messaggio commerciale diretto';
+    if (goal === 'awareness') messaggio = 'Posizionamento / educativo';
+    if (goal === 'engagement') messaggio = 'Relazionale / community building';
+    if (goal === 'leads') messaggio = 'Generazione contatti / lead magnet';
+    if (goal === 'traffic') messaggio = 'Contenuto di valore + rimando';
+    
+    // ── CTA ANALYSIS ──
+    let ctaDetected = nd;
+    let ctaType = nd;
+    const ctaPatterns = [
+        {rx:/scopri di più|leggi|approfondisci/i, type:'Informativa', label:'Scopri di più'},
+        {rx:/iscriviti|registrati|partecipa/i, type:'Lead', label:'Iscrizione / Registrazione'},
+        {rx:/acquista|compra|ordina|shop/i, type:'Vendita diretta', label:'Acquisto'},
+        {rx:/scarica|download|ottieni/i, type:'Lead magnet', label:'Download'},
+        {rx:/prenota|riserva|fissa/i, type:'Booking', label:'Prenotazione'},
+        {rx:/commenta|dimmi|raccontaci|tag/i, type:'Engagement', label:'Commenta / Tagga'},
+        {rx:/scrivici|dm|messaggio|contatt|chiama|whatsapp/i, type:'Contatto diretto', label:'Contatto DM/Telefono'},
+        {rx:/link in bio|swipe up|clicca/i, type:'Traffic', label:'Click / Link in bio'},
+        {rx:/condividi|invia|passa parola/i, type:'Virale', label:'Condivisione'},
+        {rx:/salva|metti like|segui/i, type:'Follow/Save', label:'Salva / Segui'}
+    ];
+    for (const p of ctaPatterns) {
+        if (p.rx.test(allText)) { ctaDetected = p.label; ctaType = p.type; break; }
+    }
+    
+    // ── HOOK ANALYSIS ──
+    let hookType = nd;
+    if (F.didascalia) {
+        const firstLine = F.didascalia.split('\n')[0].toLowerCase();
+        if (firstLine.match(/\?/)) hookType = 'Domanda (ottimo per engagement)';
+        else if (firstLine.match(/^\d|numeri|step|modi|consigli|trucchi|errori/)) hookType = 'Lista numerata (pattern interrupt)';
+        else if (firstLine.match(/sai che|lo sapevi|attenzione|incredibile|assurdo/)) hookType = 'Curiosità / Shock (scroll-stopper)';
+        else if (firstLine.match(/^io |^noi |^quando |storia|racconto/)) hookType = 'Storytelling (connessione emotiva)';
+        else if (firstLine.match(/novità|nuovo|lancio|finalmente|annuncio/)) hookType = 'Annuncio / News (FOMO)';
+        else if (firstLine.match(/gratis|sconto|offerta|risparmia/)) hookType = 'Offerta diretta (BOFU)';
+        else hookType = 'Dichiarativo (neutro — considera un hook più forte)';
+    }
+    
+    // ── CONTENT-AUDIENCE ALIGNMENT ──
+    let alignment = nd;
+    if (F.pubblico && (F.scopo || F.didascalia)) {
+        const pub = F.pubblico.toLowerCase();
+        const cont = (F.scopo + ' ' + (F.didascalia||'')).toLowerCase();
+        let alignScore = 0;
+        // Age-content match
+        if (pub.match(/giovan|gen z|teen/) && cont.match(/trend|viral|reel|challenge/)) alignScore += 2;
+        if (pub.match(/professionis|manager|hr|b2b/) && cont.match(/business|strateg|roi|kpi|risultat/)) alignScore += 2;
+        if (pub.match(/donn|mamm|femminil/) && cont.match(/benesser|cura|natura|famiglia|equilibrio/)) alignScore += 2;
+        // Generic alignment bonus
+        if (F.settore && cont.includes(F.settore.toLowerCase().split('/')[0].trim())) alignScore += 1;
+        if (alignScore >= 2) alignment = 'Buon allineamento contenuto-pubblico ✓';
+        else if (alignScore >= 1) alignment = 'Allineamento parziale — verifica la coerenza';
+        else alignment = 'Verifica che il messaggio parli al tuo target specifico';
+    }
+    
+    return {
+        argomento: F.scopo || F.titolo1 || nd,
+        promessa, prodotto: F.sottotipo || nd, messaggio,
+        copyOriginale: F.didascalia || nd,
+        contestoBusiness: F.contesto || nd,
+        brand: F.titolo1 || nd,
+        tema: F.scopo || goalMap[goal] || nd,
+        obiettivo: F.obiettivo || goalMap[goal],
+        targetAnalisi: F.pubblico || target || nd,
+        funnel, tono, settore: F.settore || nd,
+        tipoMedia: F.tipoMedia || nd,
+        organicOrSponsored, organicReason,
+        uniqueObj, uniqueObjReason,
+        directness, directnessReason,
+        ctaDetected, ctaType, hookType, alignment,
+        F
+    };
+}
+
+function renderStrategicAnalysis(a) {
+    const section = $('strategicSection');
+    const d = generateStrategicData(a);
+    const nd = 'Non determinabile';
+    const ss = calculateStrategyScore();
+    
+    // ── 3 QUICK ANSWERS with reasons ──
+    const qaHtml = `
+    <div class="swa-qa-card">
+        <div class="swa-qa-q">1. Post organico o sponsorizzato?</div>
+        <div class="swa-qa-answer"><span class="dot" style="background:${d.organicOrSponsored.includes('Organico')?'#22c55e':'#f59e0b'}"></span>${d.organicOrSponsored}</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:8px;line-height:1.5">${d.organicReason}</div>
+    </div>
+    <div class="swa-qa-card">
+        <div class="swa-qa-q">2. Obiettivo unico</div>
+        <div class="swa-qa-opts">
+            <div class="swa-qa-opt ${d.uniqueObj.includes('Download')?'active':''}"><span class="box">${d.uniqueObj.includes('Download')?'✓':''}</span>Download</div>
+            <div class="swa-qa-opt ${d.uniqueObj.includes('Commenti')||d.uniqueObj.includes('Salvataggi')?'active':''}"><span class="box">${d.uniqueObj.includes('Commenti')||d.uniqueObj.includes('Salvataggi')?'✓':''}</span>Commenti / Salvataggi</div>
+            <div class="swa-qa-opt ${d.uniqueObj.includes('DM')||d.uniqueObj.includes('Contatto')?'active':''}"><span class="box">${d.uniqueObj.includes('DM')||d.uniqueObj.includes('Contatto')?'✓':''}</span>DM / Contatto</div>
+            <div class="swa-qa-opt ${d.uniqueObj.includes('Click')||d.uniqueObj.includes('Acquisto')||d.uniqueObj.includes('Impressioni')?'active':''}"><span class="box">${d.uniqueObj.includes('Click')||d.uniqueObj.includes('Acquisto')||d.uniqueObj.includes('Impressioni')?'✓':''}</span>${d.uniqueObj.includes('Acquisto')?'Acquisto':d.uniqueObj.includes('Impressioni')?'Reach / Impressioni':'Click / Link'}</div>
+        </div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:8px;line-height:1.5">${d.uniqueObjReason}</div>
+    </div>
+    <div class="swa-qa-card">
+        <div class="swa-qa-q">3. Quanto diretto posso essere?</div>
+        <div class="swa-qa-opts">
+            <div class="swa-qa-opt ${d.directness==='Molto soft'?'active':''}"><span class="box">${d.directness==='Molto soft'?'✓':''}</span>Molto soft</div>
+            <div class="swa-qa-opt ${d.directness==='Chiaro ma gentile'?'active':''}"><span class="box">${d.directness==='Chiaro ma gentile'?'✓':''}</span>Chiaro ma gentile</div>
+            <div class="swa-qa-opt ${d.directness==='Più deciso'?'active':''}"><span class="box">${d.directness==='Più deciso'?'✓':''}</span>Più deciso</div>
+        </div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:8px;line-height:1.5">${d.directnessReason}</div>
+    </div>`;
+    $('quickAnswers').innerHTML = qaHtml;
+    
+    // ── Helper: build a row ──
+    function row(icon, label, value, status, tip) {
+        // status: 'green'|'orange'|'red'|'blue'
+        const isNd = value === nd;
+        const dotCls = status;
+        const badgeMap = {green:'badge-green',orange:'badge-orange',red:'badge-red',blue:'badge-blue'};
+        const badgeText = {green:'OK',orange:'Avviso',red:'Mancante',blue:'Auto'};
+        const badge = `<span class="swa-strat-badge ${badgeMap[status]}">${badgeText[status]}</span>`;
+        const tipCls = status === 'red' ? 'tip-red' : status === 'orange' ? 'tip-orange' : status === 'green' ? 'tip-green' : '';
+        const tipHtml = tip ? `<span class="val-tip ${tipCls}">${tip}</span>` : '';
+        return `<div class="swa-strat-row">
+            <div class="status-dot ${dotCls}"></div>
+            <div class="swa-strat-label"><i class="fas ${icon}"></i>${label}</div>
+            <div class="swa-strat-value${isNd?' nd':''}"><span class="val-main">${isNd ? '— Da compilare —' : value}</span>${badge}${tipHtml}</div>
+        </div>`;
+    }
+    
+    // ── Classify all fields ──
+    const allRows = [
+        // ── CAMPI DA COMPILARE (in ordine di priorità) ──
+        {icon:'fa-crosshairs', label:'Obiettivo', value:d.obiettivo, field:'obiettivo', critical:true,
+         tipOk:'Obiettivo chiaro: guida tutta la strategia.', tipMiss:'Fondamentale: senza obiettivo il post non ha direzione.'},
+        {icon:'fa-users', label:'Target', value:d.targetAnalisi, field:'pubblico', critical:true,
+         tipOk:'Target definito: puoi personalizzare tono e messaggio.', tipMiss:'Chi vuoi raggiungere? Definisci età, interessi, ruolo.'},
+        {icon:'fa-tag', label:'Argomento', value:d.argomento, field:'scopo', critical:true,
+         tipOk:'Argomento definito.', tipMiss:'Di cosa parla il post? Compila "Scopo del post".'},
+        {icon:'fa-quote-left', label:'Didascalia / Copy', value:d.copyOriginale, field:'didascalia', critical:true,
+         tipOk:'Copy presente: analisi CTA e hook attivate.', tipMiss:'Inserisci il testo del post per analizzare CTA e hook.'},
+        {icon:'fa-industry', label:'Settore', value:d.settore, field:'settore', critical:true,
+         tipOk:'Settore specificato: aiuta a scegliere tono e hashtag.', tipMiss:'Indica il settore per suggerimenti più mirati.'},
+        {icon:'fa-gem', label:'Promessa di valore', value:d.promessa, field:null, critical:true,
+         tipOk:'Promessa chiara: il pubblico sa cosa otterrà.', tipWarn:'Dedotta automaticamente — verifica che sia corretta.', tipMiss:'Nessuna promessa rilevata. Cosa ci guadagna chi legge?'},
+        {icon:'fa-box-open', label:'Prodotto / Servizio', value:d.prodotto, field:'sottotipo', critical:true,
+         tipOk:'Prodotto identificato.', tipMiss:'Specifica cosa promuovi nel campo "Sottotipo".'},
+        {icon:'fa-building', label:'Contesto business', value:d.contestoBusiness, field:'contesto', critical:true,
+         tipOk:'Contesto specificato.', tipMiss:'Aggiungi contesto per suggerimenti più personalizzati.'},
+        {icon:'fa-trademark', label:'Brand / Titolo', value:d.brand, field:'titolo1', critical:true,
+         tipOk:'Brand identificato.', tipMiss:'Inserisci il titolo/nome brand.'},
+        {icon:'fa-bolt', label:'Tipo di hook', value:d.hookType, field:null, critical:true,
+         tipOk:'Hook rilevato nella prima riga.', tipMiss:'Inserisci la didascalia per analizzare l\'apertura.'},
+        {icon:'fa-link', label:'Allineamento pubblico', value:d.alignment, field:null, critical:true,
+         tipOk:'Contenuto e target sono coerenti.', tipWarn:'Verifica che il messaggio parli davvero al tuo target.', tipMiss:'Servono target + didascalia per verificare.'},
+        // ── CAMPI AUTO-DEDOTTI ──
+        {icon:'fa-bullhorn', label:'Messaggio commerciale', value:d.messaggio, field:null, critical:false,
+         tipOk:'Messaggio coerente con obiettivo.', tipWarn:'Dedotto dall\'obiettivo — verifica.'},
+        {icon:'fa-palette', label:'Tema contenuto', value:d.tema, field:null, critical:false,
+         tipOk:'Tema coerente.'},
+        {icon:'fa-filter', label:'Fase funnel', value:d.funnel, field:null, critical:false,
+         tipOk:'Fase identificata: guida il livello di pressione.', tipWarn:'Dedotta automaticamente dal testo e obiettivo.'},
+        {icon:'fa-comments', label:'Tono comunicativo', value:d.tono, field:null, critical:false,
+         tipOk:'Tono rilevato dall\'analisi visiva.', tipWarn:'Basato su luminosità e contrasto dell\'immagine.'},
+        {icon:'fa-photo-film', label:'Tipo media', value:d.tipoMedia, field:'tipoMedia', critical:false,
+         tipOk:'Formato definito.', tipMiss:'Seleziona il tipo di media.'},
+        {icon:'fa-hand-pointer', label:'CTA rilevata', value:d.ctaDetected !== nd ? d.ctaDetected + ' (' + d.ctaType + ')' : nd, field:null, critical:false,
+         tipOk:'CTA trovata e coerente.', tipMiss:'Nessuna CTA nel testo. Aggiungi un invito all\'azione chiaro.'},
+    ];
+    
+    // ── Assign status to each row ──
+    for (const r of allRows) {
+        const v = r.value;
+        const isNd = v === nd;
+        if (isNd) {
+            r.status = 'red';
+            r.tip = r.tipMiss || 'Compila questo campo per un\'analisi completa.';
+        } else if (!r.field && v !== nd) {
+            // Auto-deduced field
+            const hasWarning = r.tipWarn;
+            if (hasWarning) {
+                r.status = 'orange';
+                r.tip = r.tipWarn;
+            } else {
+                r.status = 'green';
+                r.tip = r.tipOk || '';
+            }
+        } else {
+            r.status = 'green';
+            r.tip = r.tipOk || '';
+        }
+        // Special: alignment with "Verifica" = orange
+        if (r.label === 'Allineamento pubblico' && v.includes('Verifica')) {
+            r.status = 'orange';
+            r.tip = r.tipWarn;
+        }
+    }
+    
+    // ── Sort into categories ──
+    const missing = allRows.filter(r => r.status === 'red');
+    const warnings = allRows.filter(r => r.status === 'orange');
+    const autoOk = allRows.filter(r => r.status === 'blue');
+    const passed = allRows.filter(r => r.status === 'green');
+    
+    // ── Build tech HTML ──
+    let techHtml = '';
+    
+    // Missing fields (RED) at top — most important
+    if (missing.length > 0) {
+        const missCritical = missing.filter(r => r.critical);
+        const missOther = missing.filter(r => !r.critical);
+        techHtml += `<div class="swa-strat-cat cat-missing"><i class="fas fa-circle-xmark"></i> Da compilare — ${missing.length} camp${missing.length===1?'o':'i'} mancant${missing.length===1?'e':'i'}</div>`;
+        for (const r of [...missCritical, ...missOther]) {
+            techHtml += row(r.icon, r.label, r.value, r.status, r.tip);
+        }
+    }
+    
+    // Warnings (ORANGE)
+    if (warnings.length > 0) {
+        techHtml += `<div class="swa-strat-cat cat-warn"><i class="fas fa-triangle-exclamation"></i> Avvisi — ${warnings.length} camp${warnings.length===1?'o':'i'} da verificare</div>`;
+        for (const r of warnings) {
+            techHtml += row(r.icon, r.label, r.value, r.status, r.tip);
+        }
+    }
+    
+    // Passed (GREEN)
+    if (passed.length > 0) {
+        techHtml += `<div class="swa-strat-cat cat-ok"><i class="fas fa-circle-check"></i> Superati — ${passed.length} camp${passed.length===1?'o':'i'} OK</div>`;
+        for (const r of passed) {
+            techHtml += row(r.icon, r.label, r.value, r.status, r.tip);
+        }
+    }
+    
+    // Summary bar
+    const totalR = allRows.length;
+    const pctGreen = Math.round(passed.length / totalR * 100);
+    const pctOrange = Math.round(warnings.length / totalR * 100);
+    const pctRed = Math.round(missing.length / totalR * 100);
+    techHtml += `<div style="margin-top:20px;display:flex;height:6px;border-radius:3px;overflow:hidden;background:rgba(255,255,255,0.06)">
+        <div style="width:${pctGreen}%;background:#22c55e;transition:width 0.5s"></div>
+        <div style="width:${pctOrange}%;background:#f59e0b;transition:width 0.5s"></div>
+        <div style="width:${pctRed}%;background:#ef4444;transition:width 0.5s"></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:8px;font-size:0.72rem;color:rgba(255,255,255,0.5)">
+        <span><span style="color:#22c55e;font-weight:800">${passed.length}</span> OK</span>
+        <span><span style="color:#f59e0b;font-weight:800">${warnings.length}</span> Avvisi</span>
+        <span><span style="color:#ef4444;font-weight:800">${missing.length}</span> Mancanti</span>
+    </div>`;
+    
+    $('stratTech').innerHTML = techHtml;
+    
+    // ── CLIENT SUMMARY ──
+    let clientHtml = '';
+    
+    if (missing.length > 3) {
+        clientHtml += `<div style="padding:14px 18px;border-radius:14px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);margin-bottom:20px;display:flex;align-items:center;gap:12px">
+            <i class="fas fa-pen-to-square" style="color:#f87171;flex-shrink:0;font-size:1rem"></i>
+            <div>
+                <div style="font-size:0.85rem;font-weight:700;color:#fff">Compila i campi per una strategia completa</div>
+                <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-top:2px">Vai nella tab "Prompt Testo / Caption", sezione campi strutturati. Più compili, più il report diventa utile.</div>
+            </div>
+        </div>`;
+    }
+    
+    clientHtml += `<div class="swa-client-card">
+        <div class="swa-client-title">📋 Di cosa parla questo post?</div>
+        <div class="swa-client-text">${d.argomento !== nd 
+            ? `Questo post parla di <strong>${d.argomento}</strong>${d.settore !== nd ? ` nel settore <strong>${d.settore}</strong>` : ''}. ${d.contestoBusiness !== nd ? d.contestoBusiness+'.' : ''}`
+            : 'Non è stato possibile determinare l\'argomento. Compila il campo "Scopo" nella sezione Prompt per un\'analisi accurata.'
+        }</div>
+    </div>`;
+    
+    clientHtml += `<div class="swa-client-card">
+        <div class="swa-client-title">🎯 Cosa vuole ottenere?</div>
+        <div class="swa-client-text">L'obiettivo principale è <strong>${d.obiettivo}</strong>. 
+        Il post si trova nella fase <strong>${d.funnel.includes('TOFU') ? 'iniziale del percorso (farsi conoscere)' : d.funnel.includes('MOFU') ? 'intermedia (creare interesse e fiducia)' : d.funnel.includes('BOFU') ? 'finale (spingere all\'azione concreta)' : 'non determinata'}</strong>.
+        ${d.promessa !== nd ? '<br>La promessa implicita al pubblico è: <strong>'+d.promessa+'</strong>.' : ''}</div>
+    </div>`;
+    
+    clientHtml += `<div class="swa-client-card">
+        <div class="swa-client-title">👥 A chi si rivolge e come?</div>
+        <div class="swa-client-text">${d.targetAnalisi !== nd 
+            ? `Il target è <strong>${d.targetAnalisi}</strong>. Il tono comunicativo è <strong>${d.tono.toLowerCase()}</strong>.`
+            : 'Il pubblico target non è stato specificato. Il tono comunicativo rilevato è <strong>'+d.tono.toLowerCase()+'</strong>.'
+        }${d.alignment !== nd ? '<br><em>'+d.alignment+'</em>' : ''}</div>
+    </div>`;
+    
+    clientHtml += `<div class="swa-client-card">
+        <div class="swa-client-title">💡 Le 3 risposte chiave</div>
+        <div class="swa-client-text">
+            <strong>1.</strong> Questo post è pensato come <strong>${d.organicOrSponsored.toLowerCase()}</strong>. <span style="color:rgba(255,255,255,0.45)">${d.organicReason}</span><br>
+            <strong>2.</strong> L'azione che deve generare: <strong>${d.uniqueObj.toLowerCase()}</strong>. <span style="color:rgba(255,255,255,0.45)">${d.uniqueObjReason}</span><br>
+            <strong>3.</strong> Livello di pressione: <strong>${d.directness.toLowerCase()}</strong> — ${d.directness === 'Molto soft' ? 'niente vendita diretta, solo valore e relazione.' : d.directness === 'Chiaro ma gentile' ? 'si può proporre qualcosa ma senza forzare.' : 'è il momento di essere chiari su cosa fare e perché.'}
+        </div>
+    </div>`;
+    
+    // CTA & Hook — always show, with status
+    clientHtml += `<div class="swa-client-card" style="border-color:${d.ctaDetected !== nd ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)'};background:${d.ctaDetected !== nd ? 'rgba(34,197,94,0.03)' : 'rgba(239,68,68,0.03)'}">
+        <div class="swa-client-title">🔍 Analisi CTA e Hook</div>
+        <div class="swa-client-text">
+            ${d.ctaDetected !== nd 
+                ? `<span style="color:#4ade80;font-weight:700">✓ CTA rilevata:</span> "${d.ctaDetected}" (tipo: ${d.ctaType}).` 
+                : '<span style="color:#f87171;font-weight:700">✗ Nessuna CTA rilevata.</span> Ogni post dovrebbe avere un\'unica azione chiara per il lettore.'}
+            ${d.hookType !== nd 
+                ? `<br><span style="color:${d.hookType.includes('neutro') ? '#fbbf24' : '#4ade80'};font-weight:700">${d.hookType.includes('neutro') ? '⚠' : '✓'} Hook:</span> ${d.hookType}.`
+                : '<br><span style="color:#f87171;font-weight:700">✗ Hook non analizzabile.</span> Inserisci la didascalia per valutare la riga di apertura.'}
+        </div>
+    </div>`;
+    
+    if (d.copyOriginale !== nd) {
+        clientHtml += `<div class="swa-client-card" style="border-color:rgba(99,102,241,0.2);background:rgba(99,102,241,0.03)">
+            <div class="swa-client-title">📝 Copy originale</div>
+            <div class="swa-client-text" style="white-space:pre-wrap;font-style:italic;color:rgba(255,255,255,0.55)">${d.copyOriginale}</div>
+        </div>`;
+    }
+    
+    $('stratClient').innerHTML = clientHtml;
+    section.style.display = 'block';
+    
+    // Store for DOCX — include categorized data
+    d._categories = {passed, warnings, missing, totalR};
+    state.strategicData = d;
+}
+
+function switchStratTab(tab) {
+    document.querySelectorAll('.swa-strat-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.swa-strat-panel').forEach(p => p.classList.remove('active'));
+    if (tab === 'tech') {
+        document.querySelectorAll('.swa-strat-tab')[0].classList.add('active');
+        $('stratTech').classList.add('active');
+    } else {
+        document.querySelectorAll('.swa-strat-tab')[1].classList.add('active');
+        $('stratClient').classList.add('active');
+    }
+}
+
+// ==================== SCORE VERDICT ====================
+function getScoreVerdict(score) {
+    if (score >= 80) return {label:'Eccellente', cls:'excellent', emoji:'🏆', desc:'Il post ha una base visiva forte, pronto per performare.'};
+    if (score >= 65) return {label:'Buono', cls:'good', emoji:'✅', desc:'Buon livello — poche ottimizzazioni per risultati migliori.'};
+    if (score >= 50) return {label:'Sufficiente', cls:'fair', emoji:'⚠️', desc:'Funzionale ma con margini importanti di miglioramento.'};
+    return {label:'Da Migliorare', cls:'poor', emoji:'🔧', desc:'Servono interventi significativi prima della pubblicazione.'};
+}
+
+// ==================== COLOR PSYCHOLOGY ====================
+function getColorPsychology(palette) {
+    const psychMap = [
+        {hRange:[0,15],name:'Rosso',emotion:'Urgenza, Energia, Passione',use:'CTA, offerte flash, food',emoji:'🔴'},
+        {hRange:[15,40],name:'Arancione',emotion:'Ottimismo, Entusiasmo, Calore',use:'E-commerce, creatività, community',emoji:'🟠'},
+        {hRange:[40,65],name:'Giallo',emotion:'Attenzione, Positività, Chiarezza',use:'Avvisi, highlight, giovani brand',emoji:'🟡'},
+        {hRange:[65,160],name:'Verde',emotion:'Fiducia, Crescita, Salute',use:'Benessere, natura, finanza',emoji:'🟢'},
+        {hRange:[160,200],name:'Ciano',emotion:'Freschezza, Tecnologia, Apertura',use:'Tech, digitale, innovazione',emoji:'🩵'},
+        {hRange:[200,260],name:'Blu',emotion:'Affidabilità, Professionalità, Calma',use:'Corporate, healthcare, finance',emoji:'🔵'},
+        {hRange:[260,300],name:'Viola',emotion:'Premium, Creatività, Mistero',use:'Lusso, formazione, beauty',emoji:'🟣'},
+        {hRange:[300,340],name:'Rosa/Magenta',emotion:'Femminilità, Dolcezza, Modernità',use:'Beauty, moda, lifestyle',emoji:'🩷'},
+        {hRange:[340,361],name:'Rosso',emotion:'Urgenza, Energia, Passione',use:'CTA, offerte flash, food',emoji:'🔴'}
+    ];
+    
+    const results = [];
+    for (const c of palette.slice(0, 5)) {
+        const [h,s,l] = rgbToHsl(c.r, c.g, c.b);
+        const hex = rgbToHex(c.r, c.g, c.b);
+        
+        // Check neutrals
+        if (s < 10) {
+            if (l < 20) results.push({hex, name:'Nero', emotion:'Eleganza, Autorità, Premium', use:'Lusso, moda, tech', emoji:'⚫'});
+            else if (l > 85) results.push({hex, name:'Bianco', emotion:'Pulizia, Spazio, Semplicità', use:'Minimalismo, healthcare, tech', emoji:'⚪'});
+            else results.push({hex, name:'Grigio', emotion:'Neutralità, Equilibrio, Professionalità', use:'Corporate, background, testo', emoji:'🩶'});
+            continue;
+        }
+        
+        for (const p of psychMap) {
+            if (h >= p.hRange[0] && h < p.hRange[1]) {
+                results.push({hex, ...p});
+                break;
+            }
+        }
+    }
+    return results;
+}
+
+function renderColorPsychology(a) {
+    const psych = getColorPsychology(a.palette);
+    if (!psych.length) return;
+    
+    let html = '<h4 style="font-size:0.9rem;font-weight:700;margin-bottom:4px">🧠 Psicologia dei Colori</h4>';
+    html += '<p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-bottom:10px">Cosa comunicano i colori dominanti</p>';
+    html += '<div class="swa-psych-grid">';
+    
+    const seen = new Set();
+    for (const p of psych) {
+        if (seen.has(p.name)) continue;
+        seen.add(p.name);
+        html += `<div class="swa-psych-item">
+            <div class="swa-psych-swatch" style="background:${p.hex}"></div>
+            <div class="swa-psych-emotion">${p.emoji} ${p.name}</div>
+            <div class="swa-psych-desc">${p.emotion}</div>
+            <div class="swa-psych-desc" style="margin-top:4px;color:rgba(255,255,255,0.3)">→ ${p.use}</div>
+        </div>`;
+    }
+    html += '</div>';
+    $('colorPsychBox').innerHTML = html;
+    
+    // Store for report
+    state.colorPsychology = psych;
+}
+
+// ==================== POSTING TIME ====================
+function getPostingTime(platform, goal) {
+    const times = {
+        instagram: {
+            sales:     {best:['12:00-13:00','18:00-20:00'], days:['Martedì','Giovedì','Sabato']},
+            awareness: {best:['11:00-13:00','19:00-21:00'], days:['Lunedì','Mercoledì','Venerdì']},
+            engagement:{best:['08:00-09:00','17:00-19:00'], days:['Martedì','Giovedì','Domenica']},
+            leads:     {best:['12:00-14:00','18:00-19:00'], days:['Martedì','Mercoledì']},
+            traffic:   {best:['09:00-11:00','15:00-16:00'], days:['Lunedì','Giovedì']}
+        },
+        tiktok: {
+            sales:     {best:['19:00-21:00','12:00-13:00'], days:['Venerdì','Sabato']},
+            awareness: {best:['18:00-22:00','07:00-09:00'], days:['Martedì','Giovedì','Sabato']},
+            engagement:{best:['19:00-21:00','12:00-14:00'], days:['Martedì','Giovedì','Sabato']},
+            leads:     {best:['18:00-20:00','10:00-12:00'], days:['Mercoledì','Venerdì']},
+            traffic:   {best:['17:00-19:00','12:00-13:00'], days:['Lunedì','Mercoledì']}
+        },
+        linkedin: {
+            sales:     {best:['10:00-12:00','14:00-16:00'], days:['Martedì','Mercoledì','Giovedì']},
+            awareness: {best:['08:00-10:00','17:00-18:00'], days:['Martedì','Mercoledì','Giovedì']},
+            engagement:{best:['09:00-11:00','12:00-13:00'], days:['Martedì','Giovedì']},
+            leads:     {best:['10:00-11:00','14:00-15:00'], days:['Martedì','Mercoledì']},
+            traffic:   {best:['08:00-10:00','16:00-17:00'], days:['Lunedì','Martedì','Giovedì']}
+        },
+        facebook: {
+            sales:     {best:['13:00-16:00','19:00-21:00'], days:['Giovedì','Venerdì','Sabato']},
+            awareness: {best:['09:00-11:00','18:00-20:00'], days:['Mercoledì','Giovedì','Venerdì']},
+            engagement:{best:['09:00-10:00','18:00-19:00'], days:['Mercoledì','Venerdì','Domenica']},
+            leads:     {best:['12:00-14:00','17:00-18:00'], days:['Martedì','Mercoledì']},
+            traffic:   {best:['13:00-15:00','19:00-20:00'], days:['Giovedì','Venerdì']}
+        },
+        web: {
+            sales:     {best:['10:00-12:00','14:00-16:00'], days:['Martedì','Mercoledì','Giovedì']},
+            awareness: {best:['09:00-11:00','14:00-16:00'], days:['Lunedì','Martedì','Mercoledì']},
+            engagement:{best:['10:00-12:00','15:00-17:00'], days:['Martedì','Giovedì']},
+            leads:     {best:['09:00-11:00','14:00-15:00'], days:['Martedì','Mercoledì']},
+            traffic:   {best:['08:00-10:00','13:00-15:00'], days:['Lunedì','Martedì','Mercoledì']}
+        }
+    };
+    return times[platform]?.[goal] || times.instagram.awareness;
+}
+
+// ==================== HASHTAG STRATEGY ====================
+function getHashtagStrategy(platform, goal, settore) {
+    const sector = (settore || '').toLowerCase();
+    const base = [];
+    
+    // Platform-specific
+    if (platform === 'instagram') {
+        base.push({cat:'Formato', tags:['#reels','#carousel','#instagramtips','#contentcreator']});
+        base.push({cat:'Engagement', tags:['#community','#saveforlater','#commentbelow','#followformore']});
+    } else if (platform === 'tiktok') {
+        base.push({cat:'Discovery', tags:['#fyp','#foryou','#viral','#trending']});
+        base.push({cat:'Formato', tags:['#tiktoktips','#tutorial','#storytime']});
+    } else if (platform === 'linkedin') {
+        base.push({cat:'Visibilità', tags:['#leadership','#growth','#innovation','#networking']});
+        base.push({cat:'Contenuto', tags:['#tips','#lessons','#insights','#casestudy']});
+    } else if (platform === 'facebook') {
+        base.push({cat:'Formato', tags:['#facebookreels','#facebooklive','#grouppost']});
+        base.push({cat:'Engagement', tags:['#community','#share','#discussion']});
+    }
+    
+    // Goal-specific
+    const goalTags = {
+        sales: {cat:'Vendita', tags:['#offerta','#promo','#sconto','#shopnow','#limitedoffer']},
+        awareness: {cat:'Brand', tags:['#branding','#brandstory','#aboutus','#newbrand']},
+        engagement: {cat:'Interazione', tags:['#challenge','#poll','#askme','#contest','#giveaway']},
+        leads: {cat:'Lead', tags:['#freeresource','#download','#ebook','#webinar','#signup']},
+        traffic: {cat:'Traffico', tags:['#linkinbio','#readmore','#blogarticle','#website']}
+    };
+    if (goalTags[goal]) base.push(goalTags[goal]);
+    
+    // Sector-specific
+    if (sector.match(/cucin|food|ristora|alimenta|chef/)) base.push({cat:'Settore', tags:['#foodie','#ricette','#cucinaitaliana','#healthyfood','#cooking']});
+    else if (sector.match(/benessere|wellness|yoga|fitness/)) base.push({cat:'Settore', tags:['#wellness','#selfcare','#mindfulness','#healthylifestyle']});
+    else if (sector.match(/formazione|coach|corso|educaz/)) base.push({cat:'Settore', tags:['#formazione','#crescitapersonale','#learning','#skillup']});
+    else if (sector.match(/tech|software|digital|web|app/)) base.push({cat:'Settore', tags:['#tech','#digitalmarketing','#innovation','#startup']});
+    else if (sector.match(/moda|fashion|beauty|stile/)) base.push({cat:'Settore', tags:['#fashion','#style','#outfit','#beauty','#ootd']});
+    else if (sector.match(/immobil|casa|arredo|interior/)) base.push({cat:'Settore', tags:['#realestate','#interiordesign','#homedecor','#property']});
+    
+    return base;
+}
+
+// ==================== ACTION PLAN RENDERER ====================
+function renderActionPlan(a) {
+    const section = $('actionPlanSection');
+    const content = $('actionPlanContent');
+    const sd = state.strategicData || generateStrategicData(a);
+    const postTime = getPostingTime(state.platform, state.goal);
+    const settore = getFieldVal('fieldSettore');
+    const hashtags = getHashtagStrategy(state.platform, state.goal, settore);
+    const recs = a.recommendations || [];
+    const highPrio = recs.filter(r => r.priority === 'high');
+    const verdict = getScoreVerdict(a.overallScore);
+    
+    let html = '';
+    
+    // CARD 1: Pre-pubblicazione checklist
+    html += `<div class="swa-action-card">
+        <h4>📝 Prima di Pubblicare</h4>
+        <ul class="swa-checklist">
+            <li class="${a.bestRatioMatch >= 85 ? 'done' : 'todo'}"><span class="ck">${a.bestRatioMatch >= 85 ? '✓' : ''}</span>Formato immagine corretto per ${state.platform} (${a.bestRatioMatch}% match)</li>
+            <li class="${a.wcagRatio >= 4.5 ? 'done' : 'todo'}"><span class="ck">${a.wcagRatio >= 4.5 ? '✓' : ''}</span>Contrasto testo leggibile (WCAG ${a.wcagRatio}:1)</li>
+            <li class="${a.safeZoneCompliance >= 85 ? 'done' : 'todo'}"><span class="ck">${a.safeZoneCompliance >= 85 ? '✓' : ''}</span>Contenuti dentro le safe zones (${a.safeZoneCompliance}%)</li>
+            <li class="${a.entropy <= 5.5 ? 'done' : 'todo'}"><span class="ck">${a.entropy <= 5.5 ? '✓' : ''}</span>Complessità gestibile (entropia ${a.entropy}/8)</li>
+            <li class="${a.negativeSpace >= 20 ? 'done' : 'todo'}"><span class="ck">${a.negativeSpace >= 20 ? '✓' : ''}</span>Spazio negativo sufficiente (${a.negativeSpace}%)</li>
+            <li class="${highPrio.length === 0 ? 'done' : 'todo'}"><span class="ck">${highPrio.length === 0 ? '✓' : ''}</span>${highPrio.length > 0 ? highPrio.length + ' problemi alta priorità da risolvere' : 'Nessun problema critico rilevato'}</li>
+        </ul>
+    </div>`;
+    
+    // CARD 2: Quando pubblicare
+    html += `<div class="swa-action-card">
+        <h4>📅 Quando Pubblicare</h4>
+        <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:10px">Orari ottimali per ${state.platform} con obiettivo ${state.goal}:</p>
+        <div style="margin-bottom:10px">
+            <span style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase">Fasce orarie</span><br>
+            ${postTime.best.map(t => `<span class="swa-time-badge"><i class="fas fa-clock"></i> ${t}</span>`).join('')}
+        </div>
+        <div>
+            <span style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase">Giorni migliori</span><br>
+            ${postTime.days.map(d => `<span class="swa-time-badge" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.2);color:#34d399"><i class="fas fa-calendar-check"></i> ${d}</span>`).join('')}
+        </div>
+    </div>`;
+    
+    // CARD 3: Strategia hashtag
+    if (hashtags.length > 0) {
+        html += `<div class="swa-action-card">
+            <h4>#️⃣ Strategia Hashtag</h4>
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:10px">${state.platform === 'instagram' ? 'Usa 5-10 hashtag: mix alta popolarità + nicchia' : state.platform === 'linkedin' ? 'Max 3-5 hashtag professionali' : state.platform === 'tiktok' ? 'Max 3-4 hashtag + trending' : 'Max 3-5 hashtag rilevanti'}</p>`;
+        for (const group of hashtags) {
+            html += `<div style="margin-bottom:8px"><span style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase">${group.cat}</span>
+                <div class="swa-hashtag-cloud">${group.tags.map(t => `<span class="swa-hashtag" onclick="navigator.clipboard.writeText('${t}')">${t}</span>`).join('')}</div>
+            </div>`;
+        }
+        html += `</div>`;
+    }
+    
+    // CARD 4: Post-pubblicazione
+    html += `<div class="swa-action-card">
+        <h4>📊 Dopo la Pubblicazione</h4>
+        <ul class="swa-checklist">
+            <li class="todo"><span class="ck"></span>Rispondi ai commenti entro 30 min (boost algoritmico)</li>
+            <li class="todo"><span class="ck"></span>Condividi nelle stories/altri canali entro 1h</li>
+            <li class="todo"><span class="ck"></span>${sd.organicOrSponsored.includes('Sponsorizzato') ? 'Attiva sponsorizzazione dopo 1-2h di organico' : 'Monitora reach organico per 24h'}</li>
+            <li class="todo"><span class="ck"></span>Controlla metriche dopo 24h (CTR, saves, shares)</li>
+            <li class="todo"><span class="ck"></span>Se engagement basso → testa variante A/B dell'immagine</li>
+            <li class="todo"><span class="ck"></span>Documenta i risultati per il prossimo contenuto</li>
+        </ul>
+    </div>`;
+    
+    content.innerHTML = html;
+    section.style.display = 'block';
+    
+    // Store for report
+    state.postingTime = postTime;
+    state.hashtagStrategy = hashtags;
 }
 
 function animateNumber(el, target, suffix) {
@@ -1632,10 +2755,172 @@ async function downloadDocx() {
         body += p('• Palette colori: clustering per quantizzazione (bucket 32-step) con merge di colori simili (ΔE < 80)');
         body += p('• Heatmap: combinazione pesata di edge-saliency (50%), center-bias gaussiano (35%) e saturazione (15%), con gaussian blur σ=12');
         
-        // AI Prompts
-        body += p('8. Prompt AI per il Post Completo', 'Heading1');
+        // Strategic Analysis
+        const sd = state.strategicData || generateStrategicData(a);
+        body += p('8. Analisi Strategica del Post', 'Heading1');
         
-        body += p('8.1 Prompt Immagine', 'Heading2');
+        // Strategy completeness
+        const ssDoc = calculateStrategyScore();
+        body += mixedP([{text:'Completezza dati: ',bold:true},{text:`${ssDoc.score}% (${ssDoc.filled}/${ssDoc.total} campi compilati)`, color: ssDoc.score >= 70 ? '059669' : ssDoc.score >= 40 ? 'D97706' : 'DC2626'}]);
+        body += p('');
+        
+        body += p('8.1 Report Tecnico — Analisi per Categorie', 'Heading2');
+        
+        // Build categorized fields for DOCX (same logic as UI)
+        const ndDoc = 'Non determinabile';
+        const docRows = [
+            // ── CAMPI DA COMPILARE (priorità) ──
+            {label:'Obiettivo', value:sd.obiettivo, field:true, critical:true, tipOk:'Obiettivo chiaro: guida tutta la strategia.', tipMiss:'Fondamentale: senza obiettivo il post non ha direzione.'},
+            {label:'Target', value:sd.targetAnalisi, field:true, critical:true, tipOk:'Target definito: puoi personalizzare tono e messaggio.', tipMiss:'Chi vuoi raggiungere? Definisci età, interessi, ruolo.'},
+            {label:'Argomento', value:sd.argomento, field:true, critical:true, tipOk:'Argomento definito.', tipMiss:'Di cosa parla il post? Compila "Scopo del post".'},
+            {label:'Didascalia / Copy', value:sd.copyOriginale, field:true, critical:true, tipOk:'Copy presente: CTA e hook attivati.', tipMiss:'Inserisci il testo del post per analisi CTA e hook.'},
+            {label:'Settore', value:sd.settore, field:true, critical:true, tipOk:'Settore specificato: aiuta tono e hashtag.', tipMiss:'Indica il settore per suggerimenti più mirati.'},
+            {label:'Promessa di valore', value:sd.promessa, field:false, critical:true, tipOk:'Promessa chiara.', tipWarn:'Dedotta automaticamente — verifica.', tipMiss:'Nessuna promessa rilevata. Cosa ci guadagna chi legge?'},
+            {label:'Prodotto / Servizio', value:sd.prodotto, field:true, critical:true, tipOk:'Prodotto identificato.', tipMiss:'Specifica cosa promuovi nel campo "Sottotipo".'},
+            {label:'Contesto business', value:sd.contestoBusiness, field:true, critical:true, tipOk:'Contesto specificato.', tipMiss:'Aggiungi contesto per suggerimenti più personalizzati.'},
+            {label:'Brand / Titolo', value:sd.brand, field:true, critical:true, tipOk:'Brand identificato.', tipMiss:'Inserisci il titolo/nome brand.'},
+            {label:'Tipo di hook', value:sd.hookType, field:false, critical:true, tipOk:'Hook rilevato.', tipMiss:'Inserisci la didascalia per analizzare l\'apertura.'},
+            {label:'Allineamento pubblico', value:sd.alignment, field:false, critical:true, tipOk:'Contenuto e target coerenti.', tipWarn:'Verifica che il messaggio parli al tuo target.', tipMiss:'Servono target + didascalia per verificare.'},
+            // ── CAMPI AUTO-DEDOTTI ──
+            {label:'Messaggio commerciale', value:sd.messaggio, field:false, tipOk:'Messaggio coerente con obiettivo.', tipWarn:'Dedotto dall\'obiettivo — verifica.'},
+            {label:'Tema contenuto', value:sd.tema, field:false, tipOk:'Tema coerente.'},
+            {label:'Fase funnel', value:sd.funnel, field:false, tipOk:'Fase identificata.', tipWarn:'Dedotta automaticamente dal testo e obiettivo.'},
+            {label:'Tono comunicativo', value:sd.tono, field:false, tipOk:'Tono rilevato dall\'analisi visiva.', tipWarn:'Basato su luminosità e contrasto dell\'immagine.'},
+            {label:'Tipo media', value:sd.tipoMedia, field:true, tipOk:'Formato definito.', tipMiss:'Seleziona il tipo di media.'},
+            {label:'CTA rilevata', value:sd.ctaDetected !== ndDoc ? sd.ctaDetected + ' (' + sd.ctaType + ')' : ndDoc, field:false, tipOk:'CTA trovata.', tipMiss:'Nessuna CTA nel testo. Aggiungi un invito all\'azione.'},
+        ];
+        
+        // Assign statuses
+        for (const r of docRows) {
+            if (r.value === ndDoc) { r.status = 'red'; r.tip = r.tipMiss || ''; }
+            else if (!r.field && r.tipWarn) { r.status = 'orange'; r.tip = r.tipWarn; }
+            else { r.status = 'green'; r.tip = r.tipOk || ''; }
+            if (r.label === 'Allineamento pubblico' && r.value.includes('Verifica')) { r.status = 'orange'; r.tip = r.tipWarn || ''; }
+        }
+        
+        const docMissing = docRows.filter(r => r.status === 'red');
+        const docWarnings = docRows.filter(r => r.status === 'orange');
+        const docPassed = docRows.filter(r => r.status === 'green');
+        
+        // Summary line
+        body += mixedP([
+            {text:`✓ ${docPassed.length} superati  `,bold:true,color:'059669'},
+            {text:`⚠ ${docWarnings.length} avvisi  `,bold:true,color:'D97706'},
+            {text:`✗ ${docMissing.length} mancanti`,bold:true,color:'DC2626'}
+        ]);
+        body += p('');
+        
+        // RED: Missing fields first
+        if (docMissing.length > 0) {
+            body += mixedP([{text:`✗ DA COMPILARE — ${docMissing.length} campi mancanti`,bold:true,color:'DC2626'}]);
+            for (const r of docMissing) {
+                body += mixedP([{text:`  ✗ ${r.label}: `,bold:true},{text:'Da compilare',color:'DC2626'}]);
+                if (r.tip) body += p(`     → ${r.tip}`, null, {color:'999999',size:18});
+            }
+            body += p('');
+        }
+        
+        // ORANGE: Warnings
+        if (docWarnings.length > 0) {
+            body += mixedP([{text:`⚠ AVVISI — ${docWarnings.length} campi da verificare`,bold:true,color:'D97706'}]);
+            for (const r of docWarnings) {
+                body += mixedP([{text:`  ⚠ ${r.label}: `,bold:true},{text:r.value,color:'D97706'}]);
+                if (r.tip) body += p(`     → ${r.tip}`, null, {color:'999999',size:18});
+            }
+            body += p('');
+        }
+        
+        // GREEN: Passed
+        if (docPassed.length > 0) {
+            body += mixedP([{text:`✓ SUPERATI — ${docPassed.length} campi OK`,bold:true,color:'059669'}]);
+            for (const r of docPassed) {
+                body += mixedP([{text:`  ✓ ${r.label}: `,bold:true},{text:r.value,color:'059669'}]);
+                if (r.tip) body += p(`     ${r.tip}`, null, {color:'999999',size:18});
+            }
+            body += p('');
+        }
+        
+        body += p('8.2 Risposte Operative', 'Heading2');
+        body += p(`1. Post organico o sponsorizzato? → ${sd.organicOrSponsored}`, null, {bold:true});
+        body += p(sd.organicReason);
+        body += p(`2. Obiettivo unico → ${sd.uniqueObj}`, null, {bold:true});
+        body += p(sd.uniqueObjReason);
+        body += p(`3. Quanto diretto posso essere? → ${sd.directness}`, null, {bold:true});
+        body += p(sd.directnessReason);
+        
+        body += p('8.3 Sintesi per il Cliente', 'Heading2');
+        body += p(`Questo post ${sd.argomento !== 'Non determinabile' ? 'parla di ' + sd.argomento : 'ha un argomento da verificare'}${sd.settore !== 'Non determinabile' ? ' nel settore ' + sd.settore : ''}. L'obiettivo principale è ${sd.obiettivo}. Il post si trova nella fase ${sd.funnel.includes('TOFU') ? 'iniziale (farsi conoscere)' : sd.funnel.includes('MOFU') ? 'intermedia (creare interesse)' : sd.funnel.includes('BOFU') ? 'finale (spingere all\'azione)' : 'non determinata'} del percorso cliente.`);
+        body += p(`Il tono comunicativo rilevato è "${sd.tono.toLowerCase()}" e il livello di pressione consigliato è "${sd.directness.toLowerCase()}".`);
+        if (sd.targetAnalisi !== 'Non determinabile') body += p(`Il target è: ${sd.targetAnalisi}. ${sd.alignment !== 'Non determinabile' ? sd.alignment : ''}`);
+        if (sd.ctaDetected !== 'Non determinabile') body += p(`CTA rilevata: "${sd.ctaDetected}" (tipo: ${sd.ctaType}).`);
+        if (sd.hookType !== 'Non determinabile') body += p(`Tipo di hook usato: ${sd.hookType}.`);
+        if (sd.promessa !== 'Non determinabile') body += p(`La promessa di valore implicita è: ${sd.promessa}.`);
+        
+        // Color Psychology
+        const docPsych = state.colorPsychology || getColorPsychology(a.palette);
+        if (docPsych && docPsych.length > 0) {
+            body += p('8.4 Psicologia dei Colori', 'Heading2');
+            body += p('I colori dominanti comunicano i seguenti messaggi al pubblico:');
+            const seenDoc = new Set();
+            for (const cp of docPsych) {
+                if (seenDoc.has(cp.name)) continue;
+                seenDoc.add(cp.name);
+                body += mixedP([{text:`${cp.emoji} ${cp.name} (${cp.hex}): `,bold:true},{text:`${cp.emotion} — Ideale per: ${cp.use}`}]);
+            }
+        }
+        
+        // Media Type Recommendation
+        const docMediaRec = getMediaRecommendation(state.platform, state.goal, a);
+        body += p('9. Tipo Media Consigliato', 'Heading1');
+        body += p(`Consigliato: ${docMediaRec.primary.label}`, null, {bold:true});
+        body += p(docMediaRec.primary.reason);
+        if (docMediaRec.alt) {
+            body += p(`Alternativa: ${docMediaRec.alt.label}`, null, {bold:true});
+            body += p(docMediaRec.alt.reason);
+        }
+        if (docMediaRec.ambiguityRisk) {
+            body += p(`⚠ ${docMediaRec.ambiguityRisk}`);
+        }
+        
+        // Action Plan
+        body += p('10. Piano d\'Azione', 'Heading1');
+        
+        const docPostTime = getPostingTime(state.platform, state.goal);
+        const docSettore = getFieldVal('fieldSettore');
+        const docHashtags = getHashtagStrategy(state.platform, state.goal, docSettore);
+        
+        body += p('10.1 Quando Pubblicare', 'Heading2');
+        body += mixedP([{text:'Fasce orarie ottimali: ',bold:true},{text:docPostTime.best.join(', ')}]);
+        body += mixedP([{text:'Giorni migliori: ',bold:true},{text:docPostTime.days.join(', ')}]);
+        body += p(`Tip: ${docPostTime.tip || 'Pubblica quando il tuo pubblico è più attivo. Verifica gli insight della piattaforma per dati personalizzati.'}`);
+        
+        body += p('10.2 Checklist Pre-Pubblicazione', 'Heading2');
+        body += p(`${a.bestRatioMatch >= 85 ? '✓' : '✗'} Formato immagine corretto per ${platformName} (${a.bestRatioMatch}% match)`);
+        body += p(`${a.wcagRatio >= 4.5 ? '✓' : '✗'} Contrasto testo leggibile (WCAG ${a.wcagRatio}:1)`);
+        body += p(`${a.safeZoneCompliance >= 85 ? '✓' : '✗'} Contenuti dentro le safe zones (${a.safeZoneCompliance}%)`);
+        body += p(`${a.entropy <= 5.5 ? '✓' : '✗'} Complessità gestibile (entropia ${a.entropy}/8)`);
+        body += p(`${a.negativeSpace >= 20 ? '✓' : '✗'} Spazio negativo sufficiente (${a.negativeSpace}%)`);
+        
+        body += p('10.3 Checklist Post-Pubblicazione', 'Heading2');
+        body += p('○ Rispondi ai commenti entro 30 min (boost algoritmico)');
+        body += p('○ Condividi nelle stories/altri canali entro 1h');
+        body += p(`○ ${sd.organicOrSponsored.includes('Sponsorizzato') ? 'Attiva sponsorizzazione dopo 1-2h di organico' : 'Monitora reach organico per 24h'}`);
+        body += p('○ Controlla metriche dopo 24h (CTR, saves, shares)');
+        body += p('○ Se engagement basso → testa variante A/B dell\'immagine');
+        body += p('○ Documenta i risultati per il prossimo contenuto');
+        
+        if (docHashtags.length > 0) {
+            body += p('10.4 Strategia Hashtag', 'Heading2');
+            body += p(`${state.platform === 'instagram' ? 'Usa 5-10 hashtag: mix alta popolarità + nicchia' : state.platform === 'linkedin' ? 'Max 3-5 hashtag professionali' : state.platform === 'tiktok' ? 'Max 3-4 hashtag + trending' : 'Max 3-5 hashtag rilevanti'}`);
+            for (const group of docHashtags) {
+                body += mixedP([{text:group.cat + ': ',bold:true},{text:group.tags.join(' ')}]);
+            }
+        }
+        
+        // AI Prompts
+        body += p('11. Prompt AI per il Post Completo', 'Heading1');
+        
+        body += p('11.1 Prompt Immagine', 'Heading2');
         body += p('Copia e incolla in ChatGPT/DALL-E, Midjourney o qualsiasi AI di generazione immagini:');
         const docImgPrompt = generateImagePrompt(a, state.platform, state.goal, state.target, 'graphic', 'it');
         for (const line of docImgPrompt.split('\n')) {
@@ -1649,7 +2934,7 @@ async function downloadDocx() {
         }
         
         body += p('');
-        body += p('8.2 Prompt Testo / Caption', 'Heading2');
+        body += p('11.2 Prompt Testo / Caption', 'Heading2');
         body += p('Copia e incolla in ChatGPT, Claude o qualsiasi AI testuale per generare la caption del post:');
         const docTxtPrompt = generateContentPrompt(a, state.platform, state.goal, state.target, 'professional', 'it');
         for (const line of docTxtPrompt.split('\n')) {
@@ -1663,7 +2948,7 @@ async function downloadDocx() {
         }
         
         // Next steps
-        body += p('9. Prossimi Passi', 'Heading1');
+        body += p('12. Prossimi Passi', 'Heading1');
         body += p(`1. Implementa le raccomandazioni ad alta priorità (${recs.filter(r=>r.priority==='high').length} identificate)`);
         body += p('2. Conduci A/B test: minimo 1.000 impression per variante');
         body += p('3. Monitora CTR, engagement rate e tempo di visualizzazione');
@@ -1745,6 +3030,23 @@ document.querySelectorAll('#promptToneBtns .swa-prompt-style-btn').forEach(btn =
     });
 });
 
+// Data textarea + structured fields live update
+let dataDebounce = null;
+const fieldIds = ['contentDataInput','fieldScopo','fieldObiettivo','fieldTipoMedia','fieldSottotipo','fieldSettore','fieldPubblico','fieldTitolo1','fieldTitolo2','fieldTitolo3','fieldDidascalia','fieldContesto'];
+document.addEventListener('input', function(e) {
+    if (e.target && fieldIds.includes(e.target.id)) {
+        clearTimeout(dataDebounce);
+        dataDebounce = setTimeout(() => { 
+            if (state.analysis) { renderAllPrompts(); renderStrategicAnalysis(state.analysis); renderStrategyScore(); }
+        }, 300);
+    }
+});
+document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'fieldTipoMedia') {
+        if (state.analysis) { renderAllPrompts(); renderStrategicAnalysis(state.analysis); renderStrategyScore(); }
+    }
+});
+
 function switchPromptTab(tab) {
     document.querySelectorAll('.swa-prompt-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
     document.querySelectorAll('.swa-prompt-tab-content').forEach(c => c.classList.remove('active'));
@@ -1802,125 +3104,395 @@ function generateImagePrompt(a, platform, goal, target, style, lang) {
     if (a.entropy > 5.5) compNotes.push(lang==='en' ? 'Keep design simple: max 5 visual elements' : 'Design semplice: massimo 5 elementi visivi');
     if (a.centerBias < 50) compNotes.push(lang==='en' ? 'Place main subject/CTA at center or rule-of-thirds points' : 'Soggetto/CTA al centro o nei punti regola dei terzi');
     
-    if (lang === 'en') {
-        let p = `Create a ${platDims} image for a ${pName(platform,'en')} post.\n\nSTYLE: ${styleDesc[style].en}\n\nOBJECTIVE: ${goalImg[goal].en}\n`;
+    // Collect structured fields for context
+    function val(id) { const el = $(id); return el ? el.value.trim() : ''; }
+    const F = {
+        scopo: val('fieldScopo'), settore: val('fieldSettore'), titolo1: val('fieldTitolo1'),
+        titolo2: val('fieldTitolo2'), titolo3: val('fieldTitolo3'), contesto: val('fieldContesto'),
+        didascalia: val('fieldDidascalia'), sottotipo: val('fieldSottotipo'),
+        datiExtra: val('contentDataInput')
+    };
+    const allContext = [F.titolo1, F.titolo2, F.titolo3, F.didascalia, F.contesto, F.datiExtra].filter(Boolean).join('\n');
+    const hasContext = allContext.length > 0;
+    
+    if (lang === 'it') {
+        let p = `Analizza lo screenshot del post social concentrandoti PRIMA sul contenuto testuale e sul contesto, NON solo sull'estetica.\n\n`;
+        
+        // ── IDENTIFICATION ──
+        p += `════════════════════════════════════\n`;
+        p += `IDENTIFICAZIONE OBBLIGATORIA\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Identifica chiaramente:\n`;
+        p += `– il tipo di contenuto (evento, corso, promozione, informazione)\n`;
+        p += `– il settore reale (es. cucina, alimentazione naturale, formazione, benessere)\n`;
+        p += `– il brand o nome dell'attività citata, che deve essere considerato CENTRALE\n\n`;
+        
+        // ── CONTEXT FROM FIELDS ──
+        if (hasContext) {
+            p += `════════════════════════════════════\n`;
+            p += `DATI REALI DEL POST\n`;
+            p += `════════════════════════════════════\n`;
+            if (F.settore) p += `Settore: ${F.settore}\n`;
+            if (F.sottotipo) p += `Tipo contenuto: ${F.sottotipo}\n`;
+            if (F.titolo1) p += `Titolo: ${F.titolo1}\n`;
+            if (F.titolo2) p += `Sottotitolo: ${F.titolo2}\n`;
+            if (F.titolo3) p += `Supporto: ${F.titolo3}\n`;
+            if (F.contesto) p += `Contesto: ${F.contesto}\n`;
+            if (F.didascalia) p += `Didascalia: ${F.didascalia}\n`;
+            if (F.datiExtra) p += `Info extra: ${F.datiExtra.substring(0, 400)}\n`;
+            p += '\n';
+        }
+        
+        // ── GENERATION TASK ──
+        p += `════════════════════════════════════\n`;
+        p += `GENERA IL PROMPT IMMAGINE\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Crea un'immagine ${platDims} per un post ${pName(platform,'it')}.\n\n`;
+        p += `STILE: ${styleDesc[style].it}\n`;
+        p += `OBIETTIVO: ${goalImg[goal].it}\n`;
         if (targetLine) p += targetLine + '\n';
-        p += `\nCOLOR PALETTE: Reference colors: ${paletteDesc}. Harmony: ${harmony}.\n\nCOMPOSITION REQUIREMENTS:\n`;
+        
+        p += `\nGenera un prompt per un'immagine COERENTE con il tema del post, che aiuti l'utente a capire immediatamente di cosa si tratta.\n\n`;
+        
+        // ── SECTOR-SPECIFIC VISUAL RULES ──
+        p += `════════════════════════════════════\n`;
+        p += `REGOLE VISIVE DI COERENZA SETTORE\n`;
+        p += `════════════════════════════════════\n`;
+        p += `• Se il post riguarda un corso o evento di cucina o benessere → l'immagine DEVE includere riferimenti visivi pertinenti (ingredienti, cucina, cibo reale, ambiente autentico) e uno stile naturale, educativo e accogliente.\n`;
+        p += `• Se riguarda formazione → aula, materiali didattici, persone che apprendono, ambiente professionale.\n`;
+        p += `• Se riguarda un prodotto → il prodotto stesso in primo piano, nel suo contesto d'uso reale.\n`;
+        p += `• Se riguarda un evento → elementi che identifichino immediatamente il tipo di evento (location, attività, atmosfera).\n\n`;
+        
+        // ── PROHIBITIONS ──
+        p += `════════════════════════════════════\n`;
+        p += `DIVIETI\n`;
+        p += `════════════════════════════════════\n`;
+        p += `• NON inventare slogan, claim o messaggi motivazionali non presenti o non deducibili dal post.\n`;
+        p += `• Evita AUTOMATICAMENTE estetiche non pertinenti: moda, beauty, lusso, simboli astratti o figure stilizzate — a meno che non siano esplicitamente citate nel contenuto.\n`;
+        p += `• NON usare elementi decorativi generici che non comunicano il settore reale.\n\n`;
+        
+        // ── PALETTE & COMPOSITION ──
+        p += `════════════════════════════════════\n`;
+        p += `PALETTE COLORI E COMPOSIZIONE\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Colori di riferimento: ${paletteDesc}. Armonia: ${harmony}.\n`;
         for (const f of fixes) p += `- ${f}\n`;
         for (const n of compNotes) p += `- ${n}\n`;
-        p += `\nTECHNICAL SPECS:\n- Aspect ratio: ${platDims}\n- Text contrast ratio ≥ 7:1\n- All key elements within central 80% (safe zones)\n- High resolution, crisp details, no artifacts\n\nThe image must feel professional and instantly capture attention in a ${pName(platform,'en')} feed.`;
+        
+        // ── TECHNICAL SPECS ──
+        p += `\n════════════════════════════════════\n`;
+        p += `SPECIFICHE TECNICHE\n`;
+        p += `════════════════════════════════════\n`;
+        p += `- Formato: ${platDims}\n`;
+        p += `- Contrasto testo ≥ 7:1\n`;
+        p += `- Elementi chiave entro 80% centrale (safe zones)\n`;
+        p += `- Alta risoluzione, dettagli nitidi, nessun artefatto\n\n`;
+        
+        // ── COHERENCE TEST ──
+        p += `════════════════════════════════════\n`;
+        p += `TEST DI COERENZA FINALE (OBBLIGATORIO)\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Prima di finalizzare il prompt, verifica:\n`;
+        p += `"Guardando SOLO l'immagine, si capisce subito di che evento o contenuto si tratta?"\n`;
+        p += `Se la risposta è NO → correggi il prompt.\n\n`;
+        p += `Il prompt finale deve descrivere un'immagine che potrebbe essere pubblicata sulla pagina social del brand SENZA creare ambiguità di settore.\n`;
+        p += `L'immagine deve risultare professionale e catturare immediatamente l'attenzione nel feed ${pName(platform,'it')}.`;
         return p;
+        
     } else {
-        let p = `Crea un'immagine ${platDims} per un post ${pName(platform,'it')}.\n\nSTILE: ${styleDesc[style].it}\n\nOBIETTIVO: ${goalImg[goal].it}\n`;
+        // ── ENGLISH ──
+        let p = `Analyze the social post screenshot focusing FIRST on textual content and context, NOT just aesthetics.\n\n`;
+        
+        p += `════════════════════════════════════\n`;
+        p += `MANDATORY IDENTIFICATION\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Clearly identify:\n`;
+        p += `– the content type (event, course, promotion, information)\n`;
+        p += `– the real sector (e.g. cooking, natural food, training, wellness)\n`;
+        p += `– the brand or business name cited, which must be considered CENTRAL\n\n`;
+        
+        if (hasContext) {
+            p += `════════════════════════════════════\n`;
+            p += `REAL POST DATA\n`;
+            p += `════════════════════════════════════\n`;
+            if (F.settore) p += `Sector: ${F.settore}\n`;
+            if (F.sottotipo) p += `Content type: ${F.sottotipo}\n`;
+            if (F.titolo1) p += `Title: ${F.titolo1}\n`;
+            if (F.titolo2) p += `Subtitle: ${F.titolo2}\n`;
+            if (F.titolo3) p += `Support: ${F.titolo3}\n`;
+            if (F.contesto) p += `Context: ${F.contesto}\n`;
+            if (F.didascalia) p += `Caption: ${F.didascalia}\n`;
+            if (F.datiExtra) p += `Extra info: ${F.datiExtra.substring(0, 400)}\n`;
+            p += '\n';
+        }
+        
+        p += `════════════════════════════════════\n`;
+        p += `GENERATE IMAGE PROMPT\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Create a ${platDims} image for a ${pName(platform,'en')} post.\n\n`;
+        p += `STYLE: ${styleDesc[style].en}\n`;
+        p += `OBJECTIVE: ${goalImg[goal].en}\n`;
         if (targetLine) p += targetLine + '\n';
-        p += `\nPALETTE COLORI: Colori di riferimento: ${paletteDesc}. Armonia: ${harmony}.\n\nREQUISITI DI COMPOSIZIONE:\n`;
+        
+        p += `\nGenerate a prompt for an image COHERENT with the post theme, helping the user immediately understand what it's about.\n\n`;
+        
+        p += `════════════════════════════════════\n`;
+        p += `SECTOR-SPECIFIC VISUAL RULES\n`;
+        p += `════════════════════════════════════\n`;
+        p += `• If the post is about a cooking or wellness course/event → image MUST include relevant visual references (ingredients, kitchen, real food, authentic environment) with a natural, educational, welcoming style.\n`;
+        p += `• If about training → classroom, educational materials, people learning, professional environment.\n`;
+        p += `• If about a product → the product itself in the foreground, in its real context of use.\n`;
+        p += `• If about an event → elements that immediately identify the type of event (location, activity, atmosphere).\n\n`;
+        
+        p += `════════════════════════════════════\n`;
+        p += `PROHIBITIONS\n`;
+        p += `════════════════════════════════════\n`;
+        p += `• Do NOT invent slogans, claims or motivational messages not present or deducible from the post.\n`;
+        p += `• AUTOMATICALLY avoid non-pertinent aesthetics: fashion, beauty, luxury, abstract symbols or stylized figures — unless explicitly cited in the content.\n`;
+        p += `• Do NOT use generic decorative elements that don't communicate the real sector.\n\n`;
+        
+        p += `════════════════════════════════════\n`;
+        p += `COLOR PALETTE & COMPOSITION\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Reference colors: ${paletteDesc}. Harmony: ${harmony}.\n`;
         for (const f of fixes) p += `- ${f}\n`;
         for (const n of compNotes) p += `- ${n}\n`;
-        p += `\nSPECIFICHE TECNICHE:\n- Formato: ${platDims}\n- Contrasto testo ≥ 7:1\n- Elementi chiave entro 80% centrale (safe zones)\n- Alta risoluzione, dettagli nitidi, nessun artefatto\n\nL'immagine deve risultare professionale e catturare immediatamente l'attenzione nel feed ${pName(platform,'it')}.`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `TECHNICAL SPECS\n`;
+        p += `════════════════════════════════════\n`;
+        p += `- Aspect ratio: ${platDims}\n`;
+        p += `- Text contrast ratio ≥ 7:1\n`;
+        p += `- All key elements within central 80% (safe zones)\n`;
+        p += `- High resolution, crisp details, no artifacts\n\n`;
+        
+        p += `════════════════════════════════════\n`;
+        p += `FINAL COHERENCE TEST (MANDATORY)\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Before finalizing the prompt, verify:\n`;
+        p += `"Looking at ONLY the image, can you immediately tell what event or content this is about?"\n`;
+        p += `If the answer is NO → fix the prompt.\n\n`;
+        p += `The final prompt must describe an image that could be published on the brand's social page WITHOUT creating sector ambiguity.\n`;
+        p += `The image must feel professional and instantly capture attention in a ${pName(platform,'en')} feed.`;
         return p;
     }
 }
 
-// ==================== CONTENT / TEXT PROMPT ====================
+// ==================== CONTENT / TEXT PROMPT (MASTER MULTI-PIATTAFORMA + FRAMEWORK STRATEGICO) ====================
 function generateContentPrompt(a, platform, goal, target, tone, lang) {
-    const recs = a.recommendations || [];
-    const topColors = a.palette.slice(0, 3).map(c => rgbToHex(c.r,c.g,c.b));
-    
-    // Platform-specific content rules
-    const platRules = {
-        instagram: {
-            en: {maxLen:'2200 characters', format:'caption with line breaks for readability', hashtags:'10-15 relevant hashtags (mix popular + niche) in a separate block at the end', hook:'First line must be a powerful hook visible before "more" truncation (125 chars)', cta:'Include a clear CTA (comment, save, share, link in bio)', extras:'Use emojis strategically to break text and add personality. Consider carousel slides text if applicable.'},
-            it: {maxLen:'2200 caratteri', format:'caption con a capo per leggibilità', hashtags:'10-15 hashtag pertinenti (mix popolari + nicchia) in un blocco separato alla fine', hook:'La prima riga deve essere un hook potente visibile prima del "altro" (125 caratteri)', cta:'Includi una CTA chiara (commenta, salva, condividi, link in bio)', extras:'Usa emoji in modo strategico per spezzare il testo e dare personalità. Considera testi per eventuali slide carosello.'}
-        },
-        tiktok: {
-            en: {maxLen:'4000 characters', format:'short, punchy caption', hashtags:'3-5 trending + niche hashtags', hook:'First 2 words must stop the scroll', cta:'CTA: follow, comment, duet, stitch', extras:'Include a provocative question or controversial take. Consider text overlay script for the video.'},
-            it: {maxLen:'4000 caratteri', format:'caption breve e d\'impatto', hashtags:'3-5 hashtag trending + nicchia', hook:'Le prime 2 parole devono bloccare lo scroll', cta:'CTA: segui, commenta, duetta, stitch', extras:'Includi una domanda provocatoria o un\'opinione controcorrente. Considera script per testo in sovraimpressione nel video.'}
-        },
-        linkedin: {
-            en: {maxLen:'3000 characters', format:'professional post with line breaks every 1-2 sentences. Short paragraphs.', hashtags:'3-5 professional hashtags at the end', hook:'First 2 lines must compel clicking "see more" — use a bold statement, surprising data, or personal story opening', cta:'End with a discussion question or clear professional CTA', extras:'Include concrete data, numbers, or results. Personal anecdotes perform well. Avoid clickbait, be authentic.'},
-            it: {maxLen:'3000 caratteri', format:'post professionale con a capo ogni 1-2 frasi. Paragrafi brevi.', hashtags:'3-5 hashtag professionali alla fine', hook:'Le prime 2 righe devono spingere a cliccare "vedi altro" — usa affermazione audace, dato sorprendente o apertura con storia personale', cta:'Chiudi con una domanda di discussione o CTA professionale chiara', extras:'Includi dati concreti, numeri o risultati. Aneddoti personali funzionano bene. Evita clickbait, sii autentico.'}
-        },
-        facebook: {
-            en: {maxLen:'63206 characters (optimal: 40-80 words)', format:'conversational, warm, relatable', hashtags:'1-3 hashtags maximum (not critical)', hook:'First sentence must spark curiosity or emotion', cta:'Ask a question to boost comments, or direct to link', extras:'Emotional storytelling performs best. Consider adding a poll question. Tag relevant pages.'},
-            it: {maxLen:'63206 caratteri (ottimale: 40-80 parole)', format:'conversazionale, caldo, in cui identificarsi', hashtags:'1-3 hashtag massimo (non critici)', hook:'Prima frase deve accendere curiosità o emozione', cta:'Fai una domanda per stimolare commenti, o indirizza al link', extras:'Lo storytelling emozionale funziona meglio. Considera una domanda sondaggio. Tagga pagine pertinenti.'}
-        },
-        web: {
-            en: {maxLen:'unlimited', format:'headline (H1) + subheadline + body + CTA', hashtags:'N/A — focus on SEO keywords', hook:'Headline must communicate the core value proposition in under 8 words', cta:'Primary CTA button text (action-oriented, max 5 words) + secondary CTA', extras:'Write with SEO in mind: include primary keyword in headline. Use power words (free, proven, instant, exclusive). Consider A/B testing variants.'},
-            it: {maxLen:'illimitato', format:'titolo (H1) + sottotitolo + corpo + CTA', hashtags:'N/A — focus su parole chiave SEO', hook:'Il titolo deve comunicare la proposta di valore in massimo 8 parole', cta:'Testo CTA principale (orientato all\'azione, max 5 parole) + CTA secondaria', extras:'Scrivi in ottica SEO: includi keyword principale nel titolo. Usa parole potenti (gratis, garantito, immediato, esclusivo). Considera varianti A/B.'}
-        }
+    // Collect structured fields
+    const F = {
+        scopo: val('fieldScopo'),
+        obiettivo: val('fieldObiettivo'),
+        tipoMedia: val('fieldTipoMedia'),
+        sottotipo: val('fieldSottotipo'),
+        settore: val('fieldSettore'),
+        pubblico: val('fieldPubblico'),
+        titolo1: val('fieldTitolo1'),
+        titolo2: val('fieldTitolo2'),
+        titolo3: val('fieldTitolo3'),
+        didascalia: val('fieldDidascalia'),
+        contesto: val('fieldContesto'),
+        datiExtra: val('contentDataInput')
     };
+    function val(id) { const el = $(id); return el ? el.value.trim() : ''; }
     
-    const toneDesc = {
-        professional: {en:'Professional, authoritative, trust-building. Use data and clear structure. Formal but accessible.', it:'Professionale, autorevole, che genera fiducia. Usa dati e struttura chiara. Formale ma accessibile.'},
-        friendly: {en:'Warm, friendly, conversational. Like talking to a knowledgeable friend. Use "you" frequently. Relatable.', it:'Caldo, amichevole, conversazionale. Come parlare con un amico esperto. Usa il "tu". Vicino al lettore.'},
-        bold: {en:'Bold, direct, provocative. Short punchy sentences. Challenge assumptions. Create urgency. No fluff.', it:'Audace, diretto, provocatorio. Frasi brevi e d\'impatto. Sfida le convinzioni. Crea urgenza. Zero fronzoli.'},
-        storytelling: {en:'Narrative, emotional, story-driven. Start with a scene or personal moment. Build tension, then deliver insight/lesson.', it:'Narrativo, emozionale, basato su storie. Inizia con una scena o momento personale. Costruisci tensione, poi consegna insight/lezione.'}
+    const platLabel = {instagram:'Instagram', tiktok:'TikTok / Reels', linkedin:'LinkedIn', facebook:'Facebook', web:'Web / Landing Page'};
+    const goalLabels = {
+        it:{sales:'vendere / promuovere',awareness:'posizionare il brand',engagement:'generare interazione',leads:'generare lead / contatti',traffic:'generare traffico al sito'},
+        en:{sales:'sell / promote',awareness:'brand positioning',engagement:'generate engagement',leads:'generate leads',traffic:'drive website traffic'}
     };
-    
-    const goalContent = {
-        sales: {en:'Drive purchases/sign-ups. Emphasize value, overcome objections, create scarcity/urgency. Include price anchor or offer if applicable.', it:'Spingere acquisti/iscrizioni. Enfatizza il valore, supera le obiezioni, crea scarsità/urgenza. Includi àncora di prezzo o offerta se applicabile.'},
-        awareness: {en:'Make the brand memorable. Share values, mission, behind-the-scenes, or educational content that positions as authority.', it:'Rendere il brand memorabile. Condividi valori, missione, dietro le quinte o contenuti educativi che posizionano come autorità.'},
-        engagement: {en:'Maximize interactions. Ask questions, create debate, use "this or that", share relatable truths, invite opinions.', it:'Massimizzare le interazioni. Fai domande, crea dibattito, usa "questo o quello", condividi verità in cui identificarsi, invita opinioni.'},
-        leads: {en:'Capture contacts. Tease valuable content/resource, use lead magnet language, clear CTA to opt-in or DM.', it:'Catturare contatti. Anticipa contenuto/risorsa di valore, usa linguaggio da lead magnet, CTA chiara verso opt-in o DM.'},
-        traffic: {en:'Drive clicks to website. Create curiosity gap, promise value behind the link, use "discover/learn/read" CTAs.', it:'Generare click al sito. Crea curiosity gap, prometti valore dietro il link, usa CTA "scopri/leggi/approfondisci".'}
+    const toneLabels = {
+        it:{professional:'professionale e autorevole',friendly:'caldo e conversazionale',educational:'educativo e informativo',inspirational:'ispirazionale e motivante'},
+        en:{professional:'professional and authoritative',friendly:'warm and conversational',educational:'educational and informative',inspirational:'inspirational and motivating'}
     };
+    const mediaRec = getMediaRecommendation(platform, goal, a);
+    const nd = lang==='it' ? 'non determinabile' : 'not determinable';
     
-    // Visual cues to reference in text
-    const visualCues = [];
-    if (a.palette.length > 0) {
-        const dominantColor = describeColor(a.palette[0], lang);
-        visualCues.push(lang==='en' ? `The visual uses a ${dominantColor} dominant palette` : `Il visual usa una palette dominante ${dominantColor}`);
-    }
-    if (a.harmonyType !== 'Mista') {
-        visualCues.push(lang==='en' ? `${a.harmonyType.toLowerCase()} color harmony for visual cohesion` : `armonia ${a.harmonyType.toLowerCase()} per coesione visiva`);
-    }
-    
-    const rules = platRules[platform][lang];
-    const targetLine = target ? (lang==='en' ? `Target audience: ${target}.` : `Target: ${target}.`) : '';
-    
-    if (lang === 'en') {
-        let p = `Write the complete text/caption for a ${pName(platform,'en')} post.\n\n`;
-        p += `TONE OF VOICE: ${toneDesc[tone].en}\n\n`;
-        p += `OBJECTIVE: ${goalContent[goal].en}\n`;
-        if (targetLine) p += targetLine + '\n';
-        p += `\nPLATFORM RULES (${pName(platform,'en')}):\n`;
-        p += `- Max length: ${rules.maxLen}\n`;
-        p += `- Format: ${rules.format}\n`;
-        p += `- Hook: ${rules.hook}\n`;
-        p += `- CTA: ${rules.cta}\n`;
-        p += `- Hashtags: ${rules.hashtags}\n`;
-        p += `- Extra: ${rules.extras}\n`;
-        p += `\nVISUAL CONTEXT (the text accompanies this image):\n`;
-        p += `- ${visualCues.join('\n- ')}\n`;
-        p += `- Image conveys: ${a.overallScore >= 70 ? 'strong visual impact' : 'moderate visual presence'}, ${a.entropy <= 5 ? 'clean and focused' : 'rich and detailed'} composition\n`;
-        p += `\nSTRUCTURE TO FOLLOW:\n`;
-        p += `1. HOOK — First line: attention-grabbing opener (${rules.hook})\n`;
-        p += `2. BODY — Core message: ${goal === 'sales' ? 'value proposition + proof + offer' : goal === 'engagement' ? 'relatable insight + personal take + question' : goal === 'leads' ? 'problem + teaser of solution + lead magnet' : goal === 'traffic' ? 'curiosity gap + preview of value + link prompt' : 'brand story/value + educational insight + takeaway'}\n`;
-        p += `3. CTA — Clear call to action: ${rules.cta}\n`;
-        p += `4. HASHTAGS — ${rules.hashtags}\n`;
-        p += `\nIMPORTANT: Write the COMPLETE, READY-TO-PUBLISH text. Not instructions — the actual caption/text. Apply spacing and formatting for ${pName(platform,'en')}.`;
+    if (lang === 'it') {
+        let p = `PROMPT MASTER MULTI-PIATTAFORMA (SOCIAL + WEB)\n\n`;
+        p += `RUOLO: Analizza i dati forniti e produci un testo in italiano pronto da pubblicare, coerente con i contenuti, ottimizzato per la piattaforma indicata.\n\n`;
+        
+        // ── HEADER FIELDS ──
+        p += `PIATTAFORMA: ${platLabel[platform]}\n`;
+        p += `SCOPO: ${F.scopo || nd}\n`;
+        p += `OBIETTIVO: ${F.obiettivo || goalLabels.it[goal]}\n`;
+        p += `TIPO MEDIA: ${F.tipoMedia || mediaRec.primary.label}\n`;
+        p += `SOTTOTIPO: ${F.sottotipo || nd}\n`;
+        p += `SETTORE: ${F.settore || nd}\n`;
+        p += `PUBBLICO TARGET: ${F.pubblico || target || nd}\n`;
+        p += `TONO DI VOCE: ${toneLabels.it[tone]}\n`;
+        p += `TITOLO PRINCIPALE: ${F.titolo1 || nd}\n`;
+        p += `TITOLO SECONDARIO: ${F.titolo2 || nd}\n`;
+        p += `TITOLO DI SUPPORTO: ${F.titolo3 || nd}\n`;
+        p += `CONTESTO: ${F.contesto || nd}\n`;
+        if (F.didascalia) p += `DIDASCALIA ORIGINALE: ${F.didascalia}\n`;
+        
+        // ── ANTI-HALLUCINATION ──
+        p += `\n════════════════════════════════════\n`;
+        p += `REGOLA BASE ANTI-ALLUCINAZIONE\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Ogni classificazione deve essere basata su evidenza nel testo o contesto.\n`;
+        p += `Se l'evidenza non è presente → dichiarare "${nd}".\n`;
+        p += `Non completare mai campi inventando.\n`;
+        
+        // ── ANALYSIS ORDER ──
+        p += `\n════════════════════════════════════\n`;
+        p += `ORDINE ANALISI OBBLIGATORIO\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Prima di scrivere, analizza in sequenza:\n`;
+        p += `1. Testo esplicito nei dati\n`;
+        p += `2. Parole chiave settore\n`;
+        p += `3. Contesto dichiarato\n`;
+        p += `4. Oggetto reale del contenuto\n`;
+        p += `5. Brand nominato\n`;
+        p += `6. Obiettivo deducibile\n`;
+        p += `Non usare l'estetica come prima fonte.\n`;
+        
+        // ── CONSTRAINTS ──
+        p += `\n════════════════════════════════════\n`;
+        p += `VINCOLI OBBLIGATORI (NON NEGOZIABILI)\n`;
+        p += `════════════════════════════════════\n`;
+        p += `• Usa SOLO le informazioni presenti nei DATI e nei campi compilati.\n`;
+        p += `• Non inventare, non ampliare, non aggiungere promesse, valori o benefici non esplicitati.\n`;
+        p += `• Mantieni fedeli nomi, date, orari, luoghi, prezzi, contatti, link.\n`;
+        p += `• Se un'informazione non è presente, non compensare con storytelling generico.\n`;
+        p += `• Il testo deve rimanere 100% focalizzato sull'obiettivo dichiarato.\n`;
+        
+        // ── CREATIVE BAN ──
+        p += `\n════════════════════════════════════\n`;
+        p += `DIVIETO COMPLETAMENTO CREATIVO\n`;
+        p += `════════════════════════════════════\n`;
+        p += `NON inventare: slogan, CTA non presenti nei dati, brand intent, posizionamento, target specifici, promesse.\n`;
+        p += `Solo deduzione ragionata o "${nd}".\n`;
+        
+        // ── UNCERTAINTY ──
+        p += `\n════════════════════════════════════\n`;
+        p += `GESTIONE INCERTEZZA\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Se mancano dati:\n`;
+        p += `• settore → "settore ${nd}"\n`;
+        p += `• pubblico → "pubblico ${nd}"\n`;
+        p += `• intento → "intento probabile: X"\n`;
+        p += `Segnare sempre come stima.\n`;
+        
+        // ── PLATFORM ──
+        p += `\n════════════════════════════════════\n`;
+        p += `ADATTAMENTO PIATTAFORMA\n`;
+        p += `════════════════════════════════════\n`;
+        if (platform==='facebook'||platform==='linkedin') p += `→ ${platLabel[platform]}: Testo strutturato, chiaro, informativo, con spaziature leggibili.\n`;
+        else if (platform==='instagram') p += `→ Instagram: Hook forte nelle prime 2 righe, tono più emozionale ma informativo.\n`;
+        else if (platform==='tiktok') { p += `→ TikTok / Reels:\n  • 1 frase breve per testo on-screen\n  • 1 caption sintetica di supporto\n`; }
+        else if (platform==='web') { p += `→ Web / Landing Page:\n  • Titolo principale (headline)\n  • Paragrafo introduttivo chiaro e orientato all'azione\n`; }
+        
+        // ── STRUCTURE ──
+        p += `\n════════════════════════════════════\n`;
+        p += `STRUTTURA OBBLIGATORIA DEL CONTENUTO\n`;
+        p += `════════════════════════════════════\n`;
+        p += `1. HOOK — apertura immediata, rilevante e coerente con il messaggio reale\n`;
+        p += `2. CORPO — spiegazione ordinata del contenuto principale\n`;
+        if (goal==='sales') p += `   • promozionale → proposta chiara senza enfasi artificiale\n`;
+        else if (goal==='awareness'||goal==='engagement') p += `   • informativo → contesto + informazione chiave\n`;
+        else p += `   • evento/offerta → cosa / perché / cosa succede\n`;
+        p += `3. BLOCCO INFORMATIVO (se presente nei dati):\n`;
+        p += `   📅 QUANDO / 📍 DOVE / 💰 PREZZO / ℹ️ INFO\n`;
+        p += `4. CTA — una sola call to action, coerente con la piattaforma (solo se deducibile dai dati)\n`;
+        p += `5. HASHTAG — solo se adatti alla piattaforma (max 1–3)\n`;
+        
+        // ── EVIDENCE ──
+        p += `\n════════════════════════════════════\n`;
+        p += `CONTROLLO EVIDENZA → CONCLUSIONE\n`;
+        p += `════════════════════════════════════\n`;
+        p += `• Dato presente → usare\n`;
+        p += `• Dato deducibile → usare con cautela\n`;
+        p += `• Dato assente → NON inserire\n`;
+        
+        // ── FORMAT ──
+        p += `\n════════════════════════════════════\n`;
+        p += `LIMITI E FORMATO\n`;
+        p += `════════════════════════════════════\n`;
+        p += `• Linguaggio chiaro, leggibile da mobile\n`;
+        p += `• Lunghezza adattata alla piattaforma\n`;
+        p += `• Nessuna istruzione meta, solo testo finale pronto all'uso\n`;
+        p += `• Usa eventuali link presenti nei dati\n`;
+        
+        // ── FALLBACK ──
+        p += `\n════════════════════════════════════\n`;
+        p += `FALLBACK SICUREZZA\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Se i dati sono insufficienti: produci solo ciò che è determinabile, segnala i campi mancanti, NON espandere creativamente.\n`;
+        
+        // ── DATA ──
+        p += `\n════════════════════════════════════\n`;
+        p += `DATI DA USARE (VERBATIM)\n`;
+        p += `════════════════════════════════════\n`;
+        if (F.datiExtra) p += F.datiExtra + '\n';
+        else p += `[Incolla dati aggiuntivi nel campo "Dati aggiuntivi" dell'app]\n`;
+        
         return p;
+        
     } else {
-        let p = `Scrivi il testo/caption completo per un post ${pName(platform,'it')}.\n\n`;
-        p += `TONO DI VOCE: ${toneDesc[tone].it}\n\n`;
-        p += `OBIETTIVO: ${goalContent[goal].it}\n`;
-        if (targetLine) p += targetLine + '\n';
-        p += `\nREGOLE PIATTAFORMA (${pName(platform,'it')}):\n`;
-        p += `- Lunghezza max: ${rules.maxLen}\n`;
-        p += `- Formato: ${rules.format}\n`;
-        p += `- Hook: ${rules.hook}\n`;
-        p += `- CTA: ${rules.cta}\n`;
-        p += `- Hashtag: ${rules.hashtags}\n`;
-        p += `- Extra: ${rules.extras}\n`;
-        p += `\nCONTESTO VISIVO (il testo accompagna questa immagine):\n`;
-        p += `- ${visualCues.join('\n- ')}\n`;
-        p += `- L'immagine trasmette: ${a.overallScore >= 70 ? 'forte impatto visivo' : 'presenza visiva moderata'}, composizione ${a.entropy <= 5 ? 'pulita e focalizzata' : 'ricca e dettagliata'}\n`;
-        p += `\nSTRUTTURA DA SEGUIRE:\n`;
-        p += `1. HOOK — Prima riga: apertura che cattura l'attenzione (${rules.hook})\n`;
-        p += `2. CORPO — Messaggio principale: ${goal === 'sales' ? 'proposta di valore + prova sociale + offerta' : goal === 'engagement' ? 'insight in cui identificarsi + opinione personale + domanda' : goal === 'leads' ? 'problema + anticipazione soluzione + lead magnet' : goal === 'traffic' ? 'curiosity gap + anteprima valore + invito al link' : 'storia/valore del brand + insight educativo + takeaway'}\n`;
-        p += `3. CTA — Call to action chiara: ${rules.cta}\n`;
-        p += `4. HASHTAG — ${rules.hashtags}\n`;
-        p += `\nIMPORTANTE: Scrivi il testo COMPLETO, PRONTO DA PUBBLICARE. Non istruzioni — la caption/testo effettivo. Applica spaziatura e formattazione per ${pName(platform,'it')}.`;
+        // ── ENGLISH ──
+        let p = `MULTI-PLATFORM MASTER PROMPT (SOCIAL + WEB)\n\n`;
+        p += `ROLE: Analyze the provided data and produce a ready-to-publish text, optimized for the indicated platform.\n\n`;
+        
+        p += `PLATFORM: ${platLabel[platform]}\n`;
+        p += `PURPOSE: ${F.scopo || nd}\n`;
+        p += `OBJECTIVE: ${F.obiettivo || goalLabels.en[goal]}\n`;
+        p += `MEDIA TYPE: ${F.tipoMedia || mediaRec.primary.label}\n`;
+        p += `SUBTYPE: ${F.sottotipo || nd}\n`;
+        p += `SECTOR: ${F.settore || nd}\n`;
+        p += `TARGET AUDIENCE: ${F.pubblico || target || nd}\n`;
+        p += `TONE OF VOICE: ${toneLabels.en[tone]}\n`;
+        p += `MAIN TITLE: ${F.titolo1 || nd}\n`;
+        p += `SECONDARY TITLE: ${F.titolo2 || nd}\n`;
+        p += `SUPPORT TITLE: ${F.titolo3 || nd}\n`;
+        p += `CONTEXT: ${F.contesto || nd}\n`;
+        if (F.didascalia) p += `ORIGINAL CAPTION: ${F.didascalia}\n`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `ANTI-HALLUCINATION BASE RULE\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Every classification must be based on evidence. If not present → "${nd}". Never invent.\n`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `MANDATORY ANALYSIS ORDER\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Before writing: 1.Explicit text 2.Sector keywords 3.Context 4.Real object 5.Named brand 6.Deducible objective\n`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `MANDATORY CONSTRAINTS (NON-NEGOTIABLE)\n`;
+        p += `════════════════════════════════════\n`;
+        p += `• Use ONLY info in DATA and filled fields. No inventing. Keep names/dates/prices faithful. No generic storytelling.\n`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `CREATIVE COMPLETION BAN\n`;
+        p += `════════════════════════════════════\n`;
+        p += `Do NOT invent: slogans, CTAs not in data, brand intent, positioning, promises. Only reasoned deduction or "${nd}".\n`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `PLATFORM ADAPTATION\n`;
+        p += `════════════════════════════════════\n`;
+        if (platform==='facebook'||platform==='linkedin') p += `→ ${platLabel[platform]}: Structured, clear, informative.\n`;
+        else if (platform==='instagram') p += `→ Instagram: Strong hook in first 2 lines.\n`;
+        else if (platform==='tiktok') p += `→ TikTok: 1 short on-screen line + 1 brief caption.\n`;
+        else if (platform==='web') p += `→ Web: Headline + action-oriented intro paragraph.\n`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `MANDATORY STRUCTURE\n`;
+        p += `════════════════════════════════════\n`;
+        p += `1.HOOK 2.BODY 3.INFO BLOCK(📅WHEN/📍WHERE/💰PRICE/ℹ️INFO) 4.CTA(one, from data only) 5.HASHTAGS(max 1-3)\n`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `EVIDENCE CONTROL: Present→use | Deducible→caution | Absent→DO NOT insert\n`;
+        p += `SAFETY FALLBACK: If insufficient→produce only determinable, flag missing, do NOT expand creatively.\n`;
+        
+        p += `\n════════════════════════════════════\n`;
+        p += `DATA TO USE (VERBATIM)\n`;
+        p += `════════════════════════════════════\n`;
+        if (F.datiExtra) p += F.datiExtra + '\n';
+        else p += `[Paste additional data in the app field]\n`;
+        
         return p;
     }
 }
@@ -2086,7 +3658,7 @@ function showCopyFeedback(msg) {
 }
 
 // ==================== EXPOSE PUBLIC API ====================
-window.SWA = { downloadDocx, copyPrompt, copyPromptForChatGPT, copyPromptForMidjourney, setPromptLang, switchPromptTab };
+window.SWA = { downloadDocx, copyPrompt, copyPromptForChatGPT, copyPromptForMidjourney, setPromptLang, switchPromptTab, switchStratTab };
 
 })();
 </script>
@@ -2108,3 +3680,4 @@ window.SWA = { downloadDocx, copyPrompt, copyPromptForChatGPT, copyPromptForMidj
 </script>
 </body>
 </html>
+
